@@ -1,0 +1,209 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="Ecommerce Project">
+	<!-- landing page section -->
+	<section class="landing-page">
+		<div class="landing-page-container">
+			<h1>UNLEASH YOUR STYLE POTENTIAL<h1>
+			<p class="paragraph-landing-page">Discover fashion that empowers you. Embrace your individuality with our carefully curated collection of clothes designed to make a statement.</p>
+			<div class="CTA-buttons">
+				<a href="#">SEE ALL PRODUCTS</a>
+				<a href="#">SEE ALL PRODUCTS</a>
+			</div>
+			<div class="facts-landing-page">
+				<span><p class="fact">1M+</p><p>Customers</p></span>
+				<span><p class="fact">200+</p><p>Products</p></span>
+				<span><p class="fact">10</p><p>Stores</p></span>
+			</div>
+		</div>
+	</section>
+	<!-- end of landing page section -->
+
+	<!-- second section -->
+	<section class="second-section">
+		<div class="second-section-container">
+			<h3 class="second-section-title">FIND YOUR PERFECT FIT</h3>
+			<p>Discover fashion that empowers you.</p>
+
+			<div class="second-section-cards">
+				<div class="second-section-col"> 
+					<img src="images/jackets.png" alt="jackets" />
+					<h1 class="absolute-paragraph">JACKETS</h1>
+				</div>
+				<div class="second-section-col">
+					<img src="images/pants.png" alt="pants" />
+					<h1 class="absolute-paragraph">PANTS</h1>
+				</div>
+				<div class="second-section-col">
+					<img src="images/shorts.png" alt="shorts" />
+					<h1 class="absolute-paragraph">SHORTS</h1>
+				</div>
+
+			</div>
+		</div>
+	</section>
+	<!-- end of second section -->
+
+	<!-- third section -->
+	<section class="third-section">
+		<div class="third-section-container">
+			<h3 class="second-section-title">ELEVATE YOUR WARDROBE</h3>
+			<p>Upgrade your style with premium clothing selection.</p>
+			
+			<div class="third-section-cards">
+				<div class="third-section-col"> 
+					<img src="images/extraterestrialpants.png" alt="extraterestrial" />
+					<div class="product-details">
+						<p>EXTRATERESTRIAL PANTS</p>
+						<p>$560</p>
+					</div>
+				</div>
+				<div class="third-section-col"> 
+					<img src="images/shortmatrixpants.png" alt="shorts" />
+					<div class="product-details">
+						<p>SHORT FROM MATRIX</p>
+						<p>$360</p>
+					</div>
+				</div>
+				<div class="third-section-col"> 
+					<img src="images/pantsmarts.png" alt="pants" />
+					<div class="product-details">
+						<p>PANTS FROM THE MARS</p>
+						<p>$560</p>
+					</div>
+				</div>
+			</div>
+
+		</div>
+	</section>
+	<!-- end of third section -->
+</Layout>
+
+<style>
+	/* hero section */
+	.landing-page {
+		display: flex;
+		background-color: rgb(146, 86, 86);
+	}
+	.landing-page-container {
+		width: 90%;
+		margin: 0 auto;
+		padding: 30px;
+	}
+	.paragraph-landing-page {
+		margin-top: 22.5px;
+		font-size: 16px;
+		font-weight: 400;
+	}
+	.CTA-buttons {
+		display: flex;
+		flex-direction: column;
+		text-align: center;
+		gap: 1em;
+		font-size: 1.1rem;
+		margin-top: 22.5px;
+		margin-bottom: 27.5px;
+	}
+	.CTA-buttons > :first-child {
+		background-color: #000000;
+		color: #fff;
+		text-decoration: none;
+		padding: 32px 16px;
+	}
+	.CTA-buttons > :nth-last-child(1) {
+		background-color: white;
+		color: #000;
+		text-decoration: none;
+		padding: 2em 1em;
+		border: 1px solid #000000;
+	}
+	.facts-landing-page {
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: center;
+		gap: 1.7em;
+		font-size: 16px;
+		font-weight: 400;
+	}
+	.fact {
+		font-size: 25px;
+		font-weight: 600;
+	}
+	/* end of hero section */
+	.second-section {
+	}
+	.second-section-container {
+		max-width: 90%;
+		margin: 0 auto;
+		text-align: center;
+	}
+	.second-section-title {
+		margin-top: 50px;
+		margin-bottom: 10px;
+		font-size: 28px;
+		font-weight: 600;
+	} 
+	.second-section-cards {
+		margin-top: 15px;
+		display: grid;
+		grid-template-columns: 1fr;
+		grid-template-rows: repeat(3, 1fr);
+		grid-row-gap: 20px;
+		justify-items: center;
+		align-items: center;
+	}
+	.second-section-col {
+		position: relative;
+		cursor: pointer;
+		text-align: center;
+	}
+	.second-section-cards img {
+		max-width: 100%;
+		min-height: auto;
+		justify-items: center;
+	}
+	.absolute-paragraph {
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+		color: #fff;
+	}
+
+	/* end of second section */
+
+	/* third section */
+	.third-section {
+		width: 100%;
+	}
+	.third-section-container {
+		max-width: 90%;
+		margin: 0 auto;
+	}
+	.third-section-title {
+		margin-top: 50px;
+		margin-bottom: 10px;
+		font-size: 28px;
+		font-weight: 600;
+	} 
+	.third-section-cards {
+		display: flex;
+		flex-direction: column;
+	}
+	.third-section-col {
+	
+	}
+	.third-section-cards img {
+		max-width: 100%;
+		min-height: auto;
+	}
+	.product-details {
+		display: flex;
+		justify-content: space-between;
+	}
+
+
+	/* end of third section */
+</style>
