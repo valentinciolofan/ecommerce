@@ -1,24 +1,13 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import { fetch } from '@astrojs/sanity';
 
-const query = `*[_type == "post"]`;
-const posts = await fetch(query);
-
+import { sanityClient } from "sanity:client";
+const products = await sanityClient.fetch(`*[_type == "product"]`);
 ---
 
 <Layout title="Ecommerce Project">
-	<!-- landing page section -->
-	<h1>Blog</h1>
-<ul>
-  {posts.map((post) => (
-    <li>
-      <a href={"/posts/" + post.slug.current} class="post-link">
-        {post.title}
-      </a>
-    </li>
-  ))}
-</ul>
+
+
 	<section class="landing-page">
 		<div class="landing-page-container">
 			<h1>UNLEASH YOUR STYLE POTENTIAL<h1>

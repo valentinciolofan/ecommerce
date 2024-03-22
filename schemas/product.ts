@@ -36,23 +36,34 @@ export const product = defineType({
       name: 'mainImage',
       title: 'Main Image',
       type: 'image',
-      options: {
-        hotspot: true, // Enable cropping for the main image
-      },
+      validation: (rule) => rule.required(),
     }),
-    // Add other relevant fields for your product
+    defineField({
+      name: 'images',
+      title: 'Images',
+      type: 'array',
+      of: [{
+        type: 'image',
+        options: {
+          hotspot: true,
+        }
+      }],
+      options: {
+        layout: 'grid'
+      },
+      validation: (rule) => rule.required(),
+    }),
     defineField({
       name: 'stock',
       title: 'Stock Level',
       type: 'number',
-      validation: (rule) => rule.min(0), // Ensure stock is non-negative
+      validation: (rule) => rule.min(0), 
     }),
     defineField({
       name: 'categories',
       title: 'Categories',
       type: 'array',
-      of: [{ type: 'reference', to: [{ type: 'category' }] }], // Reference a "category" document type
+      of: [{ type: 'reference', to: [{ type: 'category' }] }],
     }),
-    // ... Add other fields as needed (e.g., variants, colors, sizes)
   ],
 })

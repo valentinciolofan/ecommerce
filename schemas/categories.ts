@@ -25,3 +25,10 @@ export const category = defineType({
     // ... Add other fields as needed (e.g., parent category)
   ],
 })
+
+// o varianta ar fi sa verific codul facut de Christian
+// cealalta in care il intreb pe chatgpt
+// cealalta in care il intreb pe devin
+// gemini
+// search on google
+// ask somebody

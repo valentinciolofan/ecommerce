@@ -1,0 +1,29 @@
+---
+import { sanityClient } from "sanity:client";
+import imageUrlBuilder from '@sanity/image-url'
+
+export async function getStaticPaths() {
+  const products = await sanityClient.fetch(`*[_type == "product"]`);
+
+  return products.map(({ slug, title }) => {
+    return {
+      params: { slug: slug.current },
+      props: { title },
+    };
+  });
+}
+
+const { slug  } = Astro.params;
+const { title } = Astro.props;
+
+console.log(slug);
+
+const builder = imageUrlBuilder(sanityClient)
+
+function urlFor(source) {
+  return builder.image(source)
+}
+
+---
+
+<h1>{title}</h1>
