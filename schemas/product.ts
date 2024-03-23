@@ -33,7 +33,7 @@ export const product = defineType({
       validation: (rule) => rule.required(), // Mark price as required
     }),
     defineField({
-      name: 'mainImage',
+      name: 'image',
       title: 'Main Image',
       type: 'image',
       validation: (rule) => rule.required(),
@@ -51,7 +51,6 @@ export const product = defineType({
       options: {
         layout: 'grid'
       },
-      validation: (rule) => rule.required(),
     }),
     defineField({
       name: 'stock',
