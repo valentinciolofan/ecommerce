@@ -3,6 +3,7 @@ import { sanityClient } from "sanity:client";
 import imageUrlBuilder from '@sanity/image-url'
 import { product } from "../../../schemas/product";
 
+export const prerender = true;
 export async function getStaticPaths() {
   const products = await sanityClient.fetch(`*[_type == "product"]`);
 

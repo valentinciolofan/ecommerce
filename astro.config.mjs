@@ -12,4 +12,5 @@ export default defineConfig({
       studioBasePath: "/admin",
     }),
     react()],
+    output: 'server',
 });
