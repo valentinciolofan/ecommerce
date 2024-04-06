@@ -118,9 +118,11 @@ import Layout from "../layouts/Layout.astro";
                     throw new Error(`HTTP error! Status: ${response.status}`);
                 }
 
-                const message = await response.text();
-                console.log(message);
-                window.location.href = "/";
+                const message = await response.status;
+                if (message === 200) {
+                    window.location.href = "/";
+                    console.log(message);
+                } 
             } catch (error) {
                 console.error("Error:", error);
             }
