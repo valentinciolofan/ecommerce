@@ -108,6 +108,7 @@ import Layout from "../layouts/Layout.astro";
             try {
                 const response = await fetch(url, {
                     method: "POST",
+                    credentials: 'include',
                     headers: {
                         "Content-Type": "application/json",
                     },
@@ -116,13 +117,12 @@ import Layout from "../layouts/Layout.astro";
 
                 if (!response.ok) {
                     throw new Error(`HTTP error! Status: ${response.status}`);
+                } else {
+                    response.json().then(res =>
+                        window.location.href = res.redirect
+                    );
                 }
-
-                const message = await response.status;
-                if (message === 200) {
-                    window.location.href = "/";
-                    console.log(message);
-                } 
+                
             } catch (error) {
                 console.error("Error:", error);
             }
