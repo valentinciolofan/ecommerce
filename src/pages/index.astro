@@ -3,11 +3,13 @@ import Layout from '../layouts/Layout.astro';
 
 import { sanityClient } from "sanity:client";
 const products = await sanityClient.fetch(`*[_type == "product"]`);
+
+const response = await fetch('http://localhost:3000/').then(res => res.text()).then(console.log);
 ---
 
 <Layout title="Ecommerce Project">
 
-
+	
 	<section class="landing-page">
 		<div class="landing-page-container">
 			<h1>UNLEASH YOUR STYLE POTENTIAL<h1>
@@ -212,6 +214,5 @@ const products = await sanityClient.fetch(`*[_type == "product"]`);
 	/* end of third section */
 </style>
 <script>
-	const sessionId = fetch('http://localhost:3000/');
-	sessionId.then(res=> res.text()).then(console.log);
+	
 </script>

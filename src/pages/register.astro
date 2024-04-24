@@ -33,7 +33,7 @@ import Layout from "../layouts/Layout.astro";
                         value="Terms and conditions"
                     />
                     <label for="termsandconditions"
-                        >I agree with terms and conditions</label
+                        ><a href="terms">I agree with terms and conditions</a></label
                     >
                 </span>
                 <input type="submit" value="Register" />
@@ -90,6 +90,13 @@ import Layout from "../layouts/Layout.astro";
     input[type="submit"]:hover {
         background-color: #333;
     }
+    a {
+            color: black;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
 </style>
 
 <script>
@@ -117,6 +124,9 @@ import Layout from "../layouts/Layout.astro";
     const handleRegistration = (event) => {
         event.preventDefault();
 
+        if (!document.getElementById('termsandconditions').checked) {
+            alert('Ups.. you forgot something!');
+        }
             const data = new FormData(event.target);
 
             // Do a bit of work to convert the entries to a plain JS object

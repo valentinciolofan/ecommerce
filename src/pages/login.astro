@@ -21,6 +21,7 @@ import Layout from "../layouts/Layout.astro";
                 <div>
                     <span>
                         <input
+                            id="rememberMe"
                             type="checkbox"
                             name="remember"
                             value="remember"
@@ -131,15 +132,14 @@ import Layout from "../layouts/Layout.astro";
         function handleSubmit(event) {
             event.preventDefault();
 
-            const data = new FormData(event.target);
 
+            const data = new FormData(event.target);
             // Do a bit of work to convert the entries to a plain JS object
             const values = Object.fromEntries(data.entries());
-
+            
             console.log(values);
             onSubmit(url, values);
         }
-
         const form = document.querySelector("form");
         form.addEventListener("submit", handleSubmit);
     </script>
