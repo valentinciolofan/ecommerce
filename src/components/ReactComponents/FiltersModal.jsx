@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import CategoryFilter from './CategoryFilter';
-import PriceFilter from './PriceFilter';
+// import CategoryFilter from './CategoryFilter';
+// import PriceFilter from './PriceFilter';
 import AvailabilityFilter from './AvailabilityFilter';
 import ColorFilter from './ColorFilter';
 import SizeFilter from './SizeFilter';
@@ -32,12 +32,14 @@ function FiltersModal({
         </button>
         <h2>Filters</h2>
         <div className="filters-scroll">
-          <CategoryFilter categories={categories} onFilterChange={onCategoryChange} />
-          <PriceFilter filters={filters} onFilterChange={onPriceChange} />
-          <AvailabilityFilter onFilterChange={onAvailabilityChange} />
+          {/* <CategoryFilter categories={categories} onFilterChange={onCategoryChange} />
+          // 
+          
+          {/* <PriceFilter filters={filters} onFilterChange={onPriceChange} /> */}
+          <AvailabilityFilter onFilterChange={onAvailabilityChange} /> 
           <ColorFilter onFilterChange={onColorChange} />
           <SizeFilter onFilterChange={onSizeChange} />
-          <MaterialFilter onFilterChange={onMaterialChange} />
+          <MaterialFilter onFilterChange={onMaterialChange} /> 
         </div>
       </div>
     </div>

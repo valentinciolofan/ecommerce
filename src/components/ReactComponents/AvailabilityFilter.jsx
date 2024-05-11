@@ -15,9 +15,9 @@ function AvailabilityFilter({ onFilterChange }) {
       <label className="custom-checkbox">
         <input
           type="checkbox"
-          value="in-stock"
-          checked={availability === 'in-stock'}
-          onChange={() => handleChange({ target: { value: 'in-stock' } })}
+          value="true"
+          checked={availability === 'true'}
+          onChange={() => handleChange({ target: { value: 'true' } })}
         />
         <span className="checkmark"></span>
         In Stock
@@ -25,9 +25,9 @@ function AvailabilityFilter({ onFilterChange }) {
       <label className="custom-checkbox">
         <input
           type="checkbox"
-          value="out-of-stock"
-          checked={availability === 'out-of-stock'}
-          onChange={() => handleChange({ target: { value: 'out-of-stock' } })}
+          value="false"
+          checked={availability === 'false'}
+          onChange={() => handleChange({ target: { value: 'false' } })}
         />
         <span className="checkmark"></span>
         Out of Stock

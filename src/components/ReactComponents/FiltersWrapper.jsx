@@ -2,15 +2,14 @@ import React, { useState } from 'react';
 import FiltersModal from './FiltersModal';
 import ProductListing from './ProductListing';
 
-function FiltersWrapper({ products, categories, filters }) {
+const FiltersWrapper = ({ products, categories, filters }) => {
   const [showModal, setShowModal] = useState(false);
   let selectedPriceRange = { min: filters.minPrice, max: filters.maxPrice };
   let selectedCategory = '';
-  let selectedAvailability = '';
-  let selectedColors = [];
-  let selectedSizes = [];
-  let selectedMaterials = [];
-
+  const [selectedAvailability, setSelectedAvailability] = useState('');
+  const [selectedColors, setSelectedColors] = useState([]);
+  const [selectedSizes, setSelectedSizes] = useState([]);
+  const [selectedMaterials, setSelectedMaterials] = useState([]);
   const handlePriceChange = (range) => {
     selectedPriceRange = range;
   };
@@ -20,19 +19,22 @@ function FiltersWrapper({ products, categories, filters }) {
   };
 
   const handleAvailabilityChange = (availability) => {
-    selectedAvailability = availability;
+    setSelectedAvailability(availability);
+    console.log(selectedAvailability);
   };
 
   const handleColorChange = (colors) => {
-    selectedColors = colors;
+    setSelectedColors(colors);
   };
 
   const handleSizeChange = (sizes) => {
-    selectedSizes = sizes;
+    setSelectedSizes(sizes);
+    console.log(selectedSizes);
   };
 
   const handleMaterialChange = (materials) => {
-    selectedMaterials = materials;
+    setSelectedMaterials(materials);
+
   };
 
   const openModal = () => setShowModal(true);

@@ -1,15 +1,42 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { addToCart, cartStore } from '../UserContext';
 import "./products.css"
 import urlFor from '../../utils/urlFor';
 
 
 
-const ProductListing = ({ products }) => {
+const ProductListing = ({ products, selectedColors, selectedMaterials, selectedSizes, selectedAvailability}) => {
   const [filteredProducts, setFilteredProducts] = useState(products);
+  useEffect(() => {
+    let filtered;
+    console.log(products);
+    if (selectedColors.length === 0) {
+      filtered = products; // if there isn't any color selected, then show all products
+    } else {
+      filtered = products.filter(product => selectedColors.includes(product.color)); // Filter based on selected colors
+    }
+   
+    if (selectedMaterials.length === 0) {
+      filtered = filtered;
+    } else {
+      filtered = filtered.filter(product => selectedMaterials.includes(product.material));
+    }
 
-  // Add useEffect hooks to handle global state changes (category, price filters)
+    if (selectedSizes.length === 0) {
+      filtered = filtered;
+    } else {
+      filtered = filtered.filter(product => selectedSizes.includes(product.size));
+    }
+    if (selectedAvailability.length === 0) {
+      filtered = filtered;
+    } else {
+      filtered = filtered.filter(product => selectedAvailability.includes(product.availability));
+    }
 
+    setFilteredProducts(filtered);
+      
+  }, [products, selectedColors, selectedMaterials, selectedSizes, selectedAvailability]);
+  
   return (
     <div className="all-products">
       <ul>

@@ -2,17 +2,22 @@ import React, { useState } from 'react';
 
 const colors = ['black', 'white', 'beige', 'blue', 'grey', 'red', 'green', 'brown', 'yellow', 'pink'];
 
-function ColorFilter({ onFilterChange }) {
+const ColorFilter = ({ onFilterChange }) => {
   const [selectedColors, setSelectedColors] = useState([]);
 
   const handleChange = (e) => {
     const color = e.target.value;
-    const newSelectedColors = selectedColors.includes(color)
-      ? selectedColors.filter((c) => c !== color)
-      : [...selectedColors, color];
+    let newSelectedColors;
+       
+    if (selectedColors.includes(color)) {
+      newSelectedColors = selectedColors.filter((c) => c !== color);
+    } else {
+      newSelectedColors = [...selectedColors, color];
+    }
     setSelectedColors(newSelectedColors);
     onFilterChange(newSelectedColors);
   };
+  
 
   return (
     <div className="color-filter">

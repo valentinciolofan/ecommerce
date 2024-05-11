@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-const sizes = ['S', 'M', 'L', 'XL', 'XXL'];
+const sizes = ['s', 'm', 'l', 'xl', 'xxl'];
 
 function SizeFilter({ onFilterChange }) {
   const [selectedSizes, setSelectedSizes] = useState([]);
@@ -26,7 +26,7 @@ function SizeFilter({ onFilterChange }) {
             onChange={handleChange}
           />
           <span className="checkmark"></span>
-          {size}
+          {size.charAt(0).toUpperCase() + size.slice(1)}
         </label>
       ))}
     </div>
