@@ -19,7 +19,7 @@ export const category = defineType({
         source: 'title',
         maxLength: 96,
       },
-      validation: (rule) => rule.required(), // Mark slug as required
+      validation: (rule) => rule.required(),
     }),
   ],
 });

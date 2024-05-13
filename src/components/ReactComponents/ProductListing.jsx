@@ -5,15 +5,37 @@ import urlFor from '../../utils/urlFor';
 
 
 
-const ProductListing = ({ products, selectedColors, selectedMaterials, selectedSizes, selectedAvailability}) => {
+const ProductListing = ({ products, selectedPriceRange, selectedCategory, selectedCollections, selectedColors, selectedMaterials, selectedSizes, selectedAvailability}) => {
   const [filteredProducts, setFilteredProducts] = useState(products);
+  const [minPrice, maxPrice] = Object.values(selectedPriceRange);
+  
   useEffect(() => {
     let filtered;
-    console.log(products);
+
     if (selectedColors.length === 0) {
       filtered = products; // if there isn't any color selected, then show all products
     } else {
       filtered = products.filter(product => selectedColors.includes(product.color)); // Filter based on selected colors
+    }
+
+    if (selectedPriceRange.length === 0) {
+      filtered = filtered;
+    } else {
+      filtered = products.filter(product => product.price >= minPrice && product.price <= maxPrice);
+    }
+
+    if (selectedCategory.length === 0) {
+      filtered = filtered;
+    } else {
+      filtered = products.filter(product => selectedCategory.includes(product.categories[0].title));
+      console.log(filtered);
+    }
+
+    if (selectedCollections.length === 0) {
+      filtered = filtered;
+    } else {
+      console.log(selectedCollections);
+      filtered = products.filter(product => selectedCollections.includes(product.collection[0].title));
     }
    
     if (selectedMaterials.length === 0) {
@@ -35,7 +57,7 @@ const ProductListing = ({ products, selectedColors, selectedMaterials, selectedS
 
     setFilteredProducts(filtered);
       
-  }, [products, selectedColors, selectedMaterials, selectedSizes, selectedAvailability]);
+  }, [products, selectedPriceRange, selectedCategory, selectedCollections, selectedColors, selectedMaterials, selectedSizes, selectedAvailability]);
   
   return (
     <div className="all-products">
@@ -57,7 +79,7 @@ const ProductListing = ({ products, selectedColors, selectedMaterials, selectedS
                 slug: product.slug.current,
                 title: product.title,
                 price: product.price,
-                images: product.images
+                image: product.image
               })}
             >
               <svg

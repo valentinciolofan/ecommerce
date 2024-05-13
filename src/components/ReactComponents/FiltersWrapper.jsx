@@ -2,25 +2,29 @@ import React, { useState } from 'react';
 import FiltersModal from './FiltersModal';
 import ProductListing from './ProductListing';
 
-const FiltersWrapper = ({ products, categories, filters }) => {
+const FiltersWrapper = ({ products }) => {
   const [showModal, setShowModal] = useState(false);
-  let selectedPriceRange = { min: filters.minPrice, max: filters.maxPrice };
-  let selectedCategory = '';
+  const [selectedPriceRange, setSelectedPriceRange] = useState({ min: 0, max: 1000 });
+  const [selectedCategory, setSelectedCategory] = useState('');
+  const [selectedCollections, setSelectedCollections] = useState([]);
   const [selectedAvailability, setSelectedAvailability] = useState('');
   const [selectedColors, setSelectedColors] = useState([]);
   const [selectedSizes, setSelectedSizes] = useState([]);
   const [selectedMaterials, setSelectedMaterials] = useState([]);
+
   const handlePriceChange = (range) => {
-    selectedPriceRange = range;
+    setSelectedPriceRange(range);
   };
 
   const handleCategoryChange = (categorySlug) => {
-    selectedCategory = categorySlug;
+    setSelectedCategory(categorySlug);
   };
+  const handleCollectionsChange = (collections) => {
+    setSelectedCollections(collections);
+  }
 
   const handleAvailabilityChange = (availability) => {
     setSelectedAvailability(availability);
-    console.log(selectedAvailability);
   };
 
   const handleColorChange = (colors) => {
@@ -29,7 +33,6 @@ const FiltersWrapper = ({ products, categories, filters }) => {
 
   const handleSizeChange = (sizes) => {
     setSelectedSizes(sizes);
-    console.log(selectedSizes);
   };
 
   const handleMaterialChange = (materials) => {
@@ -57,10 +60,10 @@ const FiltersWrapper = ({ products, categories, filters }) => {
       </button>
 
       <FiltersModal
-        categories={categories}
-        filters={filters}
+        selectedPriceRange={selectedPriceRange}
         onPriceChange={handlePriceChange}
         onCategoryChange={handleCategoryChange}
+        onCollectionsChange={handleCollectionsChange}
         onAvailabilityChange={handleAvailabilityChange}
         onColorChange={handleColorChange}
         onSizeChange={handleSizeChange}
@@ -73,6 +76,7 @@ const FiltersWrapper = ({ products, categories, filters }) => {
         products={products}
         selectedPriceRange={selectedPriceRange}
         selectedCategory={selectedCategory}
+        selectedCollections={selectedCollections}
         selectedAvailability={selectedAvailability}
         selectedColors={selectedColors}
         selectedSizes={selectedSizes}

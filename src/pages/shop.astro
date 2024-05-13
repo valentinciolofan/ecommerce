@@ -3,22 +3,14 @@ import Layout from "../layouts/Layout.astro";
 import { sanityClient } from "sanity:client";
 import FiltersWrapper from "../components/ReactComponents/FiltersWrapper.jsx";
 import { addToCart } from "../components/UserContext";
-import type { Product, Category } from "../types/types";
+import type { Product, Category, Collection } from "../types/types";
 
 const productQuery = `*[_type == "product"] {
-  title, slug, description, price, image, images, stock, categories->{title, slug}, color, size, material, availability, rating
-}`;
-const categoryQuery = `*[_type == "category"] {
-  title, slug, parentCategory->{title, slug}
+  title, slug, description, price, image, images, stock, categories[]->{title, slug}, collection[]->{title, slug}, color, size, material, availability, rating
 }`;
 
 const products: Product[] = await sanityClient.fetch(productQuery);
-const categories: Category[] = await sanityClient.fetch(categoryQuery);
 
-const filters = {
-    minPrice: 0,
-    maxPrice: 1000,
-};
 // let query = `*[_type == "product"]`;
 // let products = await sanityClient.fetch(query);
 
@@ -160,8 +152,6 @@ const filters = {
 
     <FiltersWrapper
         products={products}
-        categories={categories}
-        filters={filters}
         client:load
     />
 </Layout>

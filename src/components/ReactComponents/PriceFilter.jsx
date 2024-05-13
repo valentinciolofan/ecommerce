@@ -8,15 +8,15 @@ const predefinedPriceRanges = [
   { label: 'Over $500', min: 500, max: Infinity },
 ];
 
-function PriceFilter({ filters, onFilterChange }) {
+const PriceFilter = ({ selectedPriceRange, onFilterChange }) => {
   const [selectedRange, setSelectedRange] = useState(null);
-  const [minPrice, setMinPrice] = useState(filters.minPrice);
-  const [maxPrice, setMaxPrice] = useState(filters.maxPrice);
+  const [minPrice, setMinPrice] = useState(selectedPriceRange.minPrice);
+  const [maxPrice, setMaxPrice] = useState(selectedPriceRange.maxPrice);
 
   const handleRangeSelect = (range) => {
     setSelectedRange(range);
     setMinPrice(range.min);
-    setMaxPrice(range.max === Infinity ? filters.maxPrice : range.max);
+    setMaxPrice(range.max === Infinity ? selectedPriceRange.maxPrice : range.max);
   };
 
   const handleMinChange = (e) => {
@@ -59,7 +59,7 @@ function PriceFilter({ filters, onFilterChange }) {
         id="min-price"
         type="number"
         value={minPrice}
-        min={filters.minPrice}
+        min={selectedPriceRange.minPrice}
         onChange={handleMinChange}
       />
 
@@ -68,7 +68,7 @@ function PriceFilter({ filters, onFilterChange }) {
         id="max-price"
         type="number"
         value={maxPrice}
-        max={filters.maxPrice}
+        max={selectedPriceRange.maxPrice}
         onChange={handleMaxChange}
       />
     </div>
