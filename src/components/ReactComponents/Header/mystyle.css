@@ -1,10 +1,10 @@
-a {
+.header-user-actions {
     line-height: 1.428571429;
     color: #444444;
     white-space: nowrap;
     margin: 0px;
 }
-a:hover {
+.header-user-actions:hover {
     background-color: #ededed;
     cursor: pointer;
 }
@@ -25,4 +25,7 @@ strong {
     font-size: 18px;
     margin-left: 5px;
     color: #222222;
+}
+svg {
+    cursor: pointer;
 }

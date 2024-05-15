@@ -36,7 +36,7 @@ const UserActions = () => {
     <>
       <UserIcon session={session} handleLogOut={handleLogOut}/>
       <UserWishlistIcon session={session} />
-      <UserCartIcon session={session} />
+      <UserCartIcon session={session}/>
     </>
   );
 }

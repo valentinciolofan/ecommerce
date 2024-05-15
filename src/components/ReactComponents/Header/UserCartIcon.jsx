@@ -1,13 +1,19 @@
-import React from 'react'
+import React, { useState } from 'react'
 
 const UserCartIcon = ({ session }) => {
-    
+    const handleClick = (e) => {
+        window.location.href = "/cart";
+
+        console.log(e);
+    }
+
     return (
         <svg
             xmlns="http://www.w3.org/2000/svg"
             width="1.5em"
             height="1.5em"
             viewBox="0 0 14 14"
+            onClick={handleClick}
         >
             <path
                 fill="none"

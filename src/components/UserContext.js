@@ -1,8 +1,9 @@
 import { atom } from 'nanostores';
+import { persistentAtom } from '@nanostores/persistent'
 
 export const userSession = atom(null);
 
-export const favoriteProducts = atom(null);
+export const wishlistProducts = atom(null);
 
 
 export async function checkSession() {
@@ -25,4 +26,71 @@ export async function checkSession() {
         console.log('Fetch failed, check the reason:', error);
         userSession.set(null);
     }
+}
+
+
+// Use persistentAtom to store the cart state in localStorage
+export const cartStore = persistentAtom('cart', {
+  items: [],
+  total: 0
+}, {
+  encode: JSON.stringify,
+  decode: JSON.parse
+});
+
+export function addToCart(product) {
+  const currentCart = cartStore.get();
+  const existingItem = currentCart.items.find(item => item.slug === product.slug);
+
+  if (existingItem) {
+    existingItem.quantity += 1;
+  } else {
+    currentCart.items.push({ ...product, quantity: 1 });
+  }
+
+  calculateTotal(currentCart);
+}
+
+
+export function removeFromCart(productSlug) {
+  const currentCart = cartStore.get();
+  const updatedItems = currentCart.items.filter(item => item.slug !== productSlug);
+
+  currentCart.items = updatedItems;
+  calculateTotal(currentCart);
+}
+export const decreaseQuantity = (productSlug) => {
+  const currentCart = cartStore.get();
+  const updateQuantity = currentCart.items.map(item => {
+    if (item.slug === productSlug.itemSlug && item.quantity > 0) {
+      item.quantity -= 1;
+    }
+    return item;
+  })
+  currentCart.items = updateQuantity;
+
+  calculateTotal(currentCart);
+  cartStore.set(currentCart);
+}
+
+export const increaseQuantity = (productSlug) => {
+  const currentCart = cartStore.get();
+
+  const increaseQuantity = currentCart.items.map(item => {
+    if (item.slug === productSlug.itemSlug) {
+      item.quantity += 1;
+    }
+    return item;
+  })
+  currentCart.items = increaseQuantity;
+  
+  calculateTotal(currentCart);
+  cartStore.set(currentCart)
+}
+
+
+function calculateTotal(currentCart) {
+  const total = currentCart.items.reduce((acc, item) => acc + item.price * item.quantity, 0);
+  currentCart.total = total;
+  cartStore.set(currentCart);
 }
