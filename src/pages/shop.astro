@@ -11,6 +11,7 @@ const productQuery = `*[_type == "product"] {
 
 const products: Product[] = await sanityClient.fetch(productQuery);
 
+console.log(products);
 // let query = `*[_type == "product"]`;
 // let products = await sanityClient.fetch(query);
 

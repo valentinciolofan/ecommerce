@@ -79,6 +79,8 @@ const ProductListing = ({ products, selectedPriceRange, selectedCategory, select
                 slug: product.slug.current,
                 title: product.title,
                 price: product.price,
+                color: product.color,
+                size: product.size,
                 image: product.image
               })}
             >

@@ -1,4 +1,4 @@
-import { atom, map} from 'nanostores';
+import { atom } from 'nanostores';
 import { persistentAtom } from '@nanostores/persistent'
 
 export const userSession = atom(null);
@@ -51,6 +51,7 @@ export function addToCart(product) {
   calculateTotal(currentCart);
 }
 
+
 export function removeFromCart(productSlug) {
   const currentCart = cartStore.get();
   const updatedItems = currentCart.items.filter(item => item.slug !== productSlug);
@@ -58,6 +59,35 @@ export function removeFromCart(productSlug) {
   currentCart.items = updatedItems;
   calculateTotal(currentCart);
 }
+export const decreaseQuantity = (productSlug) => {
+  const currentCart = cartStore.get();
+  const updateQuantity = currentCart.items.map(item => {
+    if (item.slug === productSlug.itemSlug && item.quantity > 0) {
+      item.quantity -= 1;
+    }
+    return item;
+  })
+  currentCart.items = updateQuantity;
+
+  calculateTotal(currentCart);
+  cartStore.set(currentCart);
+}
+
+export const increaseQuantity = (productSlug) => {
+  const currentCart = cartStore.get();
+
+  const increaseQuantity = currentCart.items.map(item => {
+    if (item.slug === productSlug.itemSlug) {
+      item.quantity += 1;
+    }
+    return item;
+  })
+  currentCart.items = increaseQuantity;
+  
+  calculateTotal(currentCart);
+  cartStore.set(currentCart)
+}
+
 
 function calculateTotal(currentCart) {
   const total = currentCart.items.reduce((acc, item) => acc + item.price * item.quantity, 0);

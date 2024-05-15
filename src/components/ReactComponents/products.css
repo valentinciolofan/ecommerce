@@ -237,10 +237,13 @@
 
 /* CART STYLING */
 .cart-item-img {
+  
+}
+
+.cart-item-img img {
   height: 150px;
   aspect-ratio: 1/1;
   object-fit: cover;
-  width: 10%;
 }
 .cart ul {
   display: flex;
@@ -251,6 +254,22 @@
 .cart ul li {
   display: flex;
   align-items: center;
-  justify-content: center;
-  justify-self: center;
+  gap: 10px;
+}
+.product-info {
+  width: 100%;
+}
+.size-and-color {
+  display: flex;
+  justify-content: space-between;
+  margin: 10px 0px;
+}
+.product-actions {
+  display: flex;
+  justify-content: space-between;
+}
+.product-actions span {
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
