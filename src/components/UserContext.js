@@ -61,32 +61,27 @@ export function removeFromCart(productSlug) {
 }
 export const decreaseQuantity = (productSlug) => {
   const currentCart = cartStore.get();
-  const updateQuantity = currentCart.items.map(item => {
-    if (item.slug === productSlug.itemSlug && item.quantity > 0) {
-      item.quantity -= 1;
-    }
-    return item;
-  })
-  currentCart.items = updateQuantity;
+  const updatedItems = currentCart.items.map(item => {
+    return item.slug === productSlug.itemSlug && item.quantity > 0
+      ? { ...item, quantity: item.quantity - 1 }
+      : item;
+  });
 
-  calculateTotal(currentCart);
-  cartStore.set(currentCart);
-}
+  cartStore.set({ ...currentCart, items: updatedItems });
+  calculateTotal({ ...currentCart, items: updatedItems });
+};
 
 export const increaseQuantity = (productSlug) => {
   const currentCart = cartStore.get();
+  const updatedItems = currentCart.items.map(item => {
+    return item.slug === productSlug.itemSlug
+      ? { ...item, quantity: item.quantity + 1 }
+      : item;
+  });
 
-  const increaseQuantity = currentCart.items.map(item => {
-    if (item.slug === productSlug.itemSlug) {
-      item.quantity += 1;
-    }
-    return item;
-  })
-  currentCart.items = increaseQuantity;
-  
-  calculateTotal(currentCart);
-  cartStore.set(currentCart)
-}
+  cartStore.set({ ...currentCart, items: updatedItems });
+  calculateTotal({ ...currentCart, items: updatedItems });
+};
 
 
 function calculateTotal(currentCart) {
