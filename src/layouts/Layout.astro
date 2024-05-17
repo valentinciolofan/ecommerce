@@ -1,5 +1,5 @@
 ---
-import Header from '../components/Header.astro'
+import Header from "../components/Header.astro";
 
 interface Props {
 	title: string;
@@ -19,28 +19,41 @@ const { title } = Astro.props;
 		<title>{title}</title>
 	</head>
 	<body>
-		<Header />
-		<slot />
+		<div class="wrapper">
+			<Header />
+			<slot />
+		</div>
 	</body>
 </html>
 <style is:global>
-	@import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap');
-	@import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+	@import url("https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap");
+	@import url("https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap");
 	* {
 		margin: 0;
 		padding: 0;
 	}
+	body {
+		height: 100vh;
+	}
+	.wrapper {
+		margin-right: auto;
+		margin-left: auto;
+		max-width: 1360px;
+		padding-top: 10px;
+		padding-right: 20px;
+		padding-left: 20px;
+		padding-bottom: 10px;
+	}
 	h1 {
 		font-size: 3em;
 		font-family: "Montserrat", sans-serif;
-  		font-weight: 700;
- 		font-style: normal;
-
+		font-weight: 700;
+		font-style: normal;
 	}
 	p {
 		font-size: 1em;
 		font-family: "Lato", sans-serif;
-  		font-weight: 400;
- 		font-style: normal;
+		font-weight: 400;
+		font-style: normal;
 	}
 </style>

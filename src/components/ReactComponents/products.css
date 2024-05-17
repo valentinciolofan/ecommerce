@@ -352,7 +352,15 @@
   border-bottom: 1px solid #000;
   padding: 16px 0px;
 }
+.form-delivery-details input:focus {
+  outline: none;
+}
 /* delivery details */
+.shipping-products-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
 .hg-bread {
   background-color: #fff;
   display: flex;
@@ -361,6 +369,7 @@
   justify-content: space-around;
   border-top: 1px solid silver;
   border-bottom: 1px solid silver;
+  transition: opacity 200ms ease-in-out;
 }
 .hg-bread-col {
   opacity: 0.5;  /* Less visible by default */

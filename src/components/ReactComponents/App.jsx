@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import FiltersModal from './FiltersModal';
 import ProductListing from './ProductListing';
+import SearchBar from './Searchbar';
 
-const FiltersWrapper = ({ products }) => {
+const App = ({ products }) => {
   const [showModal, setShowModal] = useState(false);
   const [selectedPriceRange, setSelectedPriceRange] = useState({ min: 0, max: 1000 });
   const [selectedCategory, setSelectedCategory] = useState('');
@@ -11,7 +12,14 @@ const FiltersWrapper = ({ products }) => {
   const [selectedColors, setSelectedColors] = useState([]);
   const [selectedSizes, setSelectedSizes] = useState([]);
   const [selectedMaterials, setSelectedMaterials] = useState([]);
+  const [searchedProducts, setSearchedProducts] = useState([]);
 
+  const handleInputChange = (e) => {
+    const searchedProducts = products.filter(product => {
+        return product.title.toLowerCase().includes(e.target.value);
+    });
+    setSearchedProducts(searchedProducts);
+  }
   const handlePriceChange = (range) => {
     setSelectedPriceRange(range);
   };
@@ -45,6 +53,7 @@ const FiltersWrapper = ({ products }) => {
 
   return (
     <div>
+      <SearchBar handleInputChange={handleInputChange} products={products} />
       <button id="btnFilters" type="button" onClick={openModal}>
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -74,6 +83,7 @@ const FiltersWrapper = ({ products }) => {
 
       <ProductListing
         products={products}
+        searchedProducts={searchedProducts}
         selectedPriceRange={selectedPriceRange}
         selectedCategory={selectedCategory}
         selectedCollections={selectedCollections}
@@ -86,4 +96,4 @@ const FiltersWrapper = ({ products }) => {
   );
 }
 
-export default FiltersWrapper;
+export default App;

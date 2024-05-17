@@ -1,7 +1,7 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import { sanityClient } from "sanity:client";
-import FiltersWrapper from "../components/ReactComponents/FiltersWrapper.jsx";
+import App from "../components/ReactComponents/App.jsx";
 import { addToCart } from "../components/UserContext";
 import type { Product, Category, Collection } from "../types/types";
 
@@ -29,6 +29,7 @@ console.log(products);
 <Layout title="Ecommerce Products">
     <!--Filters -->
     <div>
+
         <h1>Find Your Style</h1>
         <div class="filters-section">
             <div class="filters-col1">
@@ -46,7 +47,6 @@ console.log(products);
                     ></span
                 >
             </div>
-
             <div class="filters-body">
                 <!--filter options -->
                 <div>
@@ -151,7 +151,7 @@ console.log(products);
         </ul>
     </div> -->
 
-    <FiltersWrapper
+    <App
         products={products}
         client:load
     />

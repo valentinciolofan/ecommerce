@@ -43,7 +43,9 @@ export interface Product {
       _type: 'reference';
     };
   }>;
+  image: { _type: 'image', asset: [Object] },
   availability: boolean;
+  description: string;
   color: string;
   size: string;
   material: string;

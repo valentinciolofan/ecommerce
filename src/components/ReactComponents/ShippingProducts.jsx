@@ -29,16 +29,16 @@ const ShippingProducts = () => {
         setDeliveryMethod('');
         setCurrentStep(0);
     }
-    
+
     useEffect(() => {
         if (detailsFilled && deliveryMethod === 'home') {
-            setCurrentStep(1);  
+            setCurrentStep(1);
         } else if (storeSelected && deliveryMethod === 'store') {
             setCurrentStep(1);
         }
     }, [detailsFilled, deliveryMethod, storeSelected]);
     return (
-        <div>
+        <div className="shipping-products-container">
             <div className='hg-bread'>
                 <div className={`hg-bread-col ${currentStep === 0 ? 'active' : ''}`}>
                     <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="
@@ -80,7 +80,7 @@ http://www.w3.org/2000/svg">
             )}
 
             {currentStep === 0 && deliveryMethod === 'store' && (
-                <div>
+                <div className='store-delivery'>
                     <svg onClick={handleBack} xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 20 20"><path fill="black" d="m3.828 9l6.071-6.071l-1.414-1.414L0 10l.707.707l7.778 7.778l1.414-1.414L3.828 11H20V9z"></path></svg>
                     <p>Choose a store:</p>
                     <div onClick={() => selectStore(true)}>Store 1</div>
@@ -99,22 +99,34 @@ http://www.w3.org/2000/svg">
             )}
 
             {currentStep === 0 && deliveryMethod === 'home' && (
-                <div>
+                <div className='home-delivery'>
                     <svg onClick={handleBack} xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 20 20"><path fill="black" d="m3.828 9l6.071-6.071l-1.414-1.414L0 10l.707.707l7.778 7.778l1.414-1.414L3.828 11H20V9z"></path></svg>
 
                     <OrderDetails onDetailsFilled={handleDetailsFilled} />
 
-                   
+
                 </div>
             )}
 
             {currentStep === 1 && detailsFilled && (
                 <div>
-                 <svg onClick={handleBack} xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 20 20"><path fill="black" d="m3.828 9l6.071-6.071l-1.414-1.414L0 10l.707.707l7.778 7.778l1.414-1.414L3.828 11H20V9z"></path></svg>
+                    <svg onClick={handleBack} xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 20 20"><path fill="black" d="m3.828 9l6.071-6.071l-1.414-1.414L0 10l.707.707l7.778 7.778l1.414-1.414L3.828 11H20V9z"></path></svg>
 
-                <h1>step 2</h1>
+                    <h1>step 2 home delivery</h1>
                 </div>
             )}
+
+            {currentStep === 1 && storeSelected && (
+                <div>
+
+                    <svg onClick={handleBack} xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 20 20"><path fill="black" d="m3.828 9l6.071-6.071l-1.414-1.414L0 10l.707.707l7.778 7.778l1.414-1.414L3.828 11H20V9z"></path></svg>
+                    <h1>step 2 pick-up point</h1>
+                </div>
+
+            )
+
+
+            }
 
 
         </div>
