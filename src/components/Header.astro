@@ -5,7 +5,7 @@ import UserActions from "./ReactComponents/Header/UserActions";
 
 <header>
     <div class="header-container">
-        <p>Logo Placeholder</p>
+        <a href="/shop" class="logo">fashionCulture</a>
         <div class="action-elements">
             <UserActions client:load/>
         </div>
@@ -14,11 +14,18 @@ import UserActions from "./ReactComponents/Header/UserActions";
         </div>
 
         <style>
+            @import url('https://fonts.cdnfonts.com/css/ballpark');
             header {
                 width: 100%;
             }
+            .logo {
+                font-size: 35px;
+                font-family: 'Ballpark', sans-serif;
+                color: #000;
+                font-weight: 700;
+                text-decoration: none;
+            }
             .header-container {
-                max-width: 90%;
                 margin: 12px auto;
                 display: flex;
                 justify-content: space-between;

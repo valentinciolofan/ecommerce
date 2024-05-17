@@ -1,41 +1,255 @@
 ---
+import Layout from "../../layouts/Layout.astro";
 import { sanityClient } from "sanity:client";
-import imageUrlBuilder from '@sanity/image-url'
-import { product } from "../../../schemas/product";
+import React from 'react'
+import { addToCart } from '../../components/UserContext';
+import { type Product } from "../../types/types";
+import { AddtoCart } from "../../components/ReactComponents/ProductListing"
+import urlFor from "../../utils/urlFor";
 
 export const prerender = true;
 export async function getStaticPaths() {
-  const products = await sanityClient.fetch(`*[_type == "product"]`);
-
-  return products.map(({ slug, title, price, images }) => {
-
-    return {
-      params: { slug: slug.current },
-      props: { title, price, images },
-    };
-  });
+  const products: Product[] = await sanityClient.fetch(`*[_type == "product"]`);
+  return products.map(
+    ({
+      slug,
+      title,
+      price,
+      images,
+      image,
+      color,
+      description,
+      availability,
+      size,
+      material,
+    }) => {
+      return {
+        params: { slug: slug.current },
+        props: {
+          title,
+          price,
+          images,
+          image,
+          color,
+          description,
+          availability,
+          size,
+          material,
+        },
+      };
+    },
+  );
 }
+const { slug } = Astro.params;
+const {
+  title,
+  price,
+  images,
+  image,
+  color,
+  description,
+  availability,
+  size,
+  material,
+} = Astro.props;
 
-const { slug  } = Astro.params;
-const { title, price, images } = Astro.props;
-
-
-const builder = imageUrlBuilder(sanityClient)
-
-function urlFor(source) {
-  return builder.image(source)
-}
-console.log(urlFor(images[0]).url());
+const productDetails = {
+  slug: slug,
+  title: title,
+  price: price,
+  color: color,
+  size: size,
+  image: image
+};
 ---
 
-<h1>{title}</h1>
-<div>
-  <img src={urlFor(images[0]).url()}
-  alt=""
-  width="500"
-  height="auto" />
-  <div>
-    <p>{title}</p>
-    <p>${price}</p>
+<Layout title=`${slug} - Fashion Culture`>
+  <div class="product-container">
+   <div class="product-wrapper">
+    <div class="product-images">
+      {
+        images.map((image) => (
+          <div>
+            <img class="product-image" src={urlFor(image).url()} alt="" />
+          </div>
+        ))
+      }
+      <a class="prev">&#10094;</a>
+      <a class="next">&#10095;</a>
+    </div>
+    <div class="product-info">
+      <div>
+      <p>{title}</p>
+      <p>${price}</p>
+      </div>
+      <p>{description}</p>
+      <ul class="product-sizes-list">
+        <li>S</li>
+        <li>M</li>
+        <li>L</li>
+        <li>XL</li>
+        <li>XXL</li>
+      </ul>
+      <AddtoCart productDetails={productDetails} client:only/>
+    </div>
   </div>
-</div>
+    </div>
+
+   
+   
+
+     <div>
+      <p> You might also be interested in: </p>
+     </div>
+  </div>
+</Layout>
+
+<style>
+  .product-container {
+    display: flex;
+    height: 80vh;
+    flex-direction: column;
+    gap: 40px;
+    min-width: 300px;
+    justify-content: center;
+    align-content: center;
+  }
+  .product-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  .product-images {
+    position: relative;
+
+  }
+  .product-image {
+    display: none;
+    border-radius: 2px;
+    max-width: 100%;
+    max-height: 600px;
+    aspect-ratio: 0.5;
+    object-fit: cover;
+  }
+  .prev,
+  .next {
+    cursor: pointer;
+    position: absolute;
+    top: 50%;
+    width: auto;
+    margin-top: -22px;
+    padding: 16px;
+    color: rgb(10, 10, 10);
+    background-color: #fff;
+    font-weight: bold;
+    font-size: 18px;
+    transition: 0.6s ease;
+    border-radius: 0 3px 3px 0;
+    user-select: none;
+  }
+  .next {
+    right: 0;
+    border-radius: 3px 0 0 3px;
+  }
+  .prev:hover,
+  .next:hover {
+    background-color: rgba(214, 214, 214, 0.8);
+  }
+  .active,
+  .dot:hover {
+    background-color: #d3d2d2;
+  }
+  .fade {
+    animation-name: fade;
+    animation-duration: 1.5s;
+  }
+  @keyframes fade {
+    from {
+      opacity: 0.4;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  .product-info p {
+    line-height: 1.5;
+  }
+  .product-info {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    font-size: 12px;
+  }
+  .product-sizes-list {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    align-content: center;
+    font-size: 16px;
+    padding: 16px;
+    list-style-type: none;
+  }
+  .product-sizes-list li {
+    cursor: pointer;
+  }
+
+@media screen and (min-width: 600px) {
+  .product-container {
+  }
+  .product-wrapper {
+    flex-direction: row;
+    justify-content: space-around;
+    align-content:center;
+  }
+  .product-info {
+    justify-content: center;
+    max-width: 300px;
+  }
+  .product-images {
+    
+  }
+}
+@media screen and (min-width: 1024px) {
+  .product-wrapper {
+    justify-content: space-between;
+    align-content:center;
+  }
+  .product-info {
+    padding: 0px 100px;
+  }
+}
+
+@media only screen and (min-width: 1200px) {
+  .product-wrapper {
+    justify-content: space-evenly;
+    align-content:center;
+  }
+  .product-info {
+    padding: 0px 0px;
+  }
+}
+</style>
+<script type="module">
+  let slideIndex = 1;
+  showSlides(slideIndex);
+  const prevBtn = document.querySelector(".prev");
+  const nextBtn = document.querySelector(".next");
+
+  prevBtn.addEventListener("click", () => showSlides((slideIndex += -1)));
+  nextBtn.addEventListener("click", () => showSlides((slideIndex += 1)));
+
+  function showSlides(n) {
+    let slides = document.querySelectorAll(".product-image");
+    if (n > slides.length) {
+      slideIndex = 1;
+    }
+    if (n < 1) {
+      slideIndex = slides.length;
+    }
+    for (let slide of slides) {
+      slide.style.display = "none";
+    }
+    slides[slideIndex - 1].style.display = "block";
+  }
+
+</script>
