@@ -6,6 +6,8 @@ export const userSession = atom(null);
 export const wishlistProducts = atom(null);
 
 
+export const searchBoxValue = atom('');
+
 export async function checkSession() {
     try {
        const response = await fetch('http://localhost:3000/check-session', {

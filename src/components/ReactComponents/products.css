@@ -431,6 +431,22 @@
   font-size: 12px;
 }
 
+/* SEARCH BOX STYLE */
+.searchBox-container {
+  display: flex;
+  min-width: 100%;
+  justify-content: center;
+  margin-top: 0.9rem;
+}
+.searchBox-container input {
+  width: 100%;
+  padding: 10px;
+  border-radius: 500px;
+  border: 1px solid #797474;
+  background-color: #efefef;
+  color: hsla(0, 0%, 0%, 0.5);
+}
+
 
 @media screen and (min-width: 600px) {
   .products-wrapper {

@@ -1,11 +1,13 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import FiltersModal from './FiltersModal';
 import ProductListing from './ProductListing';
-import SearchBar from './Searchbar';
+import { searchBoxValue } from '../UserContext';
+import { useStore } from '@nanostores/react';
 
 const App = ({ products }) => {
+  const searchValue = useStore(searchBoxValue);
   const [showModal, setShowModal] = useState(false);
-  const [selectedPriceRange, setSelectedPriceRange] = useState({ min: 0, max: 1000 });
+  const [selectedPriceRange, setSelectedPriceRange] = useState({ minPrice: 0, maxPrice: 1000 });
   const [selectedCategory, setSelectedCategory] = useState('');
   const [selectedCollections, setSelectedCollections] = useState([]);
   const [selectedAvailability, setSelectedAvailability] = useState('');
@@ -14,12 +16,15 @@ const App = ({ products }) => {
   const [selectedMaterials, setSelectedMaterials] = useState([]);
   const [searchedProducts, setSearchedProducts] = useState([]);
 
-  const handleInputChange = (e) => {
-    const searchedProducts = products.filter(product => {
-        return product.title.toLowerCase().includes(e.target.value);
-    });
-    setSearchedProducts(searchedProducts);
-  }
+ 
+  useEffect(() => {
+    const searchedProductsD = products.filter(product =>
+      product.title.toLowerCase().includes(searchValue.toLowerCase())
+    );
+    setSearchedProducts(searchedProductsD);
+  }, [searchValue, products]);
+
+
   const handlePriceChange = (range) => {
     setSelectedPriceRange(range);
   };
@@ -53,7 +58,6 @@ const App = ({ products }) => {
 
   return (
     <div>
-      <SearchBar handleInputChange={handleInputChange} products={products} />
       <button id="btnFilters" type="button" onClick={openModal}>
         <svg
           xmlns="http://www.w3.org/2000/svg"

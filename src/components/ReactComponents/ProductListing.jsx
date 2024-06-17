@@ -46,56 +46,39 @@ const ProductListing = ({ products, searchedProducts, selectedPriceRange, select
 
 
   useEffect(() => {
-    let filtered;
-    // state false if there is one which is selected and don t have filters applied
-    if (searchedProducts.length === 0) {
+    let filtered = products;
+
+    if (searchedProducts.length !== 0) {
       filtered = searchedProducts;
-    } else {
-      filtered = searchedProducts;
+    } 
+
+    if (selectedColors.length !== 0) {
+      filtered = filtered.filter(product => selectedColors.includes(product.color)); // Filter based on selected colors
     }
 
-    // if (selectedColors.length === 0) {
-    //   filtered = products; // if there isn't any color selected, then show all products
-    // } else {
-    //   filtered = products.filter(product => selectedColors.includes(product.color)); // Filter based on selected colors
-    // }
-    console.log(filtered);
-
-    // if (selectedPriceRange.length === 0) {
-    //   filtered = filtered;
-    // } else {
-    //   filtered = products.filter(product => product.price >= minPrice && product.price <= maxPrice);
-    // }
-
-    if (selectedCategory.length === 0) {
-      filtered = filtered;
-    } else {
-      filtered = products.filter(product => selectedCategory.includes(product.categories[0].title));
+    if (minPrice >= 0 && maxPrice !== 0) {
+      filtered = filtered.filter(product => product.price >= minPrice && product.price <= maxPrice);
     }
 
-    if (selectedCollections.length === 0) {
-      filtered = filtered;
-    } else {
-      filtered = products.filter(product => selectedCollections.includes(product.collection[0].title));
+    if (selectedCategory.length !== 0) {
+      filtered = filtered.filter(product => selectedCategory.includes(product.categories[0].title));
     }
 
-    if (selectedMaterials.length === 0) {
-      filtered = filtered;
-    } else {
+    if (selectedCollections.length !== 0) {
+      filtered = filtered.filter(product => selectedCollections.includes(product.collection[0].title));
+    }
+
+    if (selectedMaterials.length !== 0) {
       filtered = filtered.filter(product => selectedMaterials.includes(product.material));
     }
 
-    if (selectedSizes.length === 0) {
-      filtered = filtered;
-    } else {
+    if (selectedSizes.length !== 0) {
       filtered = filtered.filter(product => selectedSizes.includes(product.size));
     }
-    if (selectedAvailability.length === 0) {
-      filtered = filtered;
-    } else {
+
+    if (selectedAvailability.length !== 0) {
       filtered = filtered.filter(product => selectedAvailability.includes(product.availability));
     }
-    console.log(filtered);
 
     setFilteredProducts(filtered);
 

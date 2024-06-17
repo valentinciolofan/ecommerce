@@ -1,6 +1,7 @@
 ---
 import React from "react";
 import UserActions from "./ReactComponents/Header/UserActions";
+import SearchBar from "./ReactComponents/Searchbar";
 ---
 
 <header>
@@ -9,10 +10,10 @@ import UserActions from "./ReactComponents/Header/UserActions";
         <div class="action-elements">
             <UserActions client:load/>
         </div>
-        <div class="searchBox-container">
+        <!-- <div class="searchBox-container">
             <input type="text" placeholder="Search for a product" />
-        </div>
-
+        </div> -->
+        <SearchBar client:load/>
         <style>
             @import url('https://fonts.cdnfonts.com/css/ballpark');
             header {
