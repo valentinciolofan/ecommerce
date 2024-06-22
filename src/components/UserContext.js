@@ -5,7 +5,6 @@ export const userSession = atom(null);
 
 export const wishlistProducts = atom(null);
 
-
 export const searchBoxValue = atom('');
 
 export async function checkSession() {

@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import OrderDetails from './OrderDetails';
+import { useStore } from "@nanostores/react"
+import { cartStore } from '../UserContext';
 import "./products.css";
 
 const ShippingProducts = () => {
@@ -7,10 +9,13 @@ const ShippingProducts = () => {
     const [deliveryMethod, setDeliveryMethod] = useState('');
     const [storeSelected, setStoreSelected] = useState(false);
     const [detailsFilled, setDetailsFilled] = useState(false);
+    const [orderInfo, setOrderInfo] = useState({});
+    const [paymentStatus, setPaymentStatus] = useState(false);
+
+    const cartItems = useStore(cartStore);
 
     const handleDeliverySelection = (method) => {
         setDeliveryMethod(method);
-        // Reset selections when changing methods
         setStoreSelected(false);
         setDetailsFilled(false);
     };
@@ -25,6 +30,35 @@ const ShippingProducts = () => {
         console.log(deliveryMethod);
     };
 
+    const collectOrderInfo = (e) => {
+        const event = e.target;
+        const inputType = e.target.attributes[1].value;
+        const inputValue = e.target.value;
+
+
+        if (event !== null) {
+            switch (inputType) {
+                case 'name': orderInfo.name = inputValue;
+                break;
+                case 'surname': orderInfo.surname = inputValue;
+                break;
+                case 'address': orderInfo.address = inputValue;
+                break;
+                case 'additionalInfo': orderInfo.additionalInfo = inputValue;
+                break;
+                case 'city': orderInfo.city = inputValue;
+                break;
+                case 'postcode': orderInfo.postcode = inputValue;
+                break;
+                case 'region': orderInfo.region = inputValue;
+                break;
+                case 'phone': orderInfo.phone = inputValue;
+                break;
+            }
+            console.log(orderInfo);
+        }
+    }
+
     const handleBack = () => {
         setDeliveryMethod('');
         setCurrentStep(0);
@@ -36,7 +70,24 @@ const ShippingProducts = () => {
         } else if (storeSelected && deliveryMethod === 'store') {
             setCurrentStep(1);
         }
+        setOrderInfo(cartItems);
     }, [detailsFilled, deliveryMethod, storeSelected]);
+
+    const orderDetails = async (data) => {
+        const sendDetails = await fetch('http://localhost:3000/generate-receipt', {
+            method: 'POST',
+            credentials: 'include',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data),
+        });
+    };
+
+    const handlePayment = () => {
+        orderDetails(orderInfo);
+    }
+
     return (
         <div className="shipping-products-container">
             <div className='hg-bread'>
@@ -102,7 +153,7 @@ http://www.w3.org/2000/svg">
                 <div className='home-delivery'>
                     <svg onClick={handleBack} xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 20 20"><path fill="black" d="m3.828 9l6.071-6.071l-1.414-1.414L0 10l.707.707l7.778 7.778l1.414-1.414L3.828 11H20V9z"></path></svg>
 
-                    <OrderDetails onDetailsFilled={handleDetailsFilled} />
+                    <OrderDetails onDetailsFilled={handleDetailsFilled} collectOrderInfo={collectOrderInfo} />
 
 
                 </div>
@@ -113,6 +164,7 @@ http://www.w3.org/2000/svg">
                     <svg onClick={handleBack} xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 20 20"><path fill="black" d="m3.828 9l6.071-6.071l-1.414-1.414L0 10l.707.707l7.778 7.778l1.414-1.414L3.828 11H20V9z"></path></svg>
 
                     <h1>step 2 home delivery</h1>
+                    <button type='submit' id='paid' onClick={handlePayment}>PAID</button>
                 </div>
             )}
 
