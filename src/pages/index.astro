@@ -1,25 +1,48 @@
 ---
-import Layout from '../layouts/Layout.astro';
-
+import Layout from "../layouts/Layout.astro";
+import React from 'react';
 import { sanityClient } from "sanity:client";
 const products = await sanityClient.fetch(`*[_type == "product"]`);
 
-const response = await fetch('http://localhost:3000/').then(res => res.text()).then(console.log);
+const response = await fetch("http://localhost:3000/")
+	.then((res) => res.text())
+	.then(console.log);
 ---
 
 <Layout title="Ecommerce Project">
 	<section class="landing-page">
 		<div class="landing-page-container">
-			<h1>UNLEASH YOUR STYLE POTENTIAL<h1>
-			<p class="paragraph-landing-page">Discover fashion that empowers you. Embrace your individuality with our carefully curated collection of clothes designed to make a statement.</p>
-			<div class="CTA-buttons">
-				<a href="#">SEE ALL PRODUCTS</a>
-				<a href="#">SEE ALL PRODUCTS</a>
-			</div>
-			<div class="facts-landing-page">
-				<span><p class="fact">1M+</p><p>Customers</p></span>
-				<span><p class="fact">200+</p><p>Products</p></span>
-				<span><p class="fact">10</p><p>Stores</p></span>
+			<div class="landing-page-wrapper">
+				<div class="hero-page-left-col">
+					<h1>UNLEASH YOUR STYLE POTENTIAL</h1>
+					<p class="paragraph-landing-page">
+						Discover fashion that empowers you. Embrace your
+						individuality with our carefully curated collection of
+						clothes designed to make a statement.
+					</p>
+					<div class="CTA-buttons">
+						<a href="/shop">See all products</a>
+						<a href="#">Get in touch</a>
+					</div>
+					<div class="facts-landing-page">
+						<span><p class="fact">1M+</p><p>Customers</p></span>
+						<span><p class="fact">200+</p><p>Products</p></span>
+						<span><p class="fact">10</p><p>Stores</p></span>
+					</div>
+				</div>
+
+				<div class="hero-page-right-col">
+					<div class="hero-page-images">
+						<img
+							src="/images/moon.svg"
+							class="hero-page-moon-svg"
+						/>
+						<img
+							src="/images/hero-page-guy.svg"
+							class="hero-page-guy-svg"
+						/>
+					</div>
+				</div>
 			</div>
 		</div>
 	</section>
@@ -28,73 +51,113 @@ const response = await fetch('http://localhost:3000/').then(res => res.text()).t
 	<!-- second section -->
 	<section class="second-section">
 		<div class="second-section-container">
-			<h3 class="second-section-title">FIND YOUR PERFECT FIT</h3>
-			<p>Discover fashion that empowers you.</p>
-
 			<div class="second-section-cards">
-				<div class="second-section-col"> 
-					<img src="images/jackets.png" alt="jackets" />
+				<div class="second-section-col jackets">
+					<h2 class="second-section-title">FIND YOUR PERFECT FIT</h2>
+					<p>
+						Explore our diverse categories and uncover clothing that
+						suits your lifestyle. From chic essentials to bold
+						statement pieces, we have it all.
+					</p>
+					<img src="images/jackets.svg" alt="jackets" />
 					<h1 class="absolute-paragraph">JACKETS</h1>
 				</div>
-				<div class="second-section-col">
+				<div class="second-section-col pants">
 					<img src="images/pants.png" alt="pants" />
 					<h1 class="absolute-paragraph">PANTS</h1>
 				</div>
-				<div class="second-section-col">
+				<div class="second-section-col shorts">
 					<img src="images/shorts.png" alt="shorts" />
 					<h1 class="absolute-paragraph">SHORTS</h1>
 				</div>
-
 			</div>
 		</div>
 	</section>
+
 	<!-- end of second section -->
 
 	<!-- third section -->
-	<section class="third-section">
-		<div class="third-section-container">
-			<h3 class="second-section-title">ELEVATE YOUR WARDROBE</h3>
-			<p>Upgrade your style with premium clothing selection.</p>
-			
-			<div class="third-section-cards">
-				<div class="third-section-col"> 
-					<img src="images/extraterestrialpants.png" alt="extraterestrial" />
-					<div class="product-details">
-						<p>EXTRATERESTRIAL PANTS</p>
-						<p>$560</p>
-					</div>
-				</div>
-				<div class="third-section-col"> 
-					<img src="images/shortmatrixpants.png" alt="shorts" />
-					<div class="product-details">
-						<p>SHORT FROM MATRIX</p>
-						<p>$360</p>
-					</div>
-				</div>
-				<div class="third-section-col"> 
-					<img src="images/pantsmarts.png" alt="pants" />
-					<div class="product-details">
-						<p>PANTS FROM THE MARS</p>
-						<p>$560</p>
-					</div>
-				</div>
-			</div>
+<section class="third-section">
+  <div class="third-section-container">
+    <h3 class="third-section-title">ELEVATE YOUR WARDROBE</h3>
+    <p>Upgrade your style with our premium clothing selection. Explore our range of fashionable garments that blend quality, comfort, and trendsetting designs.</p>
 
-		</div>
-	</section>
+    <div class="slider-wrapper">
+      <button class="prev-button" aria-label="Previous slide">&lt;</button>
+      <div class="slider">
+        <div class="slides">
+          <div class="slide">
+            <img src="images/extraterestrialpants.png" alt="extraterestrial">
+            <div class="product-details">
+              <p>EXTRATERESTRIAL PANTS</p>
+              <p>$560</p>
+            </div>
+          </div>
+          <div class="slide">
+            <img src="images/shortmatrixpants.png" alt="shorts">
+            <div class="product-details">
+              <p>SHORT FROM MATRIX</p>
+              <p>$360</p>
+            </div>
+          </div>
+          <div class="slide">
+            <img src="images/extraterestrialpants.png" alt="pants">
+            <div class="product-details">
+              <p>PANTS FROM THE MARS</p>
+              <p>$560</p>
+            </div>
+          </div>
+          <div class="slide">
+            <img src="images/extraterestrialpants.png" alt="extraterestrial">
+            <div class="product-details">
+              <p>EXTRATERESTRIAL PANTS</p>
+              <p>$560</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <button class="next-button" aria-label="Next slide">&gt;</button>
+    </div>
+  </div>
+</section>
+
 	<!-- end of third section -->
+		<script>
+	  document.addEventListener('DOMContentLoaded', function() {
+		const slider = document.querySelector('.slider');
+		const prevButton = document.querySelector('.prev-button');
+		const nextButton = document.querySelector('.next-button');
+	
+		let scrollAmount = 0;
+	
+		nextButton.addEventListener('click', () => {
+		  slider.scrollBy({ left: 300, behavior: 'smooth' });
+		});
+	
+		prevButton.addEventListener('click', () => {
+		  slider.scrollBy({ left: -300, behavior: 'smooth' });
+		});
+	  });
+	</script>
 </Layout>
 
 <style>
 	/* hero section */
 	.landing-page {
+		background-color: #f7f7f7;
+		width: 100%;
+		height: 100vh;
 		display: flex;
-		background-color: rgb(146, 86, 86);
+		justify-content: center;
 	}
 	.landing-page-container {
-		width: 90%;
-		margin: 0 auto;
 		padding: 30px;
+		display: flex;
+	}
+	.landing-page-wrapper {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
 	}
 	.paragraph-landing-page {
 		margin-top: 22.5px;
@@ -109,18 +172,22 @@ const response = await fetch('http://localhost:3000/').then(res => res.text()).t
 		font-size: 1.1rem;
 		margin-top: 22.5px;
 		margin-bottom: 27.5px;
+		text-transform: uppercase;
+		font-weight: 400;
+		font-family: "Lato", sans-serif;
 	}
+
 	.CTA-buttons > :first-child {
 		background-color: #000000;
 		color: #fff;
 		text-decoration: none;
-		padding: 32px 16px;
+		padding: 16px 32px;
 	}
 	.CTA-buttons > :nth-last-child(1) {
 		background-color: white;
 		color: #000;
 		text-decoration: none;
-		padding: 2em 1em;
+		padding: 16px 32px;
 		border: 1px solid #000000;
 	}
 	.facts-landing-page {
@@ -135,82 +202,252 @@ const response = await fetch('http://localhost:3000/').then(res => res.text()).t
 		font-size: 25px;
 		font-weight: 600;
 	}
-	/* end of hero section */
-	.second-section {
+	.hero-page-left-col {
+		max-width: 350px;
+		display: flex;
+		justify-content: center;
+		text-align: center;
+		flex-direction: column;
 	}
+	.hero-page-right-col {
+		display: none;
+	}
+	.hero-page-images {
+		position: relative;
+	}
+	.hero-page-moon-svg {
+		position: absolute;
+		top: 50%;
+		left: 0;
+		transform: translateY(-50%);
+		max-width: 100%;
+		height: auto;
+	}
+
+	.hero-page-guy-svg {
+		position: relative;
+		margin-bottom: -4px;
+		left: 0%;
+		max-width: 100%;
+		height: auto;
+	}
+	/* end of hero section */
 	.second-section-container {
-		max-width: 90%;
+		max-width: 1200px;
 		margin: 0 auto;
 		text-align: center;
+		padding: 120px 0px;
 	}
+
 	.second-section-title {
-		margin-top: 50px;
 		margin-bottom: 10px;
 		font-size: 28px;
 		font-weight: 600;
-	} 
+	}
+	.second-section-col.jackets img {
+		margin-top: 20px;
+	}
 	.second-section-cards {
 		margin-top: 15px;
 		display: grid;
 		grid-template-columns: 1fr;
 		grid-template-rows: repeat(3, 1fr);
-		grid-row-gap: 20px;
+		grid-gap: 20px;
 		justify-items: center;
 		align-items: center;
 	}
+
 	.second-section-col {
 		position: relative;
+		width: 100%;
+		height: 100%;
+		overflow: hidden;
 		cursor: pointer;
 		text-align: center;
+		margin-top: auto;
 	}
+
 	.second-section-cards img {
-		max-width: 100%;
-		min-height: auto;
-		justify-items: center;
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
 	}
+
 	.absolute-paragraph {
 		position: absolute;
 		top: 50%;
 		left: 50%;
 		transform: translate(-50%, -50%);
 		color: #fff;
+		font-size: 24px; /* Optional: Adjust font size */
+		font-weight: bold; /* Optional: Adjust font weight */
+	}
+
+	@media screen and (min-width: 1024px) {
+		.second-section-cards {
+			grid-template-columns: 2fr 1fr;
+			grid-template-rows: repeat(2, 1fr);
+			grid-gap: 20px;
+		}
+		.second-section-col.jackets {
+			text-align: start;
+			grid-column: 1 / 2;
+			grid-row: 1 / 3;
+		}
+		.second-section-col.pants {
+			grid-column: 2 / 3;
+			grid-row: 1 / 2;
+		}
+		.second-section-col.shorts {
+			grid-column: 2 / 3;
+			grid-row: 2 / 3;
+		}
 	}
 
 	/* end of second section */
 
 	/* third section */
-	.third-section {
-		width: 100%;
-	}
-	.third-section-container {
-		max-width: 90%;
-		margin: 0 auto;
-	}
-	.third-section-title {
-		margin-top: 50px;
-		margin-bottom: 10px;
-		font-size: 28px;
-		font-weight: 600;
-	} 
-	.third-section-cards {
-		display: flex;
-		flex-direction: column;
-	}
-	.third-section-col {
-	
-	}
-	.third-section-cards img {
-		max-width: 100%;
-		min-height: auto;
-	}
-	.product-details {
-		display: flex;
-		justify-content: space-between;
-	}
+.third-section {
+  width: 100%;
+  padding: 20px 0;
+}
+.third-section-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  text-align: center;
+}
+.third-section-title {
+  margin-top: 50px;
+  margin-bottom: 10px;
+  font-size: 28px;
+  font-weight: 600;
+}
 
+.third-section p {
+  margin-bottom: 40px;
+  font-size: 16px;
+}
+
+.slider-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.slider {
+  overflow-x: auto;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+}
+
+.slides {
+  display: flex;
+  flex-wrap: nowrap;
+}
+
+.slide {
+  min-width: 250px;
+  margin-right: 20px;
+  flex-shrink: 0;
+  text-align: center;
+}
+
+.slide img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.product-details {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 10px;
+}
+
+.product-details p {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.product-details p:last-child {
+  font-weight: 700;
+}
+
+.prev-button,
+.next-button {
+  display: none;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: rgba(0, 0, 0, 0.5);
+  color: white;
+  border: none;
+  padding: 10px;
+  cursor: pointer;
+  z-index: 10;
+}
+
+.prev-button {
+  left: 10px;
+}
+
+.next-button {
+  right: 10px;
+}
+
+@media screen and (min-width: 768px) {
+  .slider {
+    overflow-x: hidden;
+  }
+
+  .prev-button,
+  .next-button {
+    display: block;
+  }
+}
 
 	/* end of third section */
+
+	@media screen and (min-width: 1024px) {
+		.landing-page-container {
+			max-width: 1200px;
+			padding: 0px;
+			flex-grow: 1;
+			justify-content: center;
+		}
+		.landing-page-wrapper {
+			flex-direction: row;
+			flex-grow: 1;
+			justify-content: space-between;
+		}
+		.hero-page-left-col {
+			max-width: 500px;
+			align-items: flex-start;
+			text-align: start;
+		}
+		.hero-page-right-col {
+			max-width: 600px;
+			display: flex;
+			align-items: flex-end;
+		}
+
+		.CTA-buttons {
+			flex-direction: row;
+		}
+		.facts-landing-page {
+			justify-content: flex-start;
+		}
+	}
+
+	@media screen and (min-width: 1200px) {
+		.landing-page-wrapper {
+		}
+	}
 </style>
-<script>
-	
-</script>
+
+

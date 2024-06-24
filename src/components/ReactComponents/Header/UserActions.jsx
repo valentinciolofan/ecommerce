@@ -5,7 +5,7 @@ import { userSession, checkSession } from '../../UserContext';
 import UserIcon  from './UserIcon';
 import UserWishlistIcon   from './UserWishlistIcon';
 import UserCartIcon from './UserCartIcon';
-
+import SearchBar from '../Searchbar';
 
 const UserActions = () => {
   let session = useStore(userSession);
@@ -34,6 +34,9 @@ const UserActions = () => {
 
   return (
     <>
+    <div className='searchBar-disable'>
+      <SearchBar />
+    </div>
       <UserIcon session={session} handleLogOut={handleLogOut}/>
       <UserWishlistIcon session={session} />
       <UserCartIcon session={session}/>
