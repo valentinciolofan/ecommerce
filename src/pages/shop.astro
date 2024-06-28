@@ -28,85 +28,8 @@ console.log(products);
 
 <Layout title="fashionCulture | Shop">
     <!--Filters -->
-    <div>
-
-        <h1>Find Your Style</h1>
-        <div class="filters-section">
-            <div class="filters-col1">
-                <p>Filters</p>
-                <span id="closeFilters"
-                    ><svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="1em"
-                        height="1em"
-                        viewBox="0 0 24 24"
-                        ><path
-                            fill="currentColor"
-                            d="m6.4 18.308l-.708-.708l5.6-5.6l-5.6-5.6l.708-.708l5.6 5.6l5.6-5.6l.708.708l-5.6 5.6l5.6 5.6l-.708.708l-5.6-5.6z"
-                        ></path></svg
-                    ></span
-                >
-            </div>
-            <div class="filters-body">
-                <!--filter options -->
-                <div>
-                    <!--categories -->
-                    <div class="filterBy">
-                        <a href="javascript:void(0);" id="categories"
-                            >Categories</a
-                        >
-                    </div>
-                    <!-- below you can add more filter options -->
-                </div>
-                <!-- elements for filtering options -->
-                <div>
-                    <!-- below you can add a div with checkboxes for each filtering option -->
-                    <div class="filter-by-category">
-                        <form method="POST">
-                            <label class="custom-checkbox">
-                                <input
-                                    type="checkbox"
-                                    id="shirts"
-                                    name="category"
-                                    value="Shirts"
-                                />
-                                <span class="checkmark"></span>
-                                Shirts
-                            </label>
-
-                            <label class="custom-checkbox">
-                                <input
-                                    type="checkbox"
-                                    id="pants"
-                                    name="category"
-                                    value="Pants"
-                                />
-                                <span class="checkmark"></span>
-                                Pants
-                            </label>
-
-                            <label class="custom-checkbox">
-                                <input
-                                    type="checkbox"
-                                    id="jackets"
-                                    name="category"
-                                    value="Jackets"
-                                />
-                                <span class="checkmark"></span>
-                                Jackets
-                            </label>
-
-                            <input
-                                type="submit"
-                                value="Show the results"
-                                class="btn-form-submit"
-                            />
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+    <main>
+    </main>
     <!-- End of filters -->
 
     <!-- <div class="all-products">
@@ -158,6 +81,9 @@ console.log(products);
 </Layout>
 
 <style>
+    main {
+        margin-top: 120px;
+    }
     /* .all-products ul {
         display: flex;
         flex-wrap: wrap;

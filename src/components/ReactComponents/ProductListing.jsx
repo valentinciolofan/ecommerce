@@ -40,7 +40,7 @@ export const AddtoCart = ({ productDetails }) => {
     </div>
   );
 };
-const ProductListing = ({ products, searchedProducts, selectedPriceRange, selectedCategory, selectedCollections, selectedColors, selectedMaterials, selectedSizes, selectedAvailability }) => {
+const ProductListing = ({ openModal, products, searchedProducts, selectedPriceRange, selectedCategory, selectedCollections, selectedColors, selectedMaterials, selectedSizes, selectedAvailability }) => {
   const [filteredProducts, setFilteredProducts] = useState(searchedProducts);
   const [minPrice, maxPrice] = Object.values(selectedPriceRange);
 
@@ -50,7 +50,7 @@ const ProductListing = ({ products, searchedProducts, selectedPriceRange, select
 
     if (searchedProducts.length !== 0) {
       filtered = searchedProducts;
-    } 
+    }
 
     if (selectedColors.length !== 0) {
       filtered = filtered.filter(product => selectedColors.includes(product.color)); // Filter based on selected colors
@@ -86,31 +86,50 @@ const ProductListing = ({ products, searchedProducts, selectedPriceRange, select
 
   return (
     <div className="all-products">
-      <ul>
-        {filteredProducts.map((product) => (
-          <li key={product.slug.current}>
-            <a href={"/product/" + product.slug.current}>
-              <div className="products">
-                <img src={urlFor(product.images[0]).url()} alt="" />
-                <div className="product-details">
-                  <span>{product.title}</span>
-                  <span>${product.price}</span>
+      <div className='all-products-wrapper'>
+        <h2>Find Your Style</h2>
+        <button id="btnFilters" type="button" onClick={openModal}>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="1em"
+            height="1em"
+            viewBox="0 0 24 24"
+          >
+            <path
+              fill="currentColor"
+              d="M22 18.605a.75.75 0 0 1-.75.75h-5.1a2.93 2.93 0 0 1-5.66 0H2.75a.75.75 0 1 1 0-1.5h7.74a2.93 2.93 0 0 1 5.66 0h5.1a.75.75 0 0 1 .75.75m0-13.21a.75.75 0 0 1-.75.75H18.8a2.93 2.93 0 0 1-5.66 0H2.75a.75.75 0 1 1 0-1.5h10.39a2.93 2.93 0 0 1 5.66 0h2.45a.74.74 0 0 1 .75.75m0 6.6a.74.74 0 0 1-.75.75H9.55a2.93 2.93 0 0 1-5.66 0H2.75a.75.75 0 1 1 0-1.5h1.14a2.93 2.93 0 0 1 5.66 0h11.7a.75.75 0 0 1 .75.75"
+            />
+          </svg>
+        </button>
+        <ul>
+          {filteredProducts.map((product) => (
+            <li key={product.slug.current}>
+              <a href={"/product/" + product.slug.current}>
+                <div className="products">
+                  <div>
+                  <img src={urlFor(product.images[0]).url()} alt="" />
+                  </div>
+                  <div className="product-details">
+                    <div className="product-title-and-price">
+                      <span>{product.title}</span>
+                      <span>${product.price}</span>
+                    </div>
+                       <AddtoCart productDetails={{
+                         title: product.title,
+                         slug: product.slug.current,
+                         color: product.color,
+                         price: product.price,
+                         size: product.size,
+                         image: product.image
+                       }} />
+                  </div>
                 </div>
-              </div>
-            </a>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
 
-
-            <AddtoCart productDetails={{
-              slug: product.slug.current,
-              title: product.title,
-              price: product.price,
-              color: product.color,
-              size: product.size,
-              image: product.image
-            }} />
-          </li>
-        ))}
-      </ul>
     </div>
   );
 }

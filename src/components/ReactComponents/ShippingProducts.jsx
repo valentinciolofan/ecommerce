@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import OrderDetails from './OrderDetails';
 import { useStore } from "@nanostores/react"
 import { cartStore } from '../UserContext';
+import Payment from '../Payment';
 import "./products.css";
 
 const ShippingProducts = () => {
@@ -71,6 +72,13 @@ const ShippingProducts = () => {
             setCurrentStep(1);
         }
         setOrderInfo(cartItems);
+
+        // script.src = 'https://js.stripe.com/v3/';
+        // script.async = true;
+        // document.body.appendChild(script);
+        // return () => {
+        //     document.body.removeChild(script);
+        //   }
     }, [detailsFilled, deliveryMethod, storeSelected]);
 
     const orderDetails = async (data) => {
@@ -90,6 +98,7 @@ const ShippingProducts = () => {
 
     return (
         <div className="shipping-products-container">
+            <div className='shipping-products-wrapper'>
             <div className='hg-bread'>
                 <div className={`hg-bread-col ${currentStep === 0 ? 'active' : ''}`}>
                     <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="
@@ -164,6 +173,7 @@ http://www.w3.org/2000/svg">
                     <svg onClick={handleBack} xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 20 20"><path fill="black" d="m3.828 9l6.071-6.071l-1.414-1.414L0 10l.707.707l7.778 7.778l1.414-1.414L3.828 11H20V9z"></path></svg>
 
                     <h1>step 2 home delivery</h1>
+                    <Payment />
                     <button type='submit' id='paid' onClick={handlePayment}>PAID</button>
                 </div>
             )}
@@ -180,7 +190,7 @@ http://www.w3.org/2000/svg">
 
             }
 
-
+        </div>
         </div>
     );
 }
