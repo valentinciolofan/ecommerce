@@ -568,6 +568,8 @@
   display: flex;
   flex-direction: column;
   gap: 20px;
+  max-width: 1400px;
+  margin: 150px auto;
 }
 
 .profile-wrapper {
@@ -580,6 +582,7 @@
 .profile-info {
   background-color: white;
   padding: 20px;
+  padding-bottom: 520px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   border: 1px solid #c0c0c0;
 }
@@ -660,6 +663,73 @@
   font-size: 12px;
 }
 
+/* ADMINISTRATOR PANEL / ORDERS MANAGEMENT */
+.panel {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.panel-wrapper {
+  max-width: 1400px;
+  flex-grow: 1;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+}
+.cards {
+  display: flex;
+  justify-content: center;
+  max-width: 1400px;
+  padding: 20px 0px;
+  gap: 20px;
+}
+.card {
+  padding: 10px 15px;
+  min-width: 200px;
+  color: #000;
+  flex-grow: 1;
+  border: 1px silver solid;
+  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.199);
+}
+.card div {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.orders-container {
+  border: 1px solid silver;
+  box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.199);
+}
+.orders-container-first-col {
+  padding: 20px;
+}
+
+.orders-container-second-col {
+
+}
+.order-divider {
+  border: none;
+  height: 1px;
+  background-color: silver;
+}
+
+.orders-search {
+  max-width: 200px;
+  margin: 20px;
+}
+.orders-table {
+  min-width: 100%;
+  border-spacing: 0;
+}
+.orders-table th, td {
+  padding-left: 20px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  text-align: start;
+}
+.orders-table>thead {
+  background-color: #dedede;
+}
 @media (max-width: 768px) {
   .search-bar:focus,
   .search-container .search-bar {

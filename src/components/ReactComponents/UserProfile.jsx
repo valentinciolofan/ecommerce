@@ -49,7 +49,7 @@ const UserProfile = () => {
                         </span>
                         <span>My Wishlist</span>
                     </button>
-                    <button
+                    {/* <button
                         className={`profile-button ${activeSection === 'profilePayment' ? 'active' : ''}`}
                         onClick={() => handleButtonClick('profilePayment')}
                     >
@@ -60,7 +60,7 @@ const UserProfile = () => {
                             </svg>
                         </span>
                         <span>Payment</span>
-                    </button>
+                    </button> */}
                 </div>
                 <div className="profile-info right-col">
                     {activeSection === 'profileInformation' && (
