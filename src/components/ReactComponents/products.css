@@ -675,17 +675,20 @@
   display: flex;
   justify-content: center;
   flex-direction: column;
+  gap: 50px;
 }
 .cards {
   display: flex;
+  flex-direction: column;
+  align-items: center;
   justify-content: center;
   max-width: 1400px;
-  padding: 20px 0px;
+  padding: 0px 30px;
   gap: 20px;
 }
 .card {
   padding: 10px 15px;
-  min-width: 200px;
+  min-width: 100%;
   color: #000;
   flex-grow: 1;
   border: 1px silver solid;
@@ -712,20 +715,35 @@
   height: 1px;
   background-color: silver;
 }
-
+.orders-search-container {
+  position: relative;
+}
 .orders-search {
   max-width: 200px;
   margin: 20px;
+  padding: 5px;
+  background-color: #FAFAFA;
+  border: 1px solid silver;
+}
+.search-icon {
+  position: absolute;
+  top: 55%;
+  left: 175px;
+  transform: translateY(-50%);
 }
 .orders-table {
   min-width: 100%;
   border-spacing: 0;
+  overflow-x: scroll;
 }
 .orders-table th, td {
   padding-left: 20px;
   padding-top: 10px;
   padding-bottom: 10px;
   text-align: start;
+}
+.table-row1 {
+  background-color: #f7f7f7;
 }
 .orders-table>thead {
   background-color: #dedede;
@@ -762,6 +780,15 @@
 @media screen and (min-width: 420px) {
   .size-and-color {
     flex-direction: row;
+  }
+}
+@media screen and (min-width: 768px) {
+  .cards {
+    flex-direction: row;
+    padding: 0px;
+  }
+  .card {
+    min-width: 200px;
   }
 }
 @media (min-width: 1024px) {
