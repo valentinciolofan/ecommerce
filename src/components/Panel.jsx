@@ -5,8 +5,6 @@ import OrdersManagement from './OrdersManagement';
 
 
 const Panel = () => {
-    
-
     return (
         <div className='panel'>
             <div className='panel-wrapper'>
