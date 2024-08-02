@@ -16,28 +16,55 @@ const storeAddresses = [
     '246 Vogue Pl, Seattle, WA 98101',
     '135 Elegance Ave, Boston, MA 02101',
     '753 Style Pkwy, Houston, TX 77001',
-    '864 Trendy Way, Atlanta, GA 30301'
+    '864 Trendy Way, Atlanta, GA 30301',
 ];
-
-
 
 const ShippingProducts = () => {
     const [currentStep, setCurrentStep] = useState(0);
     const [deliveryMethod, setDeliveryMethod] = useState('');
-    const [storeSelected, setStoreSelected] = useState(0);
+    const [storeSelected, setStoreSelected] = useState(false);
     const [detailsFilled, setDetailsFilled] = useState(false);
     const [orderInfo, setOrderInfo] = useState({});
     const cartItems = useStore(cartStore);
+   
+    console.log(orderInfo);
+
+    useEffect(() => {
+        const savedOrderInfo = localStorage.getItem('orderInfo');
+        if (savedOrderInfo) {
+            const parsedOrderInfo = JSON.parse(savedOrderInfo);
+            setOrderInfo(parsedOrderInfo);
+        }
+    }, []);
+
+    useEffect(() => {
+        if (Object.keys(orderInfo).length !== 0) {
+            localStorage.setItem('orderInfo', JSON.stringify(orderInfo));
+        }
+    }, [orderInfo]);
 
     const handleDeliverySelection = (method) => {
         setDeliveryMethod(method);
         setStoreSelected(false);
         setDetailsFilled(false);
+
+        if (method === 'home') {
+            setOrderInfo(previousOrderInfo => ({
+                ...previousOrderInfo,
+                delivery_method: 'Courier'
+            }))
+        } else if (method === 'store') {
+            setOrderInfo(previousOrderInfo => ({
+                ...previousOrderInfo,
+                delivery_method: 'Pick-up in store'
+            }))
+        }
+       
     };
 
     const handleSelectStore = (storeNr) => {
-        console.log(storeNr);
         setStoreSelected(storeNr);
+        orderInfo.address = `${storeAddresses[storeNr - 1]}`
     };
 
     const handleDetailsFilled = (isFilled) => {
@@ -74,6 +101,7 @@ const ShippingProducts = () => {
     const handleBack = () => {
         setDeliveryMethod('');
         setCurrentStep(0);
+        setStoreSelected(false);
     };
 
     useEffect(() => {
@@ -87,6 +115,7 @@ const ShippingProducts = () => {
                 if (result.status === 'paid') {
                     //   localStorage.clear();
                     setCurrentStep(2);
+                    localStorage.removeItem('cart');
                 }
             };
             checkPaymentStatus();
@@ -94,10 +123,15 @@ const ShippingProducts = () => {
 
         if (detailsFilled && deliveryMethod === 'home') {
             setCurrentStep(1);
-        } else if (storeSelected && deliveryMethod === 'store') {
+        } else if (storeSelected && deliveryMethod === 'store' && detailsFilled) {
+            setStoreSelected(false);
             setCurrentStep(1);
         }
-        setOrderInfo(cartItems);
+        setOrderInfo(prevOrderInfo => ({
+            ...prevOrderInfo,
+            items: cartItems.items,
+            total: cartItems.total
+        }));
     }, [detailsFilled, deliveryMethod, storeSelected, cartItems]);
 
     const orderDetails = async (data) => {
@@ -110,7 +144,6 @@ const ShippingProducts = () => {
             body: JSON.stringify(data),
         });
     };
-
     const handlePayment = () => {
         orderDetails(orderInfo);
     };
@@ -153,7 +186,7 @@ const ShippingProducts = () => {
                     </div>
                 )}
 
-                {currentStep === 0 && deliveryMethod === 'store' && (
+                {currentStep === 0 && deliveryMethod === 'store' && storeSelected === false && (
                     <div className="select-delivery">
                         <svg onClick={handleBack} xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 20 20">
                             <path fill="black" d="m3.828 9l6.071-6.071l-1.414-1.414L0 10l.707.707l7.778 7.778l1.414-1.414L3.828 11H20V9z"></path>
@@ -170,8 +203,34 @@ const ShippingProducts = () => {
                         <div className='select-delivery-option' onClick={() => handleSelectStore(9)}>753 Style Pkwy, Houston, TX 77001</div>
                         <div className='select-delivery-option' onClick={() => handleSelectStore(10)}>864 Trendy Way, Atlanta, GA 30301</div>
                     </div>
-
                 )}
+                {storeSelected > 0 && (
+                    <>
+                        <svg onClick={handleBack} xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 20 20">
+                            <path fill="black" d="m3.828 9l6.071-6.071l-1.414-1.414L0 10l.707.707l7.778 7.778l1.414-1.414L3.828 11H20V9z"></path>
+                        </svg>
+                        <p className="title-delivery-details">DELIVERY DETAILS</p>
+                        <div className="form-delivery-details">
+                            <input type="text" name="name" placeholder="NAME*" onChange={collectOrderInfo} required />
+                            <input type="text" name="surname" placeholder="SURNAME/S*" onChange={collectOrderInfo} required />
+                            <input type="text" name="additionalInfo" placeholder="ADDITIONAL INFORMATION*" onChange={collectOrderInfo} />
+                            <p className="contact-delivery-details">CONTACT INFORMATION</p>
+                            <small>We will use it to update the status of your delivery</small>
+
+                            <input type="text" name="phone" placeholder="PHONE*" onChange={collectOrderInfo} required />
+
+                            <button
+                                type="button"
+                                className="btn-shipping-continue"
+                                onClick={() => handleDetailsFilled(true)}
+                            >
+                                CONTINUE
+                            </button>
+                        </div>
+                    </>
+                )
+                }
+
 
                 {currentStep === 0 && deliveryMethod === 'home' && (
                     <div className='home-delivery'>
@@ -180,22 +239,23 @@ const ShippingProducts = () => {
                     </div>
                 )}
 
-                {currentStep === 1 && (detailsFilled || deliveryMethod === 'store') && (
+                {currentStep === 1 && detailsFilled && (
                     <div>
                         <svg onClick={handleBack} xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 20 20"><path fill="black" d="m3.828 9l6.071-6.071l-1.414-1.414L0 10l.707.707l7.778 7.778l1.414-1.414L3.828 11H20V9z"></path></svg>
-                        {detailsFilled ?
-                            <div className='final-delivery-address'>
-                                <span>{orderInfo.city}, {orderInfo.region}</span>
-                                <span>{orderInfo.address}</span>
-                                <span>{orderInfo.postcode}</span>
-                                <span>{orderInfo.phone}</span>
-                            </div>
-                            :
-                            <div className='final-delivery-address'>
-                                <span>fasionCulture</span>
-                                <span>{storeAddresses[storeSelected]}</span>
-                            </div>
-                        }
+                        <div className='final-delivery-address'>
+                            <p>Contact information</p>
+                            <span>{orderInfo.surname} {orderInfo.name}</span>
+                            {deliveryMethod ==='home' ? <span>{orderInfo.city} {orderInfo.region}</span> : ''}
+                            <span>{orderInfo.phone}</span>
+                            <p>Address</p>
+                            {deliveryMethod ==='store' ? <span>fashionCulture</span> : ''}
+                            <span>{orderInfo.address}</span>
+                            {orderInfo.additionalInfo ?
+                             <>
+                            <p>Additional Information</p>
+                            <span>{orderInfo.additionalInfo}</span>
+                            </>:''}
+                        </div>
                         <Payment cartItems={cartItems} />
                     </div>
                 )}
@@ -229,7 +289,7 @@ const ShippingProducts = () => {
                                             Shipper Name
                                         </p>
                                         <p className='summary-info'>
-                                            fashionCulture
+                                            fashionCulture Inc.
                                         </p>
 
                                         <div className='summary-info-row'>
@@ -237,7 +297,7 @@ const ShippingProducts = () => {
                                                 From
                                             </p>
                                             <p className='summary-info'>
-                                                adresa
+                                                Str. Avenue, New York, NY, 10025
                                             </p>
                                         </div>
                                     </div>
@@ -246,14 +306,14 @@ const ShippingProducts = () => {
                                             Recipient Name
                                         </p>
                                         <p className='summary-info'>
-                                            John Doe
+                                            {orderInfo.surname} {orderInfo.name}
                                         </p>
                                         <div className='summary-info-row'>
                                             <p className='summary-info-col'>
                                                 To
                                             </p>
                                             <p className='summary-info'>
-                                                adresa
+                                                {orderInfo.address}
                                             </p>
                                         </div>
                                     </div>
@@ -263,7 +323,7 @@ const ShippingProducts = () => {
                         <button
                             type="button"
                             className="btn-back-shopping"
-                            onClick={() => window.location.href = '/shop'}
+                            onClick={() => { window.location.href="/shop"; localStorage.removeItem('orderInfo')}}
                         >
                             BACK TO SHOPPING
                         </button>
