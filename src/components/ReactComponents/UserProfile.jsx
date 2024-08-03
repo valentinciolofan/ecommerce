@@ -1,12 +1,99 @@
 import React, { useState } from 'react';
+import { useStore } from '@nanostores/react';
+import { userSession } from '../UserContext';
 import './products.css'; // Assuming you save your styles in a file named profile.css
 
 const UserProfile = () => {
+    const profileInfo = useStore(userSession);
     const [activeSection, setActiveSection] = useState('profileInformation');
+    const [editableFields, setEditableFields] = useState({});
+    const [editMode, setEditMode] = useState({});
+    const [error, setError] = useState(null);
 
     const handleButtonClick = (button) => {
         setActiveSection(button);
     };
+
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        setEditableFields({
+            ...editableFields,
+            [name]: value,
+        });
+    };
+
+    const handleEditClick = (field) => {
+        setEditMode({
+            ...editMode,
+            [field]: !editMode[field],
+        });
+    };
+
+    const handleSaveClick = async (field) => {
+        const updatedInfo = {
+            [field]: editableFields[field] || profileInfo[field],
+        };
+
+        try {
+            const response = await fetch('http://localhost:3000/update-profile', {
+                method: 'PATCH',
+                credentials: 'include',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(updatedInfo),
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(`Server responded with status ${response.status}: ${errorData.error}`);
+            }
+
+            const data = await response.json();
+            setEditMode({
+                ...editMode,
+                [field]: false,
+            });
+            setError(null);
+        } catch (error) {
+            console.error('Error updating profile:', error);
+            setError(`Failed to update profile: ${error.message}`);
+        }
+    };
+
+    const renderEditableField = (label, name, type = 'text') => {
+        const value = editableFields[name] ?? profileInfo?.[name] ?? '';
+        return (
+            <div className="input-with-icon">
+                <label htmlFor={`profile-user-${name}`}>{label}</label>
+                <div className="input-container">
+                    <input
+                        type={type}
+                        name={name}
+                        value={value}
+                        readOnly={!editMode[name]}
+                        onChange={handleInputChange}
+                    />
+                    <svg
+                        onClick={() => handleEditClick(name)}
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="1em"
+                        height="1em"
+                        viewBox="0 0 512 512"
+                    >
+                        <path fill="black" d="m362.7 19.3l-48.4 48.4l130 130l48.4-48.4c25-25 25-65.5 0-90.5l-39.4-39.5c-25-25-65.5-25-90.5 0zm-71 71L58.6 323.5c-10.4 10.4-18 23.3-22.2 37.4L1 481.2c-2.5 8.5-.2 17.6 6 23.8s15.3 8.5 23.7 6.1L151 475.7c14.1-4.2 27-11.8 37.4-22.2l233.3-233.2z"></path>
+                    </svg>
+                    {editMode[name] && (
+                        <button onClick={() => handleSaveClick(name)}>Save</button>
+                    )}
+                </div>
+            </div>
+        );
+    };
+
+    if (!profileInfo) {
+        return <div>Loading...</div>;
+    }
 
     return (
         <div className="profile-container">
@@ -49,39 +136,22 @@ const UserProfile = () => {
                         </span>
                         <span>My Wishlist</span>
                     </button>
-                    {/* <button
-                        className={`profile-button ${activeSection === 'profilePayment' ? 'active' : ''}`}
-                        onClick={() => handleButtonClick('profilePayment')}
-                    >
-                        <span>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="1.5em" height="1.5em" viewBox="0 0 512 512">
-                                <rect width="416" height="320" x="48" y="96" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="32" rx="56" ry="56" />
-                                <path fill="none" stroke="currentColor" strokeLinejoin="round" strokeWidth="60" d="M48 192h416M128 300h48v20h-48z" />
-                            </svg>
-                        </span>
-                        <span>Payment</span>
-                    </button> */}
                 </div>
                 <div className="profile-info right-col">
                     {activeSection === 'profileInformation' && (
                         <div className="profile-personal-information">
                             <h4>Personal Information</h4>
-                            <label htmlFor="profile-user-name">Name</label>
-                            <input type="text" name="profile-user-name" value="Valentin" readOnly />
-                            <label htmlFor="profile-user-birthDate">Birth Date</label>
-                            <input type="date" name="profile-user-birthDate" value="1965-10-05" readOnly />
-                            <label htmlFor="profile-user-phone">Phone</label>
-                            <input type="text" name="profile-user-phone" value="0757368133" readOnly />
+                            {error && <p className="error">{error}</p>}
+                            {renderEditableField('Name', 'name')}
+                            {renderEditableField('Birth Date', 'birthdate', 'date')}
+                            {renderEditableField('Phone', 'phone')}
                             <p>Delivery Address</p>
-                            <label htmlFor="profile-user-county">County</label>
-                            <input type="text" name="profile-user-county" value="Valcea" readOnly />
-                            <label htmlFor="profile-user-city">City</label>
-                            <input type="text" name="profile-user-city" value="Slatioara" readOnly />
-                            <label htmlFor="profile-user-address">Address</label>
-                            <input type="text" name="profile-user-address" value="Washington Street n.2 idk" readOnly />
+                            {renderEditableField('County', 'county')}
+                            {renderEditableField('City', 'city')}
+                            {renderEditableField('Address', 'address')}
                         </div>
                     )}
-               {activeSection === 'profileOrders' && (
+                    {activeSection === 'profileOrders' && (
                         <div>
                             <h1>My Orders</h1>
                             <ul>
@@ -101,22 +171,6 @@ const UserProfile = () => {
                                 <li>Wishlist Item #3</li>
                                 {/* Add more wishlist items as needed */}
                             </ul>
-                        </div>
-                    )}
-                    {activeSection === 'profilePayment' && (
-                        <div>
-                            <h1>Payment Info</h1>
-                            <div>
-                                <h4>Saved Payment Methods</h4>
-                                <ul>
-                                    <li>Visa ending in 1234</li>
-                                    <li>Mastercard ending in 5678</li>
-                                    <li>PayPal: user@example.com</li>
-                                    {/* Add more payment methods as needed */}
-                                </ul>
-                                <h4>Billing Address</h4>
-                                <p>123 Billing St, Billing City, BC 12345</p>
-                            </div>
                         </div>
                     )}
                 </div>

@@ -25,6 +25,7 @@ const ShippingProducts = () => {
     const [storeSelected, setStoreSelected] = useState(false);
     const [detailsFilled, setDetailsFilled] = useState(false);
     const [orderInfo, setOrderInfo] = useState({});
+    const [loading, setLoading] = useState(false);
     const cartItems = useStore(cartStore);
    
     console.log(orderInfo);
@@ -113,7 +114,8 @@ const ShippingProducts = () => {
                 const response = await fetch(`http://localhost:3000/check-payment-status/${sessionId}`);
                 const result = await response.json();
                 if (result.status === 'paid') {
-                    //   localStorage.clear();
+                    setLoading(false);
+                    handlePayment();
                     setCurrentStep(2);
                     localStorage.removeItem('cart');
                 }
@@ -142,12 +144,19 @@ const ShippingProducts = () => {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify(data),
-        });
+        }).then(response => response.json())
+        .then(response => setOrderInfo(prevOrderInfo => ({
+            ...prevOrderInfo,
+            orderId: response.id
+        })));
     };
     const handlePayment = () => {
         orderDetails(orderInfo);
     };
-
+    if (loading) {
+        return <p>Loading...</p>;
+    }
+    console.log(orderInfo);
     return (
         <div className="shipping-products-container">
             <div className='shipping-products-wrapper'>
@@ -278,7 +287,7 @@ const ShippingProducts = () => {
                             <div className='summary-order-id-and-delivery'>
                                 <svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" viewBox="0 0 32 32"><path fill="black" d="m23 1l-6 6l1.415 1.402L22 4.818V21H10V10H8v11c0 1.103.897 2 2 2h12c1.103 0 2-.897 2-2V4.815l3.586 3.587L29 7z"></path><path fill="black" d="M18.5 19h-5c-.827 0-1.5-.673-1.5-1.5v-5c0-.827.673-1.5 1.5-1.5h5c.827 0 1.5.673 1.5 1.5v5c0 .827-.673 1.5-1.5 1.5M14 17h4v-4h-4zm2 14v-2c7.168 0 13-5.832 13-13c0-1.265-.181-2.514-.538-3.715l1.917-.57C30.79 13.1 31 14.542 31 16c0 8.271-6.729 15-15 15M1.621 20.285A15 15 0 0 1 1 16C1 7.729 7.729 1 16 1v2C8.832 3 3 8.832 3 16c0 1.265.181 2.515.538 3.715z"></path></svg>
                                 <div>
-                                    <p>Order ID #123457483</p>
+                                    <p>Order ID #{orderInfo.orderId}</p>
                                     <small className='summary-delivery-type'>Express Delivery</small>
                                 </div>
                             </div>
