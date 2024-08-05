@@ -154,12 +154,40 @@ const UserProfile = () => {
                     {activeSection === 'profileOrders' && (
                         <div>
                             <h1>My Orders</h1>
-                            <ul>
-                                <li>Order #1: Status - Delivered</li>
-                                <li>Order #2: Status - In Transit</li>
-                                <li>Order #3: Status - Processing</li>
-                                {/* Add more orders as needed */}
-                            </ul>
+                            <table className="orders-table">
+                    <thead>
+                        <tr>
+                            <th>Order ID</th>
+                            <th>Order Date</th>
+                            <th className="order-status">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {
+                           profileInfo.orders.map((order, index) => (
+                                <tr key={order.order_id} className={index % 2 === 0 ? '' : 'table-row1'}>
+                                    <td>#{order.order_id}</td>
+                                    <td>{order.order_date.slice(0, 10)}</td>
+                                    <td className="order-status">
+                                        <select value={order.order_status} onChange={(e) => handleOrderStatus(e, index)}>
+                                            <option>
+                                                Pending
+                                            </option>
+                                            <option>
+                                                In progress
+                                            </option>
+                                            <option>
+                                                Delivered
+                                            </option>
+                                        </select>
+                                    </td>
+                                </tr>
+                            )
+
+                            )
+                        }
+                    </tbody>
+                </table>
                         </div>
                     )}
                     {activeSection === 'profileWishlist' && (
