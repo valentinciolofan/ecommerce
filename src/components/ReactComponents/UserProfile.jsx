@@ -160,6 +160,7 @@ const UserProfile = () => {
                             <th>Order ID</th>
                             <th>Order Date</th>
                             <th className="order-status">Status</th>
+                            <th>Receipt</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -181,6 +182,7 @@ const UserProfile = () => {
                                             </option>
                                         </select>
                                     </td>
+                                    <td><a href={order.receipt_url}>View receipt</a></td>
                                 </tr>
                             )
 
@@ -193,12 +195,9 @@ const UserProfile = () => {
                     {activeSection === 'profileWishlist' && (
                         <div>
                             <h1>My Wishlist</h1>
-                            <ul>
-                                <li>Wishlist Item #1</li>
-                                <li>Wishlist Item #2</li>
-                                <li>Wishlist Item #3</li>
-                                {/* Add more wishlist items as needed */}
-                            </ul>
+                            {profileInfo.wishlist.map(favoriteProduct => <li>
+                                {favoriteProduct}
+                            </li>)}
                         </div>
                     )}
                 </div>
