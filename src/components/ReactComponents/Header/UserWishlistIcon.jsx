@@ -4,14 +4,12 @@ import { UserFavoriteListIconDropDown } from './Modal'
 const UserWishlistIcon = ({session}) => {
     const [showDropdown, setShowDropdown] = useState(false);
 
-
     const onMouseOver = async (e) => {
         if (session.get()) {
             console.log(session.get());
             setShowDropdown(true);
         }
     }
-    
     const onMouseOut = () => {
         setShowDropdown(false);
     };

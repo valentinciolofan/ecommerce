@@ -2,11 +2,18 @@
 import Layout from "../layouts/Layout.astro";
 import { userSession, checkSession } from "../components/UserContext";
 import UserProfile from "../components/ReactComponents/UserProfile";
+import { sanityClient } from "sanity:client";
+import type { Product } from "../types/types";
 
+const productQuery = `*[_type == "product"] {
+  title, slug, image, availability
+}`;
+
+const products: Product[] = await sanityClient.fetch(productQuery);
 ---
 
 <Layout title="Profile | fashionCulture">
-   <UserProfile client:load/>
+   <UserProfile products={products} client:load/>
 </Layout>
 
 

@@ -93,6 +93,8 @@ const ShippingProducts = () => {
                     break;
                 case 'region': orderInfo.region = inputValue;
                     break;
+                case 'email': orderInfo.email = inputValue;
+                    break;
                 case 'phone': orderInfo.phone = inputValue;
                     break;
             }
@@ -226,6 +228,7 @@ const ShippingProducts = () => {
                             <p className="contact-delivery-details">CONTACT INFORMATION</p>
                             <small>We will use it to update the status of your delivery</small>
 
+                            <input type="text" name="email" placeholder="EMAIL*" onChange={collectOrderInfo} required />
                             <input type="text" name="phone" placeholder="PHONE*" onChange={collectOrderInfo} required />
 
                             <button

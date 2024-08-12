@@ -114,7 +114,11 @@ const ProductListing = ({ openModal, products, searchedProducts, selectedPriceRa
                       <span>{product.title}</span>
                       <span>${product.price}</span>
                     </div>
-                       <AddtoCart productDetails={{
+                      
+                  </div>
+                </div>
+              </a>
+              <AddtoCart productDetails={{
                          title: product.title,
                          slug: product.slug.current,
                          color: product.color,
@@ -122,9 +126,6 @@ const ProductListing = ({ openModal, products, searchedProducts, selectedPriceRa
                          size: product.size,
                          image: product.image
                        }} />
-                  </div>
-                </div>
-              </a>
             </li>
           ))}
         </ul>
