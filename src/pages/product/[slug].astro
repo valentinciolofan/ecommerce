@@ -106,41 +106,40 @@ const productDetails = {
      </div>
   </div>
   <script type="module">
-    const slug = window.location.pathname.slice(9, );
-    console.log(slug);
-
-
-document.addEventListener('click', () => {
-      const svgElement = document.querySelector('#addToFav');
-      const saveDesiredProduct = async () => {
-        const productSlug = svgElement.getAttribute('data-slug'); // Access the slug from the data attribute
-
-        try {
-          const response = await fetch('http://localhost:3000/wishlist', {
-            method: 'POST',
-            credentials: 'include',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ productSlug: slug }) 
-          });
-
-          const result = await response.json();
-          if (result.success) {
-            console.log('Favorite saved successfully.');
-          } else {
-            console.error('Failed to save favorite:', result.error);
-          }
-        } catch (error) {
-          console.error('Error:', error);
+    // This code runs immediately when the module loads
+    const slug = window.location.pathname.slice(9);
+  
+    // Function to save the desired product to the wishlist
+    const saveDesiredProduct = async () => {
+      try {
+        const response = await fetch('http://localhost:3000/wishlist', {
+          method: 'POST',
+          credentials: 'include',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ productSlug: slug })
+        });
+  
+        const result = await response.json();
+        if (result.success) {
+          console.log('Favorite saved successfully.');
+        } else {
+          console.error('Failed to save favorite:', result.error);
         }
-      };
-
+      } catch (error) {
+        console.error('Error:', error);
+      }
+    };
+  
+    // Add the event listener to the SVG element once the DOM is fully loaded
+    document.addEventListener('DOMContentLoaded', () => {
+      const svgElement = document.querySelector('#addToFav');
       if (svgElement) {
         svgElement.addEventListener('click', saveDesiredProduct);
       }
     });
-  </script>
+  </script>  
 </Layout>
 
 <style>
