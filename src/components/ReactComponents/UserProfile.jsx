@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useStore } from '@nanostores/react';
 import { userSession } from '../UserContext';
 import urlFor from '../../utils/urlFor';
-import './products.css'; // Assuming you save your styles in a file named profile.css
+import './products.css';
 
 const UserProfile = ({ products }) => {
     const profileInfo = useStore(userSession);
@@ -10,9 +10,11 @@ const UserProfile = ({ products }) => {
     const [editableFields, setEditableFields] = useState({});
     const [editMode, setEditMode] = useState({});
     const [error, setError] = useState(null);
+    const [wishlistUpdated, setWishlistUpdated] = useState(false);
 
     const handleButtonClick = (button) => {
         setActiveSection(button);
+        localStorage.setItem("currentSection", button)
     };
 
     const handleInputChange = (e) => {
@@ -94,18 +96,33 @@ const UserProfile = ({ products }) => {
 
     useEffect(() => {
         if (profileInfo && products) {
-            profileInfo.wishlist = profileInfo.wishlist.map((productId) => {
+            // Update wishlist with the full product data
+            const updatedWishlist = profileInfo.wishlist.map((productId) => {
                 const foundProduct = products.find((p) => p.slug.current === productId);
                 return foundProduct || productId;
-            })
-        }
-    }, [profileInfo])
+            });
 
+            // Only update the session if the wishlist has actually changed
+            if (JSON.stringify(profileInfo.wishlist) !== JSON.stringify(updatedWishlist)) {
+                userSession.set({ ...profileInfo, wishlist: updatedWishlist });
+            }
+
+            // Set wishlistUpdated to true after the wishlist has been updated
+            setWishlistUpdated(true);
+        }
+
+        const currentSection = localStorage.getItem('currentSection');
+        if (currentSection !== null) {
+            setActiveSection(currentSection);
+        }
+    }, [profileInfo, products]);
+
+    console.log(profileInfo);
     const handleWishlistProduct = async (e) => {
         try {
             // Find the closest SVG element and extract the product slug from the URL path
             const slug = e.target.closest("SVG").parentNode.parentNode.firstChild.pathname.slice(9);
-    
+
             // Send the request to the backend to remove the product from the wishlist
             const response = await fetch('http://localhost:3000/remove-wishlist-product', {
                 method: 'PATCH',
@@ -115,15 +132,15 @@ const UserProfile = ({ products }) => {
                 },
                 body: JSON.stringify({ slug }),
             });
-    
+
             // Check if the response is OK
             if (!response.ok) {
                 // If not, throw an error with the response status text
                 throw new Error(`Error: ${response.statusText}`);
             }
-    
+
             const removeProduct = await response.json();
-    
+
             // If the product was successfully removed, update the state
             if (removeProduct.status === 'OK') {
                 const updatedWishlist = profileInfo.wishlist.filter(product => product.slug.current !== slug);
@@ -138,7 +155,7 @@ const UserProfile = ({ products }) => {
             alert('An error occurred while trying to remove the product from your wishlist. Please try again later.');
         }
     };
-    
+
     if (!profileInfo) {
         return <div>Loading...</div>;
     }
@@ -202,46 +219,46 @@ const UserProfile = ({ products }) => {
                     {activeSection === 'profileOrders' && (
                         <div>
                             <h1>My Orders</h1>
-                            { profileInfo.orders.length ?
-                                  <table className="orders-table">
-                                  <thead>
-                                      <tr>
-                                          <th>Order ID</th>
-                                          <th>Order Date</th>
-                                          <th className="order-status">Status</th>
-                                          <th>Receipt</th>
-                                      </tr>
-                                  </thead>
-                                  <tbody>
-                                      {
-                                          profileInfo.orders.map((order, index) => (
-                                              <tr key={order.order_id} className={index % 2 === 0 ? '' : 'table-row1'}>
-                                                  <td>#{order.order_id}</td>
-                                                  <td>{order.order_date.slice(0, 10)}</td>
-                                                  <td className="order-status">
-                                                      <select value={order.order_status} onChange={(e) => handleOrderStatus(e, index)}>
-                                                          <option>
-                                                              Pending
-                                                          </option>
-                                                          <option>
-                                                              In progress
-                                                          </option>
-                                                          <option>
-                                                              Delivered
-                                                          </option>
-                                                      </select>
-                                                  </td>
-                                                  <td><a href={order.receipt_url}>View receipt</a></td>
-                                              </tr>
-                                          )
-  
-                                          )
-                                      }
-                                  </tbody>
-                              </table> : <p>You didn't placed any order yet. You can see our products <a href='/shop'>here</a></p>
+                            {profileInfo.orders.length ?
+                                <table className="orders-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Order ID</th>
+                                            <th>Order Date</th>
+                                            <th className="order-status">Status</th>
+                                            <th>Receipt</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {
+                                            profileInfo.orders.map((order, index) => (
+                                                <tr key={order.order_id} className={index % 2 === 0 ? '' : 'table-row1'}>
+                                                    <td>#{order.order_id}</td>
+                                                    <td>{order.order_date.slice(0, 10)}</td>
+                                                    <td className="order-status">
+                                                        <select value={order.order_status} onChange={(e) => handleOrderStatus(e, index)}>
+                                                            <option>
+                                                                Pending
+                                                            </option>
+                                                            <option>
+                                                                In progress
+                                                            </option>
+                                                            <option>
+                                                                Delivered
+                                                            </option>
+                                                        </select>
+                                                    </td>
+                                                    <td><a href={order.receipt_url}>View receipt</a></td>
+                                                </tr>
+                                            )
+
+                                            )
+                                        }
+                                    </tbody>
+                                </table> : <p>You didn't placed any order yet. You can see our products <a href='/shop'>here</a></p>
 
                             }
-                          
+
                         </div>
                     )}
                     {activeSection === 'profileWishlist' && (
@@ -249,30 +266,42 @@ const UserProfile = ({ products }) => {
                             <div className='all-products-wrapper'>
                                 <h1>My Wishlist</h1>
                                 <ul>
-                                    {profileInfo.wishlist.length ? profileInfo.wishlist.map((product) => (
-                                        <li key={product.slug.current}>
-                                            <a href={"/product/" + product.slug.current}>
-                                                <div className="products">
-                                                    <div>
-                                                        <img src={urlFor(product.image).url()} alt="" />
-                                                    </div>
-                                                    <div className="product-details">
-                                                        <div className="product-title-and-price">
-                                                            <span>{product.title}</span>
-
+                                    {
+                                        profileInfo.wishlist.length > 0 && profileInfo.wishlist.every(product => product?.slug?.current !== undefined) ? (
+                                            profileInfo.wishlist.map((product) => (
+                                                <li key={product.slug.current}>
+                                                    <a href={"/product/" + product.slug.current}>
+                                                        <div className="products">
+                                                            <div>
+                                                                <img src={urlFor(product.image).url()} alt="" />
+                                                            </div>
+                                                            <div className="product-details">
+                                                                <div className="product-title-and-price">
+                                                                    <span>{product.title}</span>
+                                                                </div>
+                                                            </div>
                                                         </div>
-                                                    </div>
-                                                </div>
-                                            </a>
-                                            <span onClick={handleWishlistProduct}>
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 256 256"><path fill="black" d="M216 48h-40v-8a24 24 0 0 0-24-24h-48a24 24 0 0 0-24 24v8H40a8 8 0 0 0 0 16h8v144a16 16 0 0 0 16 16h128a16 16 0 0 0 16-16V64h8a8 8 0 0 0 0-16M96 40a8 8 0 0 1 8-8h48a8 8 0 0 1 8 8v8H96Zm96 168H64V64h128Zm-80-104v64a8 8 0 0 1-16 0v-64a8 8 0 0 1 16 0m48 0v64a8 8 0 0 1-16 0v-64a8 8 0 0 1 16 0"></path></svg>
-                                            </span>
-
-                                        </li>
-
-                                    ))
-                                        : <li>Ups .. you didn't added any product to wishlist yet. View all available products <a href='/shop'>here</a></li>
+                                                    </a>
+                                                    <span onClick={handleWishlistProduct}>
+                                                        <svg
+                                                            xmlns="http://www.w3.org/2000/svg"
+                                                            width="1em"
+                                                            height="1em"
+                                                            viewBox="0 0 256 256"
+                                                        >
+                                                            <path
+                                                                fill="black"
+                                                                d="M216 48h-40v-8a24 24 0 0 0-24-24h-48a24 24 0 0 0-24 24v8H40a8 8 0 0 0 0 16h8v144a16 16 0 0 0 16 16h128a16 16 0 0 0 16-16V64h8a8 8 0 0 0 0-16M96 40a8 8 0 0 1 8-8h48a8 8 0 0 1 8 8v8H96Zm96 168H64V64h128Zm-80-104v64a8 8 0 0 1-16 0v-64a8 8 0 0 1 16 0m48 0v64a8 8 0 0 1-16 0v-64a8 8 0 0 1 16 0"
+                                                            ></path>
+                                                        </svg>
+                                                    </span>
+                                                </li>
+                                            ))
+                                        ) : (
+                                            <li>Ups .. you didn't add any product to your wishlist yet. View all available products <a href='/shop'>here</a></li>
+                                        )
                                     }
+
                                 </ul>
                             </div>
                         </div>

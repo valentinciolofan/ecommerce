@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { UserFavoriteListIconDropDown } from './Modal'
 
 const UserWishlistIcon = ({session}) => {
@@ -14,10 +14,20 @@ const UserWishlistIcon = ({session}) => {
         setShowDropdown(false);
     };
 
+    const handleButtonClick = () => {
+        localStorage.setItem('currentSection', 'profileWishlist'); 
+        window.location.href = '/profile';
+    };
+
+    useEffect(() => {
+        if (window.location.pathname !== '/profile') {
+            localStorage.removeItem('currentSection');
+        }
+    }, [window.location.pathname])
     return (
         <>
         <svg
-            onClick={() => console.log(session)}
+            onClick={handleButtonClick}
             xmlns="http://www.w3.org/2000/svg"
             width="1.5em"
             height="1.5em"
