@@ -7,6 +7,8 @@ export const wishlistProducts = atom(null);
 
 export const searchBoxValue = atom('');
 
+export const productDetailsStore = atom('');
+
 export async function checkSession() {
     try {
        const response = await fetch('http://localhost:3000/check-session', {
@@ -41,7 +43,7 @@ export const cartStore = persistentAtom('cart', {
 
 export function addToCart(product) {
   const currentCart = cartStore.get();
-  const existingItem = currentCart.items.find(item => item.slug === product.slug);
+  const existingItem = currentCart.items.find(item => item.slug === product.slug && item.size === product.size);
 
   if (existingItem) {
     existingItem.quantity += 1;

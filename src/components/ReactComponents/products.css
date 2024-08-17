@@ -255,7 +255,28 @@
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
   position: relative;
 }
+/* Product page styling */
+.product-sizes-list {
+  display: flex;
+  list-style-type: none;
+}
+.product-sizes-list li {
+  cursor: pointer;
+  padding: 8px 12px;
+  transition:
+    background-color 0.3s,
+    color 0.3s;
+  background-color: transparent;
+  border: 1px solid #fff;
+}
 
+.product-sizes-list li:hover {
+  background-color: #f0f0f0;
+}
+
+.product-sizes-list li.selected {
+  border: 1px solid #000;
+}
 /* CART STYLING */
 .cart {
   display: flex;

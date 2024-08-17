@@ -1,21 +1,23 @@
 import React, { useState, useEffect } from 'react';
-import { addToCart, cartStore } from '../UserContext';
+import { useStore } from '@nanostores/react';
+import { productDetailsStore, addToCart, cartStore } from '../UserContext';
 import "./products.css"
 import urlFor from '../../utils/urlFor';
 
-
 export const AddtoCart = ({ productDetails }) => {
-  const handleAddToCart = () => {
-    addToCart({
-      slug: productDetails.slug,
-      title: productDetails.title,
-      color: productDetails.color,
-      price: productDetails.price,
-      size: productDetails.size,
-      image: productDetails.image
-    })
-    console.log(productDetails.slug);
+  const productDetailsFromStore = useStore(productDetailsStore);
 
+  const handleAddToCart = () => {
+      addToCart({
+          slug: productDetails.slug,
+          title: productDetails.title,
+          color: productDetails.color,
+          price: productDetails.price,
+          size: productDetailsFromStore.selectedSize,
+          image: productDetails.image,
+      });
+
+      console.log('Added to cart with size: ', productDetailsFromStore.selectedSize);
   };
 
   return (
@@ -40,6 +42,8 @@ export const AddtoCart = ({ productDetails }) => {
     </div>
   );
 };
+
+
 const ProductListing = ({ openModal, products, searchedProducts, selectedPriceRange, selectedCategory, selectedCollections, selectedColors, selectedMaterials, selectedSizes, selectedAvailability }) => {
   const [filteredProducts, setFilteredProducts] = useState(searchedProducts);
   const [minPrice, maxPrice] = Object.values(selectedPriceRange);

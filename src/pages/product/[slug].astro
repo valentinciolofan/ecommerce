@@ -1,11 +1,12 @@
 ---
 import Layout from "../../layouts/Layout.astro";
 import { sanityClient } from "sanity:client";
-import React from 'react'
-import { addToCart } from '../../components/UserContext';
+import React from "react";
+import { addToCart } from "../../components/UserContext";
 import { type Product } from "../../types/types";
 import { AddToWishlist } from "../../components/ReactComponents/Header/UserWishlistIcon";
-import { AddtoCart } from "../../components/ReactComponents/ProductListing"
+import { AddtoCart } from "../../components/ReactComponents/ProductListing";
+import ProductSizes from "../../components/ProductSizes"
 import urlFor from "../../utils/urlFor";
 
 export const prerender = true;
@@ -21,7 +22,7 @@ export async function getStaticPaths() {
       color,
       description,
       availability,
-      size,
+      sizes,
       material,
     }) => {
       return {
@@ -34,7 +35,7 @@ export async function getStaticPaths() {
           color,
           description,
           availability,
-          size,
+          sizes,
           material,
         },
       };
@@ -50,62 +51,62 @@ const {
   color,
   description,
   availability,
-  size,
+  sizes,
   material,
 } = Astro.props;
+
+const structuredSizes = [];
+for (let i = 0; i < sizes.length; i += 2) {
+  structuredSizes.push({
+    size: sizes[i],
+    stock: sizes[i + 1],
+  });
+}
 
 const productDetails = {
   slug: slug,
   title: title,
   price: price,
   color: color,
-  size: size,
-  image: image
+  size: '',
+  image: image,
 };
 ---
 
 <Layout title=`${slug} - Fashion Culture`>
   <div class="product-container">
-   <div class="product-wrapper">
-    <div class="product-images">
-      {
-        images.map((image) => (
-          <div>
-            <img class="product-image" src={urlFor(image).url()} alt="" />
-          </div>
-        ))
-      }
-      <a class="prev">&#10094;</a>
-      <a class="next">&#10095;</a>
-    </div>
-    <div class="product-info">
-      <div>
-      <p>{title}</p>
-      <p>${price}</p>
+    <div class="product-wrapper">
+      <div class="product-images">
+        {
+          images.map((image) => (
+            <div>
+              <img class="product-image" src={urlFor(image).url()} alt="" />
+            </div>
+          ))
+        }
+        <a class="prev">&#10094;</a>
+        <a class="next">&#10095;</a>
       </div>
-      <p>{description}</p>
-      <ul class="product-sizes-list">
-        <li>S</li>
-        <li>M</li>
-        <li>L</li>
-        <li>XL</li>
-        <li>XXL</li>
-      </ul>
-      <AddToWishlist client:only/>
-      <AddtoCart productDetails={productDetails} client:only/>
+      <div class="product-info">
+        <div>
+          <p>{title}</p>
+          <p>${price}</p>
+        </div>
+        <p>{description}</p>
+        <p>Select a size:</p>
+        <ProductSizes sizes={structuredSizes} client:load/>
+        <AddToWishlist client:only />
+        <AddtoCart productDetails={productDetails} client:load />
+      </div>
     </div>
   </div>
-    </div>
 
-   
-   
-
-     <div>
-      <p>You might also be interested in:</p>
-     </div>
+  <div>
+    <p>You might also be interested in:</p>
   </div>
-  <script type="module">
-// carousel of images
+</Layout>
+<script type="module">
+  // carousel of images
   let slideIndex = 1;
   showSlides(slideIndex);
   const prevBtn = document.querySelector(".prev");
@@ -128,8 +129,20 @@ const productDetails = {
     slides[slideIndex - 1].style.display = "block";
   }
 
-  </script>  
-</Layout>
+  // select size
+  document.addEventListener("DOMContentLoaded", function () {
+    const sizeOptions = document.querySelectorAll(".size-option");
+    sizeOptions.forEach((option) => {
+      option.addEventListener("click", function () {
+        // Remove 'selected' class from all options
+        sizeOptions.forEach((opt) => opt.classList.remove("selected"));
+
+        // Add 'selected' class to the clicked option
+        this.classList.add("selected");
+      });
+    });
+  });
+</script>
 
 <style>
   .product-container {
@@ -148,7 +161,6 @@ const productDetails = {
   }
   .product-images {
     position: relative;
-
   }
   .product-image {
     display: none;
@@ -209,50 +221,58 @@ const productDetails = {
   }
   .product-sizes-list {
     display: flex;
-    gap: 10px;
-    justify-content: center;
-    align-content: center;
-    font-size: 16px;
-    padding: 16px;
     list-style-type: none;
   }
   .product-sizes-list li {
     cursor: pointer;
+    padding: 8px 12px;
+    transition:
+      background-color 0.3s,
+      color 0.3s;
+    background-color: transparent;
+    border: 1px solid #fff;
   }
 
-@media screen and (min-width: 600px) {
-  .product-container {
+  .product-sizes-list li:hover {
+    background-color: #f0f0f0;
   }
-  .product-wrapper {
-    flex-direction: row;
-    justify-content: space-around;
-    align-content:center;
-  }
-  .product-info {
-    justify-content: center;
-    max-width: 300px;
-  }
-  .product-images {
-    
-  }
-}
-@media screen and (min-width: 1024px) {
-  .product-wrapper {
-    justify-content: space-between;
-    align-content:center;
-  }
-  .product-info {
-    padding: 0px 100px;
-  }
-}
 
-@media only screen and (min-width: 1200px) {
-  .product-wrapper {
-    justify-content: space-evenly;
-    align-content:center;
+  .product-sizes-list li.selected {
+    border: 1px solid #000;
   }
-  .product-info {
-    padding: 0px 0px;
+
+  @media screen and (min-width: 600px) {
+    .product-container {
+    }
+    .product-wrapper {
+      flex-direction: row;
+      justify-content: space-around;
+      align-content: center;
+    }
+    .product-info {
+      justify-content: center;
+      max-width: 300px;
+    }
+    .product-images {
+    }
   }
-}
+  @media screen and (min-width: 1024px) {
+    .product-wrapper {
+      justify-content: space-between;
+      align-content: center;
+    }
+    .product-info {
+      padding: 0px 100px;
+    }
+  }
+
+  @media only screen and (min-width: 1200px) {
+    .product-wrapper {
+      justify-content: space-evenly;
+      align-content: center;
+    }
+    .product-info {
+      padding: 0px 0px;
+    }
+  }
 </style>

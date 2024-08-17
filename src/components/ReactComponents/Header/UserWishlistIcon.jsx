@@ -53,6 +53,9 @@ export const AddToWishlist = () => {
     const slug = window.location.pathname.slice(9);
 
     const saveDesiredProduct = async () => {
+        if (session === null) {
+            return alert('You need to be logged in to add products to wishlist!');
+        } 
         try {
           const response = await fetch('http://localhost:3000/wishlist', {
             method: 'POST',
