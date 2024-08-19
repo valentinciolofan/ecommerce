@@ -27,19 +27,19 @@ const ProductSizes = ({ sizes }) => {
 
     return (
         <>
-         <ul className="product-sizes-list">
-            {sizes && sizes.map((size) => (
-                <li
-                    key={size.size}
-                    className={`size-option ${size.size === productDetails.selectedSize ? 'selected' : ''}`}
-                    onClick={() => handleSizeClick(size.size)}
-                >
-                    {size.size.toUpperCase()}
-                </li>
-            ))}
-        </ul>
+            <ul className="product-sizes-list">
+                {sizes && sizes.map((size) => (
+                    <li
+                        key={size.size}
+                        className={`size-option ${size.size === productDetails.selectedSize ? 'selected' : ''}`}
+                        onClick={() => handleSizeClick(size.size)}
+                    >
+                        {size.size.toUpperCase()}
+                    </li>
+                ))}
+            </ul>
         </>
-       
+
     );
 };
 
