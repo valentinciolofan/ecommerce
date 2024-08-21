@@ -58,7 +58,6 @@ export async function getStaticPaths() {
 const { slug } = Astro.params;
 const { product, relatedProducts } = Astro.props;
 
-console.log(relatedProducts);
 
 const structuredSizes = [];
 for (let i = 0; i < product.sizes.length; i += 2) {

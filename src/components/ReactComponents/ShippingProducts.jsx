@@ -30,6 +30,7 @@ const ShippingProducts = () => {
    
     console.log(orderInfo);
 
+
     useEffect(() => {
         const savedOrderInfo = localStorage.getItem('orderInfo');
         if (savedOrderInfo) {
@@ -100,25 +101,68 @@ const ShippingProducts = () => {
             }
         }
     };
+// step 1
+/*
+deliveryMethod -> store / home
+store -> false / 1-10 -> details -> setcurrentstep2
+home -> details _> set current step 2
 
-    const handleBack = () => {
-        setDeliveryMethod('');
+
+
+step 2
+
+step 3
+
+
+*/
+const handleBack = () => {
+    const resetState = () => {
         setCurrentStep(0);
-        setStoreSelected(false);
+        setDetailsFilled(false);
     };
+
+    const resetDeliveryMethod = () => {
+        setDeliveryMethod('');
+    };
+
+    if (deliveryMethod === 'home') {
+        if (detailsFilled) {
+            resetState();
+            setDeliveryMethod('home');
+        } else {
+            resetDeliveryMethod();
+        }
+    }
+
+    if (deliveryMethod === 'store') {
+        if (!storeSelected) {
+            resetDeliveryMethod();
+        } else if (storeSelected > 0) {
+            setDeliveryMethod('store');
+            setStoreSelected(false);
+        }
+
+        if (detailsFilled && currentStep === 1) {
+            resetState();
+            setDeliveryMethod('store');
+            setStoreSelected(1);
+        }
+    }
+};
+
 
     useEffect(() => {
         const query = new URLSearchParams(window.location.search);
         const sessionId = query.get('session_id');
-
+        
         if (sessionId !== null) {
             const checkPaymentStatus = async () => {
                 const response = await fetch(`http://localhost:3000/check-payment-status/${sessionId}`);
                 const result = await response.json();
                 if (result.status === 'paid') {
-                    setLoading(false);
-                    handlePayment();
                     setCurrentStep(2);
+
+                    handlePayment();
                     localStorage.removeItem('cart');
                 }
             };
@@ -136,6 +180,10 @@ const ShippingProducts = () => {
             items: cartItems.items,
             total: cartItems.total
         }));
+
+        if (currentStep === 2 && orderInfo.orderId === undefined) {
+            setLoading(true);
+        }
     }, [detailsFilled, deliveryMethod, storeSelected, cartItems]);
 
     const orderDetails = async (data) => {
@@ -147,10 +195,13 @@ const ShippingProducts = () => {
             },
             body: JSON.stringify(data),
         }).then(response => response.json())
-        .then(response => setOrderInfo(prevOrderInfo => ({
-            ...prevOrderInfo,
-            orderId: response.id
-        })));
+        .then(response => {
+            setOrderInfo(prevOrderInfo => ({
+                ...prevOrderInfo,
+                orderId: response.id
+            }))
+            setLoading(false);
+        });
     };
     const handlePayment = () => {
         orderDetails(orderInfo);
@@ -158,7 +209,6 @@ const ShippingProducts = () => {
     if (loading) {
         return <p>Loading...</p>;
     }
-    console.log(orderInfo);
     return (
         <div className="shipping-products-container">
             <div className='shipping-products-wrapper'>

@@ -12,14 +12,11 @@ const handleProcessPaymentClick = () => {
 const CartProducts = () => {
   const cartItems = useStore(cartStore);
 
-  console.log(cartItems)
+  if (cartItems.total === 0 && cartItems.items.length === 0) {
+    return <p>You need to add products in your cart</p>
+  }  
 
   return (
-
-    // subtotal
-    // shipping
-    //divider
-    // checkout
     <div className="cart">
     <h2>My Cart</h2>
 
