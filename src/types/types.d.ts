@@ -28,7 +28,7 @@ export interface Product {
     _type: 'slug';
     current: string;
   };
-  category: {
+  categories: {
     _type: 'reference';
     _ref: string;
   };

@@ -1,6 +1,6 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import React from 'react';
+import React from "react";
 import { sanityClient } from "sanity:client";
 const products = await sanityClient.fetch(`*[_type == "product"]`);
 
@@ -76,67 +76,86 @@ const response = await fetch("http://localhost:3000/")
 	<!-- end of second section -->
 
 	<!-- third section -->
-<section class="third-section">
-  <div class="third-section-container">
-    <h3 class="third-section-title">ELEVATE YOUR WARDROBE</h3>
-    <p>Upgrade your style with our premium clothing selection. Explore our range of fashionable garments that blend quality, comfort, and trendsetting designs.</p>
+	<section class="third-section">
+		<div class="third-section-container">
+			<h3 class="third-section-title">ELEVATE YOUR WARDROBE</h3>
+			<p>
+				Upgrade your style with our premium clothing selection. Explore
+				our range of fashionable garments that blend quality, comfort,
+				and trendsetting designs.
+			</p>
 
-    <div class="slider-wrapper">
-      <button class="prev-button" aria-label="Previous slide">&lt;</button>
-      <div class="slider">
-        <div class="slides">
-          <div class="slide">
-            <img src="images/extraterestrialpants.png" alt="extraterestrial">
-            <div class="product-details">
-              <p>EXTRATERESTRIAL PANTS</p>
-              <p>$560</p>
-            </div>
-          </div>
-          <div class="slide">
-            <img src="images/shortmatrixpants.png" alt="shorts">
-            <div class="product-details">
-              <p>SHORT FROM MATRIX</p>
-              <p>$360</p>
-            </div>
-          </div>
-          <div class="slide">
-            <img src="images/extraterestrialpants.png" alt="pants">
-            <div class="product-details">
-              <p>PANTS FROM THE MARS</p>
-              <p>$560</p>
-            </div>
-          </div>
-          <div class="slide">
-            <img src="images/extraterestrialpants.png" alt="extraterestrial">
-            <div class="product-details">
-              <p>EXTRATERESTRIAL PANTS</p>
-              <p>$560</p>
-            </div>
-          </div>
-        </div>
-      </div>
-      <button class="next-button" aria-label="Next slide">&gt;</button>
-    </div>
-  </div>
-</section>
+			<div class="slider-wrapper">
+				<button class="prev-button" aria-label="Previous slide"
+					>&lt;</button
+				>
+				<div class="slider">
+					<div class="slides">
+						<div class="slide">
+							<img
+								src="images/extraterestrialpants.png"
+								alt="extraterestrial"
+							/>
+							<div class="product-details">
+								<p>EXTRATERESTRIAL PANTS</p>
+								<p>$560</p>
+							</div>
+						</div>
+						<div class="slide">
+							<img
+								src="images/shortmatrixpants.png"
+								alt="shorts"
+							/>
+							<div class="product-details">
+								<p>SHORT FROM MATRIX</p>
+								<p>$360</p>
+							</div>
+						</div>
+						<div class="slide">
+							<img
+								src="images/extraterestrialpants.png"
+								alt="pants"
+							/>
+							<div class="product-details">
+								<p>PANTS FROM THE MARS</p>
+								<p>$560</p>
+							</div>
+						</div>
+						<div class="slide">
+							<img
+								src="images/extraterestrialpants.png"
+								alt="extraterestrial"
+							/>
+							<div class="product-details">
+								<p>EXTRATERESTRIAL PANTS</p>
+								<p>$560</p>
+							</div>
+						</div>
+					</div>
+				</div>
+				<button class="next-button" aria-label="Next slide">&gt;</button
+				>
+			</div>
+		</div>
+	</section>
 
 	<!-- end of third section -->
-		<script>
-	  document.addEventListener('DOMContentLoaded', function() {
-		const slider = document.querySelector('.slider');
-		const prevButton = document.querySelector('.prev-button');
-		const nextButton = document.querySelector('.next-button');
-	
-		let scrollAmount = 0;
-	
-		nextButton.addEventListener('click', () => {
-		  slider.scrollBy({ left: 300, behavior: 'smooth' });
+	<script>
+		document.addEventListener("DOMContentLoaded", function () {
+			const slider = document.querySelector(".slider");
+			const prevButton = document.querySelector(".prev-button");
+			const nextButton = document.querySelector(".next-button");
+
+			let scrollAmount = 0;
+
+			nextButton.addEventListener("click", () => {
+				slider.scrollBy({ left: 300, behavior: "smooth" });
+			});
+
+			prevButton.addEventListener("click", () => {
+				slider.scrollBy({ left: -300, behavior: "smooth" });
+			});
 		});
-	
-		prevButton.addEventListener('click', () => {
-		  slider.scrollBy({ left: -300, behavior: 'smooth' });
-		});
-	  });
 	</script>
 </Layout>
 
@@ -306,109 +325,109 @@ const response = await fetch("http://localhost:3000/")
 	/* end of second section */
 
 	/* third section */
-.third-section {
-  width: 100%;
-  padding: 20px 0;
-}
-.third-section-container {
-  max-width: 1200px;
-  margin: 0 auto;
-  text-align: center;
-}
-.third-section-title {
-  margin-top: 50px;
-  margin-bottom: 10px;
-  font-size: 28px;
-  font-weight: 600;
-}
+	.third-section {
+		width: 100%;
+		padding: 20px 0;
+	}
+	.third-section-container {
+		max-width: 1200px;
+		margin: 0 auto;
+		text-align: center;
+	}
+	.third-section-title {
+		margin-top: 50px;
+		margin-bottom: 10px;
+		font-size: 28px;
+		font-weight: 600;
+	}
 
-.third-section p {
-  margin-bottom: 40px;
-  font-size: 16px;
-}
+	.third-section p {
+		margin-bottom: 40px;
+		font-size: 16px;
+	}
 
-.slider-wrapper {
-  position: relative;
-  display: flex;
-  align-items: center;
-}
+	.slider-wrapper {
+		position: relative;
+		display: flex;
+		align-items: center;
+	}
 
-.slider {
-  overflow-x: auto;
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-  scroll-behavior: smooth;
-  -webkit-overflow-scrolling: touch;
-}
+	.slider {
+		overflow-x: auto;
+		display: flex;
+		justify-content: flex-start;
+		align-items: center;
+		scroll-behavior: smooth;
+		-webkit-overflow-scrolling: touch;
+	}
 
-.slides {
-  display: flex;
-  flex-wrap: nowrap;
-}
+	.slides {
+		display: flex;
+		flex-wrap: nowrap;
+	}
 
-.slide {
-  min-width: 250px;
-  margin-right: 20px;
-  flex-shrink: 0;
-  text-align: center;
-}
+	.slide {
+		min-width: 250px;
+		margin-right: 20px;
+		flex-shrink: 0;
+		text-align: center;
+	}
 
-.slide img {
-  width: 100%;
-  height: auto;
-  display: block;
-}
+	.slide img {
+		width: 100%;
+		height: auto;
+		display: block;
+	}
 
-.product-details {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: 10px;
-}
+	.product-details {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		margin-top: 10px;
+	}
 
-.product-details p {
-  margin: 0;
-  font-size: 16px;
-  font-weight: 500;
-}
+	.product-details p {
+		margin: 0;
+		font-size: 16px;
+		font-weight: 500;
+	}
 
-.product-details p:last-child {
-  font-weight: 700;
-}
+	.product-details p:last-child {
+		font-weight: 700;
+	}
 
-.prev-button,
-.next-button {
-  display: none;
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  background-color: rgba(0, 0, 0, 0.5);
-  color: white;
-  border: none;
-  padding: 10px;
-  cursor: pointer;
-  z-index: 10;
-}
+	.prev-button,
+	.next-button {
+		display: none;
+		position: absolute;
+		top: 50%;
+		transform: translateY(-50%);
+		background-color: rgba(0, 0, 0, 0.5);
+		color: white;
+		border: none;
+		padding: 10px;
+		cursor: pointer;
+		z-index: 10;
+	}
 
-.prev-button {
-  left: 10px;
-}
+	.prev-button {
+		left: 10px;
+	}
 
-.next-button {
-  right: 10px;
-}
+	.next-button {
+		right: 10px;
+	}
 
-@media screen and (min-width: 768px) {
-  .slider {
-    overflow-x: hidden;
-  }
+	@media screen and (min-width: 768px) {
+		.slider {
+			overflow-x: hidden;
+		}
 
-  .prev-button,
-  .next-button {
-    display: block;
-  }
-}
+		.prev-button,
+		.next-button {
+			display: block;
+		}
+	}
 
 	/* end of third section */
 
@@ -448,5 +467,3 @@ const response = await fetch("http://localhost:3000/")
 		}
 	}
 </style>
-
-

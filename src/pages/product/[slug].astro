@@ -2,109 +2,145 @@
 import Layout from "../../layouts/Layout.astro";
 import { sanityClient } from "sanity:client";
 import React from "react";
-import { addToCart } from "../../components/UserContext";
 import { type Product } from "../../types/types";
 import { AddToWishlist } from "../../components/ReactComponents/Header/UserWishlistIcon";
 import { AddtoCart } from "../../components/ReactComponents/ProductListing";
-import ProductSizes from "../../components/ProductSizes"
+import ProductSizes from "../../components/ProductSizes";
 import urlFor from "../../utils/urlFor";
 
 export const prerender = true;
+
 export async function getStaticPaths() {
-  const products: Product[] = await sanityClient.fetch(`*[_type == "product"]`);
-  return products.map(
-    ({
-      slug,
-      title,
-      price,
-      images,
-      image,
-      color,
-      description,
-      availability,
-      sizes,
-      material,
-    }) => {
+  // Fetch all products
+  const products = await sanityClient.fetch(`*[_type == "product"]{
+    slug,
+    title,
+    price,
+    images,
+    image,
+    color,
+    description,
+    availability,
+    sizes,
+    material,
+    categories[]->{title}, 
+    collection[]->{title}
+  }`);
+
+  // Function to get random products excluding the current one
+  function getRandomProducts(currentSlug) {
+    const filteredProducts = products.filter(
+      (p) => p.slug.current !== currentSlug,
+    );
+    const shuffled = filteredProducts.sort(() => 0.5 - Math.random());
+    return shuffled.slice(0, 6); // Return up to 6 random products
+  }
+
+  // Map over products to create paths
+  const paths = await Promise.all(
+    products.map(async (product) => {
+      // Get 6 random products as related products
+      const relatedProducts = getRandomProducts(product.slug.current);
+
       return {
-        params: { slug: slug.current },
+        params: { slug: product.slug.current },
         props: {
-          title,
-          price,
-          images,
-          image,
-          color,
-          description,
-          availability,
-          sizes,
-          material,
+          product,
+          relatedProducts,
         },
       };
-    },
+    }),
   );
+
+  return paths; // Directly return the paths array
 }
+
 const { slug } = Astro.params;
-const {
-  title,
-  price,
-  images,
-  image,
-  color,
-  description,
-  availability,
-  sizes,
-  material,
-} = Astro.props;
+const { product, relatedProducts } = Astro.props;
+
+console.log(relatedProducts);
 
 const structuredSizes = [];
-for (let i = 0; i < sizes.length; i += 2) {
+for (let i = 0; i < product.sizes.length; i += 2) {
   structuredSizes.push({
-    size: sizes[i],
-    stock: sizes[i + 1],
+    size: product.sizes[i],
+    stock: product.sizes[i + 1],
   });
 }
 
 const productDetails = {
   slug: slug,
-  title: title,
-  price: price,
-  color: color,
-  size: '',
-  image: image,
+  title: product.title,
+  price: product.price,
+  color: product.color,
+  size: "",
+  image: product.image,
 };
 ---
 
-<Layout title=`${slug} - Fashion Culture`>
+<Layout title={`${product.title} - fashionCulture`}>
   <div class="product-container">
     <div class="product-wrapper">
       <div class="product-images">
         {
-          images.map((image) => (
-            <div>
+          product.images.map((image) => (
+            <div class="product-image-wrapper">
               <img class="product-image" src={urlFor(image).url()} alt="" />
             </div>
           ))
         }
-        <a class="prev">&#10094;</a>
-        <a class="next">&#10095;</a>
       </div>
       <div class="product-info">
         <div>
-          <p>{title}</p>
-          <p>${price}</p>
+          <p>{product.title}</p>
+          <p>${product.price}</p>
         </div>
-        <p>{description}</p>
+        <p>{product.description}</p>
         <p>Select a size:</p>
-        <ProductSizes sizes={structuredSizes} client:load/>
+        <ProductSizes sizes={structuredSizes} client:load />
         <AddToWishlist client:only />
-        <AddtoCart productDetails={productDetails} client:load />
+        <div class="add-to-cart-wrapper">
+          <AddtoCart productDetails={productDetails} client:load />
+        </div>
       </div>
     </div>
   </div>
 
-  <div>
-    <p>You might also be interested in:</p>
-  </div>
+  <section class="third-section">
+    <div class="third-section-container">
+      <p>
+        You could also be interested in
+      </p>
+
+      <div class="slider-wrapper">
+        <button class="prev-button" aria-label="Previous slide">&lt;</button>
+        <div class="slider">
+          <div class="slides">
+            {relatedProducts.map((product) => {
+                return (
+                  <a href={product.slug.current}>
+                    <div class="slide">
+                      <img
+                        src={urlFor(product.image).url()}
+                        alt={product.title}
+                      />
+                      <div class="product-details">
+                        <p>{product.title}</p>
+                        <p>${product.price}</p>
+                      </div>
+                    </div>
+                  </a>
+                );
+              })
+            }
+          </div>
+        </div>
+        <button class="next-button" aria-label="Next slide">&gt;</button>
+      </div>
+    </div>
+  </section>
 </Layout>
+
 <script type="module">
   // carousel of images
   let slideIndex = 1;
@@ -142,137 +178,245 @@ const productDetails = {
       });
     });
   });
+
+  // script for suggested products
+  document.addEventListener("DOMContentLoaded", function () {
+    const slider = document.querySelector(".slider");
+    const prevButton = document.querySelector(".prev-button");
+    const nextButton = document.querySelector(".next-button");
+
+    nextButton.addEventListener("click", () => {
+      slider.scrollBy({ left: 300, behavior: "smooth" });
+    });
+
+    prevButton.addEventListener("click", () => {
+      slider.scrollBy({ left: -300, behavior: "smooth" });
+    });
+  });
 </script>
 
 <style>
+  /* Base container styling */
   .product-container {
     display: flex;
-    height: 80vh;
     flex-direction: column;
-    gap: 40px;
+    gap: 20px; /* Adjusted for mobile */
+    padding: 20px;
     min-width: 300px;
     justify-content: center;
     align-content: center;
   }
+
   .product-wrapper {
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 20px; /* Ensure spacing between components */
+    max-width: 100%; /* Limit width for better scaling */
   }
+
+  /* Image and Info Layout */
   .product-images {
-    position: relative;
-  }
-  .product-image {
-    display: none;
-    border-radius: 2px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     max-width: 100%;
-    max-height: 600px;
-    aspect-ratio: 0.5;
+  }
+
+  .product-image-wrapper {
+    width: 100%;
+    max-width: 400px;
+    margin: 0 auto;
+  }
+
+  .product-image {
+    width: 100%;
+    height: auto;
     object-fit: cover;
+    border-radius: 8px;
   }
-  .prev,
-  .next {
-    cursor: pointer;
-    position: absolute;
-    top: 50%;
-    width: auto;
-    margin-top: -22px;
-    padding: 16px;
-    color: rgb(10, 10, 10);
-    background-color: #fff;
-    font-weight: bold;
-    font-size: 18px;
-    transition: 0.6s ease;
-    border-radius: 0 3px 3px 0;
-    user-select: none;
-  }
-  .next {
-    right: 0;
-    border-radius: 3px 0 0 3px;
-  }
-  .prev:hover,
-  .next:hover {
-    background-color: rgba(214, 214, 214, 0.8);
-  }
-  .active,
-  .dot:hover {
-    background-color: #d3d2d2;
-  }
-  .fade {
-    animation-name: fade;
-    animation-duration: 1.5s;
-  }
-  @keyframes fade {
-    from {
-      opacity: 0.4;
-    }
-    to {
-      opacity: 1;
-    }
-  }
-  .product-info p {
-    line-height: 1.5;
-  }
+
+  /* Product Info */
   .product-info {
     display: flex;
     flex-direction: column;
     gap: 20px;
-    font-size: 12px;
-  }
-  .product-sizes-list {
-    display: flex;
-    list-style-type: none;
-  }
-  .product-sizes-list li {
-    cursor: pointer;
-    padding: 8px 12px;
-    transition:
-      background-color 0.3s,
-      color 0.3s;
-    background-color: transparent;
-    border: 1px solid #fff;
+    font-size: 14px;
+    padding: 10px;
+    box-sizing: border-box;
   }
 
-  .product-sizes-list li:hover {
-    background-color: #f0f0f0;
+  /* Add to Cart */
+  .add-to-cart-wrapper {
+    margin-top: 20px;
   }
 
-  .product-sizes-list li.selected {
-    border: 1px solid #000;
-  }
-
-  @media screen and (min-width: 600px) {
-    .product-container {
-    }
+  /* Responsive Design for Tablet and Desktop */
+  @media screen and (min-width: 768px) {
     .product-wrapper {
       flex-direction: row;
-      justify-content: space-around;
-      align-content: center;
-    }
-    .product-info {
-      justify-content: center;
-      max-width: 300px;
-    }
-    .product-images {
-    }
-  }
-  @media screen and (min-width: 1024px) {
-    .product-wrapper {
       justify-content: space-between;
-      align-content: center;
+      gap: 40px; /* Increase gap between image and info */
+    }
+    .product-image-wrapper {
+      max-width: 50%; /* Allow image to take half the width */
     }
     .product-info {
-      padding: 0px 100px;
+      max-width: 50%; /* Allow info to take half the width */
     }
   }
 
-  @media only screen and (min-width: 1200px) {
+  @media screen and (min-width: 1024px) {
     .product-wrapper {
-      justify-content: space-evenly;
-      align-content: center;
+      max-width: 1200px;
+      margin: 0 auto;
     }
     .product-info {
-      padding: 0px 0px;
+      padding: 0px 20px;
+    }
+  }
+
+  /* Third Section Styling */
+  .third-section-container {
+    max-width: 100%;
+    margin: 0 auto;
+    padding: 20px 10px; /* Padding for mobile */
+  }
+
+  .third-section-title {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    font-size: 24px;
+    font-weight: 600;
+  }
+
+  .third-section p {
+    margin-bottom: 20px;
+    font-size: 14px;
+  }
+
+  .slider-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+  }
+
+  .slider {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .slides {
+    display: flex;
+    flex-wrap: nowrap;
+  }
+  .slides a {
+    color: #000;
+    text-decoration: none;
+  }
+  .slide {
+    min-width: 80%;
+    margin-right: 10px;
+    flex-shrink: 0;
+    text-align: center;
+    border-radius: 8px;
+    overflow: hidden;
+    background-color: #fff;
+    transition: transform 0.3s ease;
+  }
+
+  .slide img {
+    max-width: 100%;
+    height: 200px;
+    object-fit: cover;
+    background-position: center center;
+    display: block;
+  }
+
+  .product-details {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 10px;
+  }
+
+  .product-details p {
+    margin: 0;
+    font-size: 14px;
+    font-weight: 500;
+  }
+
+  .product-details p:last-child {
+    font-weight: 700;
+  }
+
+  .prev-button,
+  .next-button {
+    display: none; /* Hidden on mobile */
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    z-index: 10;
+    border-radius: 50%;
+  }
+
+  .prev-button {
+    left: 10px;
+  }
+
+  .next-button {
+    right: 10px;
+  }
+
+  /* Adjustments for Larger Screens */
+  @media screen and (min-width: 768px) {
+    .slide {
+      min-width: 45%;
+      margin-right: 15px;
+    }
+
+    .product-details p {
+      font-size: 16px;
+    }
+
+    .prev-button,
+    .next-button {
+      display: block; /* Show buttons on tablet and desktop */
+    }
+  }
+
+  @media screen and (min-width: 1024px) {
+    .third-section-container {
+      max-width: 1200px;
+      padding: 40px 20px;
+    }
+
+    .third-section-title {
+      margin-top: 50px;
+      margin-bottom: 30px;
+      font-size: 28px;
+    }
+
+    .third-section p {
+      margin-bottom: 30px;
+      font-size: 16px;
+    }
+
+    .slide {
+      min-width: 30%;
+      margin-right: 20px;
+    }
+
+    .slide img {
+      height: 350px;
     }
   }
 </style>
