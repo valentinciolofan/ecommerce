@@ -5,7 +5,7 @@ import { sanityClient } from "sanity:client";
 const products = await sanityClient.fetch(`*[_type == "product"]`);
 ---
 
-<Layout title="Ecommerce Project">
+<Layout title="fashionCulture | Unleash Your Style Potential">
 	<section class="landing-page">
 		<div class="landing-page-container">
 			<div class="landing-page-wrapper">
@@ -136,75 +136,105 @@ const products = await sanityClient.fetch(`*[_type == "product"]`);
 	</section>
 
 	<!-- end of third section -->
-<script>
-document.addEventListener("DOMContentLoaded", () => {
-  const section = document.querySelector(".second-section");
-  const cols = document.querySelectorAll(".second-section-col");
+	<script>
+		document.addEventListener("DOMContentLoaded", () => {
+			const section = document.querySelector(
+				".second-section",
+			) as HTMLElement | null;
+			const cols = document.querySelectorAll<HTMLElement>(
+				".second-section-col",
+			);
 
-  const observer = new IntersectionObserver(entries => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        cols.forEach((col, index) => {
-          col.style.animationDelay = `${index * 0.2 + 0.3}s`;
-          col.classList.add("animate");
-        });
-        observer.unobserve(section); // Stop observing after animation triggers
-      }
-    });
-  }, {
-    threshold: 0.10 // Trigger when 10% of the section is in view
-  });
+			if (section) {
+				const observer = new IntersectionObserver(
+					(entries) => {
+						entries.forEach((entry) => {
+							if (entry.isIntersecting) {
+								cols.forEach((col, index) => {
+									if (col) {
+										col.style.animationDelay = `${index * 0.2 + 0.3}s`;
+										col.classList.add("animate");
+									}
+								});
+								observer.unobserve(section); // Stop observing after animation triggers
+							}
+						});
+					},
+					{
+						threshold: 0.1, // Trigger when 10% of the section is in view
+					},
+				);
 
-  observer.observe(section);
-});
+				observer.observe(section);
+			}
+		});
 
+		// carousel ### third section functionality ###
 
-// carousel ### third section functionality ###
+		document.addEventListener("DOMContentLoaded", function () {
+			const slider = document.querySelector(
+				".slider",
+			) as HTMLElement | null;
+			const slides = document.querySelectorAll<HTMLElement>(".slide");
+			const prevButton = document.querySelector(
+				".prev-button",
+			) as HTMLButtonElement | null;
+			const nextButton = document.querySelector(
+				".next-button",
+			) as HTMLButtonElement | null;
 
-	document.addEventListener("DOMContentLoaded", function () {
-  const slider = document.querySelector(".slider");
-  const slides = document.querySelectorAll(".slide");
-  const prevButton = document.querySelector(".prev-button");
-  const nextButton = document.querySelector(".next-button");
+			if (slides.length > 0 && slider) {
+				let scrollAmount = 0;
+				const slideWidth = slides[0]?.offsetWidth || 0;
+				const maxScroll = slider.scrollWidth - slider.clientWidth;
 
-  let scrollAmount = 0;
-  const slideWidth = slides[0].offsetWidth;
-  const maxScroll = slider.scrollWidth - slider.clientWidth;
+				if (nextButton && prevButton) {
+					nextButton.addEventListener("click", () => {
+						if (scrollAmount < maxScroll) {
+							slider.scrollBy({
+								left: slideWidth,
+								behavior: "smooth",
+							});
+							scrollAmount += slideWidth;
+						} else {
+							slider.scrollTo({ left: 0, behavior: "smooth" });
+							scrollAmount = 0;
+						}
+					});
 
-  if (nextButton !== null && slider !== null && prevButton !== null) {
-    nextButton.addEventListener("click", () => {
-      if (scrollAmount < maxScroll) {
-        slider.scrollBy({ left: slideWidth, behavior: "smooth" });
-        scrollAmount += slideWidth;
-      } else {
-        slider.scrollTo({ left: 0, behavior: "smooth" });
-        scrollAmount = 0;
-      }
-    });
+					prevButton.addEventListener("click", () => {
+						if (scrollAmount > 0) {
+							slider.scrollBy({
+								left: -slideWidth,
+								behavior: "smooth",
+							});
+							scrollAmount -= slideWidth;
+						} else {
+							slider.scrollTo({
+								left: maxScroll,
+								behavior: "smooth",
+							});
+							scrollAmount = maxScroll;
+						}
+					});
 
-    prevButton.addEventListener("click", () => {
-      if (scrollAmount > 0) {
-        slider.scrollBy({ left: -slideWidth, behavior: "smooth" });
-        scrollAmount -= slideWidth;
-      } else {
-        slider.scrollTo({ left: maxScroll, behavior: "smooth" });
-        scrollAmount = maxScroll;
-      }
-    });
-
-    // Auto-slide every 5 seconds
-    setInterval(() => {
-      if (scrollAmount < maxScroll) {
-        slider.scrollBy({ left: slideWidth, behavior: "smooth" });
-        scrollAmount += slideWidth;
-      } else {
-        slider.scrollTo({ left: 0, behavior: "smooth" });
-        scrollAmount = 0;
-      }
-    }, 5000);
-  }
-});
-</script>
+					// Auto-slide every 5 seconds
+					setInterval(() => {
+						if (scrollAmount < maxScroll) {
+							slider.scrollBy({
+								left: slideWidth,
+								behavior: "smooth",
+							});
+							scrollAmount += slideWidth;
+						} else {
+							slider.scrollTo({ left: 0, behavior: "smooth" });
+							scrollAmount = 0;
+						}
+					}, 5000);
+				}
+			}
+		});
+	</script>
 </Layout>
 
 <style>
@@ -274,7 +304,6 @@ document.addEventListener("DOMContentLoaded", () => {
 	.hero-page-right-col {
 		display: none;
 		animation: fadeInRightFromGround 1s ease-out forwards;
-
 	}
 	.hero-page-images {
 		position: relative;
@@ -296,27 +325,33 @@ document.addEventListener("DOMContentLoaded", () => {
 		height: auto;
 	}
 	/* Keyframe animations */
-@keyframes fadeInLeftFromGround {
-  from {
-    opacity: 0;
-    transform: translate(-50px, 50px); /* 35-degree angle from the bottom-left */
-  }
-  to {
-    opacity: 1;
-    transform: translate(0, 0); /* Final position */
-  }
-}
+	@keyframes fadeInLeftFromGround {
+		from {
+			opacity: 0;
+			transform: translate(
+				-50px,
+				50px
+			); /* 35-degree angle from the bottom-left */
+		}
+		to {
+			opacity: 1;
+			transform: translate(0, 0); /* Final position */
+		}
+	}
 
-@keyframes fadeInRightFromGround {
-  from {
-    opacity: 0;
-    transform: translate(50px, 50px); /* 35-degree angle from the bottom-right */
-  }
-  to {
-    opacity: 1;
-    transform: translate(0, 0); /* Final position */
-  }
-}
+	@keyframes fadeInRightFromGround {
+		from {
+			opacity: 0;
+			transform: translate(
+				50px,
+				50px
+			); /* 35-degree angle from the bottom-right */
+		}
+		to {
+			opacity: 1;
+			transform: translate(0, 0); /* Final position */
+		}
+	}
 	/* end of hero section */
 	.second-section-container {
 		max-width: 1200px;
@@ -385,41 +420,43 @@ document.addEventListener("DOMContentLoaded", () => {
 			grid-row: 2 / 3;
 		}
 	}
-/* Keyframe animations */
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
+	/* Keyframe animations */
+	@keyframes fadeInUp {
+		from {
+			opacity: 0;
+			transform: translateY(20px);
+		}
+		to {
+			opacity: 1;
+			transform: translateY(0);
+		}
+	}
 
-@keyframes scaleIn {
-  from {
-    opacity: 0;
-    transform: scale(0.95);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
-}
+	@keyframes scaleIn {
+		from {
+			opacity: 0;
+			transform: scale(0.95);
+		}
+		to {
+			opacity: 1;
+			transform: scale(1);
+		}
+	}
 
-/* Initial state */
-.second-section-col {
-  opacity: 0;
-  transform: translateY(20px) scale(0.95); /* Combine initial transforms */
-  transition: opacity 0.8s ease-out, transform 0.8s ease-out;
-}
+	/* Initial state */
+	.second-section-col {
+		opacity: 0;
+		transform: translateY(20px) scale(0.95); /* Combine initial transforms */
+		transition:
+			opacity 0.8s ease-out,
+			transform 0.8s ease-out;
+	}
 
-/* Animation when .animate class is added */
-.second-section-col.animate {
-  opacity: 1;
-  transform: translateY(0) scale(1); /* Final state */
-}
+	/* Animation when .animate class is added */
+	.second-section-col.animate {
+		opacity: 1;
+		transform: translateY(0) scale(1); /* Final state */
+	}
 
 	/* end of second section */
 
@@ -566,5 +603,4 @@ document.addEventListener("DOMContentLoaded", () => {
 			min-width: 280px;
 		}
 	}
-	
 </style>

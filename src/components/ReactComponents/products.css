@@ -287,9 +287,6 @@
   border-radius: 2px;
   padding: 30px 10px;
 }
-.cart-item-img {
-  
-}
 .cart-item-img img {
   height: 150px;
   aspect-ratio: 1/1;
@@ -377,9 +374,6 @@
 
 /* SHIPPING STYLE */
 
-.title-delivery-details {
-
-}
 .contact-delivery-details {
  font-size: 12px;
 }
@@ -552,6 +546,7 @@
   padding: 0 40px 0 0;
   font-size: 14px;
   transition: width 0.4s ease-in-out;
+  background-color: transparent;
 }
 
 .search-bar::placeholder {
@@ -579,9 +574,6 @@
   transition: all 0.4s ease-in-out;
 }
 
-.search-bar:focus ~ .searchBox-svg,
-.search-container.open .searchBox-svg {
-}
 
 /* PROFILE STYLE */
 .profile-container {
@@ -733,10 +725,6 @@
 }
 .orders-container-first-col {
   padding: 20px;
-}
-
-.orders-container-second-col {
-
 }
 .order-divider {
   border: none;
