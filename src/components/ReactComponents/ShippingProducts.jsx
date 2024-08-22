@@ -5,7 +5,6 @@ import { cartStore } from '../UserContext';
 import Payment from '../Payment';
 import "./products.css";
 
-
 const storeAddresses = [
     '123 Fashion Ave, New York, NY 10001',
     '456 Style St, Los Angeles, CA 90001',
@@ -25,22 +24,34 @@ const ShippingProducts = () => {
     const [storeSelected, setStoreSelected] = useState(false);
     const [detailsFilled, setDetailsFilled] = useState(false);
     const [orderInfo, setOrderInfo] = useState({});
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(true);  // Set initial loading to true
     const cartItems = useStore(cartStore);
-   
-    console.log(orderInfo);
-
 
     useEffect(() => {
-        const savedOrderInfo = localStorage.getItem('orderInfo');
-        if (savedOrderInfo) {
-            const parsedOrderInfo = JSON.parse(savedOrderInfo);
-            setOrderInfo(parsedOrderInfo);
+        if (typeof window !== "undefined") {
+            const savedStep = localStorage.getItem('currentStep');
+            const savedDeliveryMethod = localStorage.getItem('deliveryMethod');
+            const savedDetailsFilled = localStorage.getItem('detailsFilled') === 'true';
+            const savedOrderInfo = localStorage.getItem('orderInfo');
+            
+            if (savedStep !== null) setCurrentStep(parseInt(savedStep, 10));
+            if (savedDeliveryMethod) setDeliveryMethod(savedDeliveryMethod);
+            if (savedOrderInfo) setOrderInfo(JSON.parse(savedOrderInfo));
+            setDetailsFilled(savedDetailsFilled);
         }
-    }, []);
 
+        setOrderInfo(prevOrderInfo => ({
+            ...prevOrderInfo,
+            items: cartItems.items,
+            total: cartItems.total
+        }));
+
+        setLoading(false);
+    }, [cartItems]);
+
+    // Update localStorage whenever orderInfo changes
     useEffect(() => {
-        if (Object.keys(orderInfo).length !== 0) {
+        if (Object.keys(orderInfo).length !== 0 && typeof window !== "undefined") {
             localStorage.setItem('orderInfo', JSON.stringify(orderInfo));
         }
     }, [orderInfo]);
@@ -50,120 +61,98 @@ const ShippingProducts = () => {
         setStoreSelected(false);
         setDetailsFilled(false);
 
-        if (method === 'home') {
-            setOrderInfo(previousOrderInfo => ({
-                ...previousOrderInfo,
-                delivery_method: 'Courier'
-            }))
-        } else if (method === 'store') {
-            setOrderInfo(previousOrderInfo => ({
-                ...previousOrderInfo,
-                delivery_method: 'Pick-up in store'
-            }))
+        setOrderInfo(previousOrderInfo => ({
+            ...previousOrderInfo,
+            delivery_method: method === 'home' ? 'Courier' : 'Pick-up in store'
+        }));
+
+        if (typeof window !== "undefined") {
+            localStorage.setItem('deliveryMethod', method);
+            localStorage.setItem('detailsFilled', false);
         }
-       
     };
 
     const handleSelectStore = (storeNr) => {
         setStoreSelected(storeNr);
-        orderInfo.address = `${storeAddresses[storeNr - 1]}`
+        setOrderInfo(prevOrderInfo => ({
+            ...prevOrderInfo,
+            address: storeAddresses[storeNr - 1]
+        }));
     };
 
     const handleDetailsFilled = (isFilled) => {
         setDetailsFilled(isFilled);
+        if (typeof window !== "undefined") {
+            localStorage.setItem('detailsFilled', isFilled);
+        }
     };
 
     const collectOrderInfo = (e) => {
-        const event = e.target;
-        const inputType = e.target.attributes[1].value;
-        const inputValue = e.target.value;
+        const { name, value } = e.target;
+        setOrderInfo(prevOrderInfo => ({
+            ...prevOrderInfo,
+            [name]: value
+        }));
+    };
 
-        if (event !== null) {
-            switch (inputType) {
-                case 'name': orderInfo.name = inputValue;
-                    break;
-                case 'surname': orderInfo.surname = inputValue;
-                    break;
-                case 'address': orderInfo.address = inputValue;
-                    break;
-                case 'additionalInfo': orderInfo.additionalInfo = inputValue;
-                    break;
-                case 'city': orderInfo.city = inputValue;
-                    break;
-                case 'postcode': orderInfo.postcode = inputValue;
-                    break;
-                case 'region': orderInfo.region = inputValue;
-                    break;
-                case 'email': orderInfo.email = inputValue;
-                    break;
-                case 'phone': orderInfo.phone = inputValue;
-                    break;
+    const handleBack = () => {
+        const resetState = () => {
+            setCurrentStep(0);
+            setDetailsFilled(false);
+            if (typeof window !== "undefined") {
+                localStorage.setItem('currentStep', 0);
+                localStorage.setItem('detailsFilled', false);
+            }
+        };
+
+        const resetDeliveryMethod = () => {
+            setDeliveryMethod('');
+            if (typeof window !== "undefined") {
+                localStorage.removeItem('deliveryMethod');
+            }
+        };
+
+        if (deliveryMethod === 'home') {
+            if (detailsFilled) {
+                resetState();
+                setDeliveryMethod('home');
+            } else {
+                resetDeliveryMethod();
+            }
+        }
+
+        if (deliveryMethod === 'store') {
+            if (!storeSelected) {
+                resetDeliveryMethod();
+            } else if (storeSelected > 0) {
+                setDeliveryMethod('store');
+                setStoreSelected(false);
+            }
+
+            if (detailsFilled && currentStep === 1) {
+                resetState();
+                setDeliveryMethod('store');
+                setStoreSelected(1);
             }
         }
     };
-// step 1
-/*
-deliveryMethod -> store / home
-store -> false / 1-10 -> details -> setcurrentstep2
-home -> details _> set current step 2
-
-
-
-step 2
-
-step 3
-
-
-*/
-const handleBack = () => {
-    const resetState = () => {
-        setCurrentStep(0);
-        setDetailsFilled(false);
-    };
-
-    const resetDeliveryMethod = () => {
-        setDeliveryMethod('');
-    };
-
-    if (deliveryMethod === 'home') {
-        if (detailsFilled) {
-            resetState();
-            setDeliveryMethod('home');
-        } else {
-            resetDeliveryMethod();
-        }
-    }
-
-    if (deliveryMethod === 'store') {
-        if (!storeSelected) {
-            resetDeliveryMethod();
-        } else if (storeSelected > 0) {
-            setDeliveryMethod('store');
-            setStoreSelected(false);
-        }
-
-        if (detailsFilled && currentStep === 1) {
-            resetState();
-            setDeliveryMethod('store');
-            setStoreSelected(1);
-        }
-    }
-};
-
 
     useEffect(() => {
         const query = new URLSearchParams(window.location.search);
         const sessionId = query.get('session_id');
-        
+
         if (sessionId !== null) {
             const checkPaymentStatus = async () => {
+                setLoading(true);
                 const response = await fetch(`http://localhost:3000/check-payment-status/${sessionId}`);
                 const result = await response.json();
+                setLoading(false);
                 if (result.status === 'paid') {
                     setCurrentStep(2);
-
-                    handlePayment();
-                    localStorage.removeItem('cart');
+                    await orderDetails(orderInfo);
+                    if (typeof window !== "undefined") {
+                        localStorage.removeItem('cart');
+                    }
                 }
             };
             checkPaymentStatus();
@@ -175,18 +164,14 @@ const handleBack = () => {
             setStoreSelected(false);
             setCurrentStep(1);
         }
-        setOrderInfo(prevOrderInfo => ({
-            ...prevOrderInfo,
-            items: cartItems.items,
-            total: cartItems.total
-        }));
 
-        if (currentStep === 2 && orderInfo.orderId === undefined) {
+        if (currentStep === 2 && !orderInfo.orderId) {
             setLoading(true);
         }
-    }, [detailsFilled, deliveryMethod, storeSelected, cartItems]);
+    }, [detailsFilled, deliveryMethod, storeSelected]);
 
     const orderDetails = async (data) => {
+        setLoading(true);
         await fetch('http://localhost:3000/generate-receipt', {
             method: 'POST',
             credentials: 'include',
@@ -195,20 +180,26 @@ const handleBack = () => {
             },
             body: JSON.stringify(data),
         }).then(response => response.json())
-        .then(response => {
-            setOrderInfo(prevOrderInfo => ({
-                ...prevOrderInfo,
-                orderId: response.id
-            }))
-            setLoading(false);
-        });
+            .then(response => {
+                console.log(orderInfo);
+                setOrderInfo(prevOrderInfo => ({
+                    ...prevOrderInfo,
+                    orderId: response.orderId
+                }));
+
+                setLoading(false);
+                console.log(orderInfo);
+            });
     };
-    const handlePayment = () => {
-        orderDetails(orderInfo);
-    };
+
+    // const handlePayment = () => {
+    //     orderDetails(orderInfo);
+    // };
+
     if (loading) {
         return <p>Loading...</p>;
     }
+
     return (
         <div className="shipping-products-container">
             <div className='shipping-products-wrapper'>
@@ -389,7 +380,7 @@ const handleBack = () => {
                         >
                             BACK TO SHOPPING
                         </button>
-                        <button type='submit' id='paid' onClick={handlePayment}>PAID</button>
+                        {/* <button type='submit' id='paid' onClick={handlePayment}>PAID</button> */}
                     </div>
                 )}
             </div>

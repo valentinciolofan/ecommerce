@@ -3,10 +3,6 @@ import Layout from "../layouts/Layout.astro";
 import React from "react";
 import { sanityClient } from "sanity:client";
 const products = await sanityClient.fetch(`*[_type == "product"]`);
-
-const response = await fetch("http://localhost:3000/")
-	.then((res) => res.text())
-	.then(console.log);
 ---
 
 <Layout title="Ecommerce Project">
@@ -140,23 +136,75 @@ const response = await fetch("http://localhost:3000/")
 	</section>
 
 	<!-- end of third section -->
-	<script>
-		document.addEventListener("DOMContentLoaded", function () {
-			const slider = document.querySelector(".slider");
-			const prevButton = document.querySelector(".prev-button");
-			const nextButton = document.querySelector(".next-button");
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const section = document.querySelector(".second-section");
+  const cols = document.querySelectorAll(".second-section-col");
 
-			let scrollAmount = 0;
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        cols.forEach((col, index) => {
+          col.style.animationDelay = `${index * 0.2 + 0.3}s`;
+          col.classList.add("animate");
+        });
+        observer.unobserve(section); // Stop observing after animation triggers
+      }
+    });
+  }, {
+    threshold: 0.10 // Trigger when 10% of the section is in view
+  });
 
-			nextButton.addEventListener("click", () => {
-				slider.scrollBy({ left: 300, behavior: "smooth" });
-			});
+  observer.observe(section);
+});
 
-			prevButton.addEventListener("click", () => {
-				slider.scrollBy({ left: -300, behavior: "smooth" });
-			});
-		});
-	</script>
+
+// carousel ### third section functionality ###
+
+	document.addEventListener("DOMContentLoaded", function () {
+  const slider = document.querySelector(".slider");
+  const slides = document.querySelectorAll(".slide");
+  const prevButton = document.querySelector(".prev-button");
+  const nextButton = document.querySelector(".next-button");
+
+  let scrollAmount = 0;
+  const slideWidth = slides[0].offsetWidth;
+  const maxScroll = slider.scrollWidth - slider.clientWidth;
+
+  if (nextButton !== null && slider !== null && prevButton !== null) {
+    nextButton.addEventListener("click", () => {
+      if (scrollAmount < maxScroll) {
+        slider.scrollBy({ left: slideWidth, behavior: "smooth" });
+        scrollAmount += slideWidth;
+      } else {
+        slider.scrollTo({ left: 0, behavior: "smooth" });
+        scrollAmount = 0;
+      }
+    });
+
+    prevButton.addEventListener("click", () => {
+      if (scrollAmount > 0) {
+        slider.scrollBy({ left: -slideWidth, behavior: "smooth" });
+        scrollAmount -= slideWidth;
+      } else {
+        slider.scrollTo({ left: maxScroll, behavior: "smooth" });
+        scrollAmount = maxScroll;
+      }
+    });
+
+    // Auto-slide every 5 seconds
+    setInterval(() => {
+      if (scrollAmount < maxScroll) {
+        slider.scrollBy({ left: slideWidth, behavior: "smooth" });
+        scrollAmount += slideWidth;
+      } else {
+        slider.scrollTo({ left: 0, behavior: "smooth" });
+        scrollAmount = 0;
+      }
+    }, 5000);
+  }
+});
+</script>
 </Layout>
 
 <style>
@@ -169,7 +217,6 @@ const response = await fetch("http://localhost:3000/")
 		justify-content: center;
 	}
 	.landing-page-container {
-		padding: 30px;
 		display: flex;
 	}
 	.landing-page-wrapper {
@@ -179,27 +226,22 @@ const response = await fetch("http://localhost:3000/")
 	}
 	.paragraph-landing-page {
 		margin-top: 22.5px;
-		font-size: 16px;
-		font-weight: 400;
 	}
 	.CTA-buttons {
 		display: flex;
 		flex-direction: column;
 		text-align: center;
 		gap: 1em;
-		font-size: 1.1rem;
-		margin-top: 22.5px;
-		margin-bottom: 27.5px;
+		margin-top: 22px;
+		margin-bottom: 27px;
 		text-transform: uppercase;
-		font-weight: 400;
-		font-family: "Lato", sans-serif;
 	}
-
 	.CTA-buttons > :first-child {
 		background-color: #000000;
 		color: #fff;
 		text-decoration: none;
 		padding: 16px 32px;
+		flex: 1;
 	}
 	.CTA-buttons > :nth-last-child(1) {
 		background-color: white;
@@ -207,28 +249,32 @@ const response = await fetch("http://localhost:3000/")
 		text-decoration: none;
 		padding: 16px 32px;
 		border: 1px solid #000000;
+		align-items: center;
+		flex: 1;
 	}
 	.facts-landing-page {
 		display: flex;
 		flex-wrap: wrap;
 		justify-content: center;
 		gap: 1.7em;
-		font-size: 16px;
-		font-weight: 400;
 	}
 	.fact {
 		font-size: 25px;
 		font-weight: 600;
 	}
 	.hero-page-left-col {
-		max-width: 350px;
+		max-width: 100%;
+		padding: 20px;
 		display: flex;
 		justify-content: center;
 		text-align: center;
 		flex-direction: column;
+		animation: fadeInLeftFromGround 1s ease-out forwards;
 	}
 	.hero-page-right-col {
 		display: none;
+		animation: fadeInRightFromGround 1s ease-out forwards;
+
 	}
 	.hero-page-images {
 		position: relative;
@@ -249,6 +295,28 @@ const response = await fetch("http://localhost:3000/")
 		max-width: 100%;
 		height: auto;
 	}
+	/* Keyframe animations */
+@keyframes fadeInLeftFromGround {
+  from {
+    opacity: 0;
+    transform: translate(-50px, 50px); /* 35-degree angle from the bottom-left */
+  }
+  to {
+    opacity: 1;
+    transform: translate(0, 0); /* Final position */
+  }
+}
+
+@keyframes fadeInRightFromGround {
+  from {
+    opacity: 0;
+    transform: translate(50px, 50px); /* 35-degree angle from the bottom-right */
+  }
+  to {
+    opacity: 1;
+    transform: translate(0, 0); /* Final position */
+  }
+}
 	/* end of hero section */
 	.second-section-container {
 		max-width: 1200px;
@@ -259,8 +327,6 @@ const response = await fetch("http://localhost:3000/")
 
 	.second-section-title {
 		margin-bottom: 10px;
-		font-size: 28px;
-		font-weight: 600;
 	}
 	.second-section-col.jackets img {
 		margin-top: 20px;
@@ -273,6 +339,7 @@ const response = await fetch("http://localhost:3000/")
 		grid-gap: 20px;
 		justify-items: center;
 		align-items: center;
+		padding: 20px;
 	}
 
 	.second-section-col {
@@ -280,7 +347,6 @@ const response = await fetch("http://localhost:3000/")
 		width: 100%;
 		height: 100%;
 		overflow: hidden;
-		cursor: pointer;
 		text-align: center;
 		margin-top: auto;
 	}
@@ -297,8 +363,6 @@ const response = await fetch("http://localhost:3000/")
 		left: 50%;
 		transform: translate(-50%, -50%);
 		color: #fff;
-		font-size: 24px; /* Optional: Adjust font size */
-		font-weight: bold; /* Optional: Adjust font weight */
 	}
 
 	@media screen and (min-width: 1024px) {
@@ -321,29 +385,62 @@ const response = await fetch("http://localhost:3000/")
 			grid-row: 2 / 3;
 		}
 	}
+/* Keyframe animations */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Initial state */
+.second-section-col {
+  opacity: 0;
+  transform: translateY(20px) scale(0.95); /* Combine initial transforms */
+  transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+}
+
+/* Animation when .animate class is added */
+.second-section-col.animate {
+  opacity: 1;
+  transform: translateY(0) scale(1); /* Final state */
+}
 
 	/* end of second section */
 
 	/* third section */
 	.third-section {
 		width: 100%;
-		padding: 20px 0;
+		padding: 20px 0px;
 	}
 	.third-section-container {
 		max-width: 1200px;
 		margin: 0 auto;
 		text-align: center;
+		padding: 0px 20px;
 	}
 	.third-section-title {
 		margin-top: 50px;
 		margin-bottom: 10px;
-		font-size: 28px;
-		font-weight: 600;
 	}
 
 	.third-section p {
 		margin-bottom: 40px;
-		font-size: 16px;
 	}
 
 	.slider-wrapper {
@@ -386,16 +483,6 @@ const response = await fetch("http://localhost:3000/")
 		margin-top: 10px;
 	}
 
-	.product-details p {
-		margin: 0;
-		font-size: 16px;
-		font-weight: 500;
-	}
-
-	.product-details p:last-child {
-		font-weight: 700;
-	}
-
 	.prev-button,
 	.next-button {
 		display: none;
@@ -417,8 +504,10 @@ const response = await fetch("http://localhost:3000/")
 	.next-button {
 		right: 10px;
 	}
-
 	@media screen and (min-width: 768px) {
+		.hero-page-left-col {
+			max-width: 500px;
+		}
 		.slider {
 			overflow-x: hidden;
 		}
@@ -433,8 +522,8 @@ const response = await fetch("http://localhost:3000/")
 
 	@media screen and (min-width: 1024px) {
 		.landing-page-container {
-			max-width: 1200px;
-			padding: 0px;
+			max-width: 1400px;
+			padding: 20px;
 			flex-grow: 1;
 			justify-content: center;
 		}
@@ -444,9 +533,9 @@ const response = await fetch("http://localhost:3000/")
 			justify-content: space-between;
 		}
 		.hero-page-left-col {
-			max-width: 500px;
 			align-items: flex-start;
 			text-align: start;
+			padding: 0px;
 		}
 		.hero-page-right-col {
 			max-width: 600px;
@@ -456,6 +545,7 @@ const response = await fetch("http://localhost:3000/")
 
 		.CTA-buttons {
 			flex-direction: row;
+			min-width: 100%;
 		}
 		.facts-landing-page {
 			justify-content: flex-start;
@@ -466,4 +556,15 @@ const response = await fetch("http://localhost:3000/")
 		.landing-page-wrapper {
 		}
 	}
+	@media screen and (max-width: 600px) {
+		.CTA-buttons {
+			min-width: 100%;
+		}
+	}
+	@media screen and (max-width: 1024px) {
+		.CTA-buttons {
+			min-width: 280px;
+		}
+	}
+	
 </style>

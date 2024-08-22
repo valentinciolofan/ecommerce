@@ -30,7 +30,128 @@ const { title } = Astro.props;
 	</body>
 </html>
 <style is:global>
-	@import url("https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap");
+	/* Import the fonts */
+	@import url('https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Merriweather:wght@400;700&display=swap');
+  
+	* {
+		margin: 0px;
+		padding: 0px;
+		
+	}
+	
+	/* Set up global body styles */
+	body {
+	  font-family: 'Lato', sans-serif;
+	  color: #333333;
+	  background-color: #FFFFFF;
+	  line-height: 1.6;
+	  font-size: 16px; /* Base font size */
+	}
+  
+	/* Global styles for headings */
+	h1, h2, h3, h4, h5, h6 {
+	  font-family: 'Merriweather', serif;
+	  color: #333333;
+	  margin-bottom: 1rem;
+	  line-height: 1.3;
+	}
+  
+	h1 {
+	  font-size: 3rem; /* 48px */
+	  font-weight: 700;
+	}
+  
+	h2 {
+	  font-size: 2.25rem; /* 36px */
+	  font-weight: 700;
+	}
+  
+	h3 {
+	  font-family: 'Lato', sans-serif;
+	  font-size: 1.875rem; /* 30px */
+	  font-weight: 700;
+	}
+  
+	h4 {
+	  font-family: 'Lato', sans-serif;
+	  font-size: 1.5rem; /* 24px */
+	  font-weight: 700;
+	}
+  
+	h5 {
+	  font-family: 'Lato', sans-serif;
+	  font-size: 1.25rem; /* 20px */
+	  font-weight: 500;
+	}
+  
+	h6 {
+	  font-family: 'Lato', sans-serif;
+	  font-size: 1.125rem; /* 18px */
+	  font-weight: 500;
+	}
+  
+	/* Global styles for paragraphs and other text elements */
+	p {
+	  font-size: 1rem; /* 16px */
+	  font-weight: 400;
+	  line-height: 1.6;
+	}
+  
+	.body-large {
+	  font-size: 1.125rem; /* 18px */
+	  font-weight: 400;
+	  line-height: 1.6;
+	}
+  
+	.body-small {
+	  font-size: 0.875rem; /* 14px */
+	  font-weight: 400;
+	  line-height: 1.6;
+	}
+  
+	/* Global styles for buttons */
+	button {
+	  font-family: 'Lato', sans-serif;
+	  font-size: 1rem; /* 16px */
+	  font-weight: 700;
+	  letter-spacing: 0.5px;
+	}
+  
+	/* Secondary button styles */
+	.btn-secondary {
+	  font-size: 0.875rem; /* 14px */
+	  font-weight: 700;
+	  letter-spacing: 0.5px;
+	}
+  
+	/* Navigation styles */
+	nav a {
+	  font-family: 'Lato', sans-serif;
+	  font-size: 1rem; /* 16px */
+	  font-weight: 700;
+	}
+  
+	nav a.sub {
+	  font-size: 0.875rem; /* 14px */
+	  font-weight: 400;
+	}
+  
+	/* Caption and overline styles */
+	.caption {
+	  font-family: 'Merriweather', serif;
+	  font-size: 0.75rem; /* 12px */
+	  font-weight: 400;
+	}
+  
+	.overline {
+	  font-family: 'Lato', sans-serif;
+	  font-size: 0.75rem; /* 12px */
+	  font-weight: 700;
+	  letter-spacing: 1px;
+	}
+  </style>
+  
+<!-- 
 	@import url("https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap");
 	* {
 		margin: 0;
@@ -59,5 +180,4 @@ const { title } = Astro.props;
 		font-family: "Lato", sans-serif;
 		font-weight: 400;
 		font-style: normal;
-	}
-</style>
+	} -->
