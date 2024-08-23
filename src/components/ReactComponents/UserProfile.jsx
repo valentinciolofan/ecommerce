@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useStore } from '@nanostores/react';
 import { userSession } from '../UserContext';
 import urlFor from '../../utils/urlFor';
-import './products.css';
+import './mystyle.css';
 
 const UserProfile = ({ products }) => {
     const profileInfo = useStore(userSession);

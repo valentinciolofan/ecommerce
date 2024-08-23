@@ -28,17 +28,17 @@ export async function getStaticPaths() {
   }`);
 
   // Function to get random products excluding the current one
-  function getRandomProducts(currentSlug) {
+  const getRandomProducts = (currentSlug: any) => {
     const filteredProducts = products.filter(
-      (p) => p.slug.current !== currentSlug,
+      (p: { slug: { current: any } }) => p.slug.current !== currentSlug,
     );
     const shuffled = filteredProducts.sort(() => 0.5 - Math.random());
     return shuffled.slice(0, 6); // Return up to 6 random products
-  }
+  };
 
   // Map over products to create paths
   const paths = await Promise.all(
-    products.map(async (product) => {
+    products.map(async (product: { slug: { current: any } }) => {
       // Get 6 random products as related products
       const relatedProducts = getRandomProducts(product.slug.current);
 
@@ -57,7 +57,6 @@ export async function getStaticPaths() {
 
 const { slug } = Astro.params;
 const { product, relatedProducts } = Astro.props;
-
 
 const structuredSizes = [];
 for (let i = 0; i < product.sizes.length; i += 2) {
@@ -78,229 +77,273 @@ const productDetails = {
 ---
 
 <Layout title={`${product.title} - fashionCulture`}>
-  <div class="product-container">
-    <div class="product-wrapper">
-      <div class="product-images">
-        {
-          product.images.map((image) => (
-            <div class="product-image-wrapper">
-              <img class="product-image" src={urlFor(image).url()} alt="" />
+  <main>
+    <section class="product-container">
+      <div class="product-wrapper">
+        <div class="product-images">
+          {
+            product.images.map((image: any) => (
+              <div class="product-image-container">
+                <img
+                  class="product-image"
+                  src={urlFor(image).url()}
+                  alt={product.title}
+                />
+              </div>
+            ))
+          }
+        </div>
+        <!-- product information such as title, price, description -->
+        <aside class="product-info">
+          <div>
+            <div class="product-info-title-and-wishlist">
+              <p class="product-info-title text-1">{product.title}</p>
+              <AddToWishlist client:only />
             </div>
-          ))
-        }
-      </div>
-      <div class="product-info">
-        <div>
-          <p>{product.title}</p>
-          <p>${product.price}</p>
-        </div>
-        <p>{product.description}</p>
-        <p>Select a size:</p>
-        <ProductSizes sizes={structuredSizes} client:load />
-        <AddToWishlist client:only />
-        <div class="add-to-cart-wrapper">
-          <AddtoCart productDetails={productDetails} client:load />
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <section class="third-section">
-    <div class="third-section-container">
-      <p>
-        You could also be interested in
-      </p>
-
-      <div class="slider-wrapper">
-        <button class="prev-button" aria-label="Previous slide">&lt;</button>
-        <div class="slider">
-          <div class="slides">
-            {relatedProducts.map((product) => {
-                return (
-                  <a href={product.slug.current}>
-                    <div class="slide">
-                      <img
-                        src={urlFor(product.image).url()}
-                        alt={product.title}
-                      />
-                      <div class="product-details">
-                        <p>{product.title}</p>
-                        <p>${product.price}</p>
-                      </div>
-                    </div>
-                  </a>
-                );
-              })
-            }
+            <p class="product-info-price text-1">${product.price}</p>
           </div>
-        </div>
-        <button class="next-button" aria-label="Next slide">&gt;</button>
+          <p class="text-1">{product.description}</p>
+          <div class="size-select">
+            <p class="text-1">Select a size:</p>
+            <ProductSizes sizes={structuredSizes} client:load />
+          </div>
+          <div class="add-to-cart-wrapper">
+            <AddtoCart productDetails={productDetails} client:load />
+          </div>
+        </aside>
+        <!-- product info ### title, price, size -->
       </div>
-    </div>
-  </section>
+    </section>
+
+    <section class="slider-section">
+      <div class="slider-container">
+        <p class="slider-description">You might also be interested in</p>
+        <div class="slider-wrapper">
+          <button class="slider-prev-button" aria-label="Previous slide"
+            >&lt;</button
+          >
+          <div class="slider">
+            <div class="slider-slides">
+              {
+                relatedProducts.map(
+                  (product: {
+                    slug: { current: string | URL | null | undefined };
+                    image: any;
+                    title: unknown;
+                    price: unknown;
+                  }) => {
+                    return (
+                      <div class="slider-slide">
+                        <a href={product.slug.current}>
+                          <img
+                            src={urlFor(product.image)?.url()}
+                            alt={product.title as string}
+                          />
+                          <div class="slider-product-details">
+                            <p class="slider-product-title title-1">{product.title}</p>
+                            <p class="slider-product-price title-1">${product.price}</p>
+                          </div>
+                        </a>
+                      </div>
+                    );
+                  },
+                )
+              }
+            </div>
+          </div>
+          <button class="slider-next-button" aria-label="Next slide"
+            >&gt;</button
+          >
+        </div>
+      </div>
+    </section>
+  </main>
+  <script>
+    // script for product images
+    document.addEventListener("DOMContentLoaded", function () {
+      const showSlides = (n: number) => {
+        const slides = document.querySelectorAll<HTMLElement>(".product-image");
+        if (n > slides.length) {
+          slideIndex = 1;
+        }
+        if (n < 1) {
+          slideIndex = slides.length;
+        }
+        slides.forEach((slide) => {
+          slide.style.display = "none";
+        });
+        slides[slideIndex - 1].style.display = "block";
+      };
+
+      let slideIndex = 1;
+      showSlides(slideIndex);
+
+      const prevBtn = document.querySelector(
+        ".prev",
+      ) as HTMLButtonElement | null;
+      const nextBtn = document.querySelector(
+        ".next",
+      ) as HTMLButtonElement | null;
+
+      if (prevBtn && nextBtn) {
+        prevBtn.addEventListener("click", () => showSlides((slideIndex += -1)));
+        nextBtn.addEventListener("click", () => showSlides((slideIndex += 1)));
+      }
+    });
+
+    // carousel script for suggested products
+    document.addEventListener("DOMContentLoaded", function () {
+      const slider = document.querySelector(".slider") as HTMLElement | null;
+      const slides = document.querySelectorAll<HTMLElement>(".slider-slide");
+      const prevButton = document.querySelector(
+        ".slider-prev-button",
+      ) as HTMLButtonElement | null;
+      const nextButton = document.querySelector(
+        ".slider-next-button",
+      ) as HTMLButtonElement | null;
+
+      if (slides.length > 0 && slider) {
+        let scrollAmount = 0;
+        const slideWidth = slides[0]?.offsetWidth || 0;
+        const maxScroll = slider.scrollWidth - slider.clientWidth;
+
+        if (nextButton && prevButton) {
+          nextButton.addEventListener("click", () => {
+            if (scrollAmount < maxScroll) {
+              slider.scrollBy({
+                left: slideWidth,
+                behavior: "smooth",
+              });
+              scrollAmount += slideWidth;
+            } else {
+              slider.scrollTo({ left: 0, behavior: "smooth" });
+              scrollAmount = 0;
+            }
+          });
+
+          prevButton.addEventListener("click", () => {
+            if (scrollAmount > 0) {
+              slider.scrollBy({
+                left: -slideWidth,
+                behavior: "smooth",
+              });
+              scrollAmount -= slideWidth;
+            } else {
+              slider.scrollTo({
+                left: maxScroll,
+                behavior: "smooth",
+              });
+              scrollAmount = maxScroll;
+            }
+          });
+
+          // Auto-slide every 5 seconds
+          setInterval(() => {
+            if (scrollAmount < maxScroll) {
+              slider.scrollBy({
+                left: slideWidth,
+                behavior: "smooth",
+              });
+              scrollAmount += slideWidth;
+            } else {
+              slider.scrollTo({ left: 0, behavior: "smooth" });
+              scrollAmount = 0;
+            }
+          }, 5000);
+        }
+      }
+    });
+  </script>
 </Layout>
 
-<script type="module">
-  // carousel of images
-  let slideIndex = 1;
-  showSlides(slideIndex);
-  const prevBtn = document.querySelector(".prev");
-  const nextBtn = document.querySelector(".next");
-
-  prevBtn.addEventListener("click", () => showSlides((slideIndex += -1)));
-  nextBtn.addEventListener("click", () => showSlides((slideIndex += 1)));
-
-  function showSlides(n) {
-    let slides = document.querySelectorAll(".product-image");
-    if (n > slides.length) {
-      slideIndex = 1;
-    }
-    if (n < 1) {
-      slideIndex = slides.length;
-    }
-    for (let slide of slides) {
-      slide.style.display = "none";
-    }
-    slides[slideIndex - 1].style.display = "block";
-  }
-
-  // select size
-  document.addEventListener("DOMContentLoaded", function () {
-    const sizeOptions = document.querySelectorAll(".size-option");
-    sizeOptions.forEach((option) => {
-      option.addEventListener("click", function () {
-        // Remove 'selected' class from all options
-        sizeOptions.forEach((opt) => opt.classList.remove("selected"));
-
-        // Add 'selected' class to the clicked option
-        this.classList.add("selected");
-      });
-    });
-  });
-
-  // script for suggested products
-  document.addEventListener("DOMContentLoaded", function () {
-    const slider = document.querySelector(".slider");
-    const prevButton = document.querySelector(".prev-button");
-    const nextButton = document.querySelector(".next-button");
-
-    nextButton.addEventListener("click", () => {
-      slider.scrollBy({ left: 300, behavior: "smooth" });
-    });
-
-    prevButton.addEventListener("click", () => {
-      slider.scrollBy({ left: -300, behavior: "smooth" });
-    });
-  });
-</script>
-
 <style>
-  /* Base container styling */
-  .product-container {
+  main {
+    margin-top: 100px;
     display: flex;
     flex-direction: column;
-    gap: 20px; /* Adjusted for mobile */
+    gap: 120px;
+  }
+  .product-container {
+    display: flex;
+    gap: 20px;
     padding: 20px;
     min-width: 300px;
     justify-content: center;
-    align-content: center;
   }
-
   .product-wrapper {
     display: flex;
     flex-direction: column;
-    gap: 20px; /* Ensure spacing between components */
-    max-width: 100%; /* Limit width for better scaling */
-  }
-
-  /* Image and Info Layout */
-  .product-images {
-    display: flex;
-    justify-content: center;
     align-items: center;
-    max-width: 100%;
+    gap: 20px;
   }
-
-  .product-image-wrapper {
+  /* Image and Info Layout */
+  .product-image-container {
     width: 100%;
-    max-width: 400px;
-    margin: 0 auto;
+    height: 400px;
+    overflow: hidden;
   }
-
   .product-image {
-    width: 100%;
+    max-width: 100%;
     height: auto;
-    object-fit: cover;
-    border-radius: 8px;
+    object-fit: contain;
+    object-position: center;
   }
-
   /* Product Info */
   .product-info {
     display: flex;
     flex-direction: column;
     gap: 20px;
     font-size: 14px;
-    padding: 10px;
     box-sizing: border-box;
   }
-
+  .product-info-title-and-wishlist {
+    display: flex;
+    justify-content: space-between;
+  }
+  .product-info-title {
+    text-transform: uppercase;
+  }
+  .size-select {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
   /* Add to Cart */
   .add-to-cart-wrapper {
     margin-top: 20px;
   }
 
-  /* Responsive Design for Tablet and Desktop */
-  @media screen and (min-width: 768px) {
-    .product-wrapper {
-      flex-direction: row;
-      justify-content: space-between;
-      gap: 40px; /* Increase gap between image and info */
-    }
-    .product-image-wrapper {
-      max-width: 50%; /* Allow image to take half the width */
-    }
-    .product-info {
-      max-width: 50%; /* Allow info to take half the width */
-    }
+  /* Suggested / Recommended products  Section Styling */
+  .slider-section {
+    width: 100%;
+    padding: 20px 0px;
   }
 
-  @media screen and (min-width: 1024px) {
-    .product-wrapper {
-      max-width: 1200px;
-      margin: 0 auto;
-    }
-    .product-info {
-      padding: 0px 20px;
-    }
-  }
-
-  /* Third Section Styling */
-  .third-section-container {
-    max-width: 100%;
+  .slider-container {
+    max-width: 1400px;
     margin: 0 auto;
-    padding: 20px 10px; /* Padding for mobile */
+    padding: 0px 20px;
   }
 
-  .third-section-title {
-    margin-top: 20px;
-    margin-bottom: 20px;
-    font-size: 24px;
-    font-weight: 600;
+  .slider-title {
+    margin-top: 50px;
+    margin-bottom: 10px;
   }
 
-  .third-section p {
+  .slider-description {
     margin-bottom: 20px;
-    font-size: 14px;
+    font-size: 12px;
+    text-transform: uppercase;
   }
 
   .slider-wrapper {
     position: relative;
     display: flex;
     align-items: center;
-    overflow: hidden;
   }
 
   .slider {
+    overflow-x: auto;
     display: flex;
     justify-content: flex-start;
     align-items: center;
@@ -308,53 +351,43 @@ const productDetails = {
     -webkit-overflow-scrolling: touch;
   }
 
-  .slides {
+  .slider-slides {
     display: flex;
     flex-wrap: nowrap;
   }
-  .slides a {
-    color: #000;
-    text-decoration: none;
-  }
-  .slide {
-    min-width: 80%;
-    margin-right: 10px;
-    flex-shrink: 0;
+  .slider-slide {
+    width: 350px;
+    min-height: 300px;
+    margin-right: 20px;
     text-align: center;
-    border-radius: 8px;
-    overflow: hidden;
-    background-color: #fff;
-    transition: transform 0.3s ease;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 
-  .slide img {
-    max-width: 100%;
-    height: 200px;
-    object-fit: cover;
-    background-position: center center;
+  .slider-slide img {
+    width: 100%; 
+    height: 100%; 
+    object-fit: cover; 
     display: block;
+    background-color: #f7f7f7; 
+    aspect-ratio: 3/4;
   }
 
-  .product-details {
+  .slider-product-details {
     display: flex;
     flex-direction: column;
-    align-items: center;
-    margin-top: 10px;
+    align-items: flex-start;
+    margin-top: 7px;
+  }
+  .slider-product-title, .slider-product-price {
+    color: #333333;
+    font-size: 12px;
   }
 
-  .product-details p {
-    margin: 0;
-    font-size: 14px;
-    font-weight: 500;
-  }
-
-  .product-details p:last-child {
-    font-weight: 700;
-  }
-
-  .prev-button,
-  .next-button {
-    display: none; /* Hidden on mobile */
+  .slider-prev-button,
+  .slider-next-button {
+    display: none;
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
@@ -364,58 +397,65 @@ const productDetails = {
     padding: 10px;
     cursor: pointer;
     z-index: 10;
-    border-radius: 50%;
   }
 
-  .prev-button {
+  .slider-prev-button {
     left: 10px;
   }
 
-  .next-button {
+  .slider-next-button {
     right: 10px;
   }
 
-  /* Adjustments for Larger Screens */
   @media screen and (min-width: 768px) {
-    .slide {
-      min-width: 45%;
-      margin-right: 15px;
+    .slider {
+      overflow-x: hidden;
     }
 
-    .product-details p {
-      font-size: 16px;
-    }
-
-    .prev-button,
-    .next-button {
-      display: block; /* Show buttons on tablet and desktop */
+    .slider-prev-button,
+    .slider-next-button {
+      display: block;
     }
   }
 
+  /* Responsive Design for Tablet and Desktop */
+  @media screen and (max-width: 767px) {
+    .product-container {
+      flex-direction: column;
+    }
+    .product-wrapper {
+      min-width: 100%;
+    }
+  }
+  /* Adjustments for Larger Screens */
+  @media screen and (min-width: 768px) {
+    .product-wrapper {
+      flex-direction: row;
+      justify-content: space-between;
+      flex-grow: 1;
+      gap: 40px;
+    }
+    .product-images {
+      min-width: 70%;
+    }
+    .product-image-container {
+      height: 100%;
+    }
+    .product-info {
+      max-width: 30%;
+      justify-content: center;
+    }
+  }
+  @media screen and (min-width: 768px) {
+  }
   @media screen and (min-width: 1024px) {
-    .third-section-container {
-      max-width: 1200px;
-      padding: 40px 20px;
+    .product-info {
+      padding: 0px 20px;
     }
-
-    .third-section-title {
-      margin-top: 50px;
-      margin-bottom: 30px;
-      font-size: 28px;
-    }
-
-    .third-section p {
-      margin-bottom: 30px;
-      font-size: 16px;
-    }
-
-    .slide {
-      min-width: 30%;
-      margin-right: 20px;
-    }
-
-    .slide img {
-      height: 350px;
+  }
+  @media screen and (min-width: 1400px) {
+    .product-wrapper {
+      max-width: 1400px;
     }
   }
 </style>

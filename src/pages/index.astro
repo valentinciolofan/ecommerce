@@ -72,64 +72,65 @@ const products = await sanityClient.fetch(`*[_type == "product"]`);
 	<!-- end of second section -->
 
 	<!-- third section -->
-	<section class="third-section">
-		<div class="third-section-container">
-			<h3 class="third-section-title">ELEVATE YOUR WARDROBE</h3>
-			<p>
+	<section class="slider-section">
+		<div class="slider-container">
+			<h3 class="slider-title">ELEVATE YOUR WARDROBE</h3>
+			<p class="slider-description">
 				Upgrade your style with our premium clothing selection. Explore
 				our range of fashionable garments that blend quality, comfort,
 				and trendsetting designs.
 			</p>
 
 			<div class="slider-wrapper">
-				<button class="prev-button" aria-label="Previous slide"
+				<button class="slider-prev-button" aria-label="Previous slide"
 					>&lt;</button
 				>
 				<div class="slider">
-					<div class="slides">
-						<div class="slide">
+					<div class="slider-slides">
+						<div class="slider-slide">
 							<img
 								src="images/extraterestrialpants.png"
 								alt="extraterestrial"
 							/>
-							<div class="product-details">
+							<div class="slider-product-details">
 								<p>EXTRATERESTRIAL PANTS</p>
 								<p>$560</p>
 							</div>
 						</div>
-						<div class="slide">
+						<div class="slider-slide">
 							<img
 								src="images/shortmatrixpants.png"
 								alt="shorts"
 							/>
-							<div class="product-details">
+							<div class="slider-product-details">
 								<p>SHORT FROM MATRIX</p>
 								<p>$360</p>
 							</div>
 						</div>
-						<div class="slide">
+						<div class="slider-slide">
 							<img
 								src="images/extraterestrialpants.png"
 								alt="pants"
 							/>
-							<div class="product-details">
+							<div class="slider-product-details">
 								<p>PANTS FROM THE MARS</p>
 								<p>$560</p>
 							</div>
 						</div>
-						<div class="slide">
+						<div class="slider-slide">
 							<img
 								src="images/extraterestrialpants.png"
 								alt="extraterestrial"
 							/>
-							<div class="product-details">
+							<div class="slider-product-details">
 								<p>EXTRATERESTRIAL PANTS</p>
 								<p>$560</p>
 							</div>
 						</div>
 					</div>
 				</div>
-				<button class="next-button" aria-label="Next slide">&gt;</button
+				<button class="slider-next-button" aria-label="Next slide"
+					>&gt;</button
 				>
 			</div>
 		</div>
@@ -175,12 +176,13 @@ const products = await sanityClient.fetch(`*[_type == "product"]`);
 			const slider = document.querySelector(
 				".slider",
 			) as HTMLElement | null;
-			const slides = document.querySelectorAll<HTMLElement>(".slide");
+			const slides =
+				document.querySelectorAll<HTMLElement>(".slider-slide");
 			const prevButton = document.querySelector(
-				".prev-button",
+				".slider-prev-button",
 			) as HTMLButtonElement | null;
 			const nextButton = document.querySelector(
-				".next-button",
+				".slider-next-button",
 			) as HTMLButtonElement | null;
 
 			if (slides.length > 0 && slider) {
@@ -461,22 +463,24 @@ const products = await sanityClient.fetch(`*[_type == "product"]`);
 	/* end of second section */
 
 	/* third section */
-	.third-section {
+	.slider-section {
 		width: 100%;
 		padding: 20px 0px;
 	}
-	.third-section-container {
+
+	.slider-container {
 		max-width: 1200px;
 		margin: 0 auto;
 		text-align: center;
 		padding: 0px 20px;
 	}
-	.third-section-title {
+
+	.slider-title {
 		margin-top: 50px;
 		margin-bottom: 10px;
 	}
 
-	.third-section p {
+	.slider-description {
 		margin-bottom: 40px;
 	}
 
@@ -495,33 +499,33 @@ const products = await sanityClient.fetch(`*[_type == "product"]`);
 		-webkit-overflow-scrolling: touch;
 	}
 
-	.slides {
+	.slider-slides {
 		display: flex;
 		flex-wrap: nowrap;
 	}
 
-	.slide {
+	.slider-slide {
 		min-width: 250px;
 		margin-right: 20px;
 		flex-shrink: 0;
 		text-align: center;
 	}
 
-	.slide img {
+	.slider-slide img {
 		width: 100%;
 		height: auto;
 		display: block;
 	}
 
-	.product-details {
+	.slider-product-details {
 		display: flex;
 		justify-content: space-between;
 		align-items: center;
 		margin-top: 10px;
 	}
 
-	.prev-button,
-	.next-button {
+	.slider-prev-button,
+	.slider-next-button {
 		display: none;
 		position: absolute;
 		top: 50%;
@@ -534,23 +538,25 @@ const products = await sanityClient.fetch(`*[_type == "product"]`);
 		z-index: 10;
 	}
 
-	.prev-button {
+	.slider-prev-button {
 		left: 10px;
 	}
 
-	.next-button {
+	.slider-next-button {
 		right: 10px;
 	}
+
 	@media screen and (min-width: 768px) {
 		.hero-page-left-col {
 			max-width: 500px;
 		}
+
 		.slider {
 			overflow-x: hidden;
 		}
 
-		.prev-button,
-		.next-button {
+		.slider-prev-button,
+		.slider-next-button {
 			display: block;
 		}
 	}

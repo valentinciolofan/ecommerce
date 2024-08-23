@@ -3,7 +3,7 @@ import FiltersModal from './FiltersModal';
 import ProductListing from './ProductListing';
 import { searchBoxValue } from '../UserContext';
 import { useStore } from '@nanostores/react';
-import './products.css'
+import './mystyle.css'
 
 const App = ({ products }) => {
   const searchValue = useStore(searchBoxValue);

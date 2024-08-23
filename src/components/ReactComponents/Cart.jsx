@@ -2,7 +2,7 @@ import React from "react"
 import { useStore } from "@nanostores/react"
 import { cartStore, removeFromCart, decreaseQuantity, increaseQuantity } from "../UserContext"
 import urlFor from "../../utils/urlFor"
-import "./products.css"
+import "./mystyle.css"
 
 const handleProcessPaymentClick = () => {
   window.location.href = "/checkout/shipping"

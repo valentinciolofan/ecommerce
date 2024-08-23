@@ -3,7 +3,7 @@ import OrderDetails from './OrderDetails';
 import { useStore } from "@nanostores/react";
 import { cartStore } from '../UserContext';
 import Payment from '../Payment';
-import "./products.css";
+import "./mystyle.css";
 
 const storeAddresses = [
     '123 Fashion Ave, New York, NY 10001',

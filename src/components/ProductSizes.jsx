@@ -31,7 +31,7 @@ const ProductSizes = ({ sizes }) => {
                 {sizes && sizes.map((size) => (
                     <li
                         key={size.size}
-                        className={`size-option ${size.size === productDetails.selectedSize ? 'selected' : ''}`}
+                        className={`text-1 size-option ${size.size === productDetails.selectedSize ? 'selected' : ''}`}
                         onClick={() => handleSizeClick(size.size)}
                     >
                         {size.size.toUpperCase()}

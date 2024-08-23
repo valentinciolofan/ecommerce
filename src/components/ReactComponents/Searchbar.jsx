@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useStore } from '@nanostores/react';
 import { searchBoxValue } from '../UserContext';
-import './products.css'; // Import the CSS file
+import './mystyle.css'; 
 
 const SearchBar = () => {
     const inputValue = useStore(searchBoxValue);

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useStore } from '@nanostores/react';
 import { productDetailsStore, addToCart, cartStore } from '../UserContext';
-import "./products.css"
+import "./mystyle.css"
 import urlFor from '../../utils/urlFor';
 
 export const AddtoCart = ({ productDetails }) => {
