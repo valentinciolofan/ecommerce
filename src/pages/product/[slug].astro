@@ -160,7 +160,7 @@ const productDetails = {
   </main>
   <script>
     // script for product images
-    document.addEventListener("DOMContentLoaded", function () {
+    document.addEventListener("DOMContentLoaded", () => {
       const showSlides = (n: number) => {
         const slides = document.querySelectorAll<HTMLElement>(".product-image");
         if (n > slides.length) {
@@ -192,7 +192,7 @@ const productDetails = {
     });
 
     // carousel script for suggested products
-    document.addEventListener("DOMContentLoaded", function () {
+    document.addEventListener("DOMContentLoaded", () => {
       const slider = document.querySelector(".slider") as HTMLElement | null;
       const slides = document.querySelectorAll<HTMLElement>(".slider-slide");
       const prevButton = document.querySelector(
@@ -257,12 +257,6 @@ const productDetails = {
 </Layout>
 
 <style>
-  main {
-    margin-top: 100px;
-    display: flex;
-    flex-direction: column;
-    gap: 120px;
-  }
   .product-container {
     display: flex;
     gap: 20px;
@@ -350,7 +344,9 @@ const productDetails = {
     scroll-behavior: smooth;
     -webkit-overflow-scrolling: touch;
   }
-
+  .slider::-webkit-scrollbar {
+		display: none;
+	}
   .slider-slides {
     display: flex;
     flex-wrap: nowrap;
@@ -408,10 +404,6 @@ const productDetails = {
   }
 
   @media screen and (min-width: 768px) {
-    .slider {
-      overflow-x: hidden;
-    }
-
     .slider-prev-button,
     .slider-next-button {
       display: block;

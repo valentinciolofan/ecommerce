@@ -2,141 +2,130 @@
 import Layout from "../layouts/Layout.astro";
 import React from "react";
 import { sanityClient } from "sanity:client";
-const products = await sanityClient.fetch(`*[_type == "product"]`);
+import type { Product } from "../types/types";
+import urlFor from "../utils/urlFor";
+const products: Product[] = await sanityClient.fetch(`*[_type == "product"]`);
 ---
 
 <Layout title="fashionCulture | Unleash Your Style Potential">
-	<section class="landing-page">
-		<div class="landing-page-container">
-			<div class="landing-page-wrapper">
-				<div class="hero-page-left-col">
-					<h1>UNLEASH YOUR STYLE POTENTIAL</h1>
-					<p class="paragraph-landing-page">
-						Discover fashion that empowers you. Embrace your
-						individuality with our carefully curated collection of
-						clothes designed to make a statement.
-					</p>
-					<div class="CTA-buttons">
-						<a href="/shop">See all products</a>
-						<a href="/contact">Get in touch</a>
+	<main>
+		<section class="landing-page">
+			<div class="landing-page-container">
+				<div class="landing-page-wrapper">
+					<div class="hero-page-left-col">
+						<h1>UNLEASH YOUR STYLE POTENTIAL</h1>
+						<p class="paragraph-landing-page">
+							Discover fashion that empowers you. Embrace your
+							individuality with our carefully curated collection
+							of clothes designed to make a statement.
+						</p>
+						<div class="CTA-buttons">
+							<a href="/shop">See all products</a>
+							<a href="/contact">Get in touch</a>
+						</div>
+						<div class="facts-landing-page">
+							<span><p class="fact">1M+</p><p>Customers</p></span>
+							<span><p class="fact">200+</p><p>Products</p></span>
+							<span><p class="fact">10</p><p>Stores</p></span>
+						</div>
 					</div>
-					<div class="facts-landing-page">
-						<span><p class="fact">1M+</p><p>Customers</p></span>
-						<span><p class="fact">200+</p><p>Products</p></span>
-						<span><p class="fact">10</p><p>Stores</p></span>
-					</div>
-				</div>
 
-				<div class="hero-page-right-col">
-					<div class="hero-page-images">
-						<img
-							src="/images/moon.svg"
-							class="hero-page-moon-svg"
-						/>
-						<img
-							src="/images/hero-page-guy.svg"
-							class="hero-page-guy-svg"
-						/>
+					<div class="hero-page-right-col">
+						<div class="hero-page-images">
+							<img
+								src="/images/moon.svg"
+								class="hero-page-moon-svg"
+							/>
+							<img
+								src="/images/hero-page-guy.svg"
+								class="hero-page-guy-svg"
+							/>
+						</div>
 					</div>
 				</div>
 			</div>
-		</div>
-	</section>
-	<!-- end of landing page section -->
+		</section>
+		<!-- end of landing page section -->
 
-	<!-- second section -->
-	<section class="second-section">
-		<div class="second-section-container">
-			<div class="second-section-cards">
-				<div class="second-section-col jackets">
-					<h2 class="second-section-title">FIND YOUR PERFECT FIT</h2>
-					<p>
-						Explore our diverse categories and uncover clothing that
-						suits your lifestyle. From chic essentials to bold
-						statement pieces, we have it all.
-					</p>
-					<img src="images/jackets.svg" alt="jackets" />
-					<h1 class="absolute-paragraph">JACKETS</h1>
-				</div>
-				<div class="second-section-col pants">
-					<img src="images/pants.png" alt="pants" />
-					<h1 class="absolute-paragraph">PANTS</h1>
-				</div>
-				<div class="second-section-col shorts">
-					<img src="images/shorts.png" alt="shorts" />
-					<h1 class="absolute-paragraph">SHORTS</h1>
-				</div>
-			</div>
-		</div>
-	</section>
-	<!-- end of second section -->
-
-	<!-- third section -->
-	<section class="slider-section">
-		<div class="slider-container">
-			<h3 class="slider-title">ELEVATE YOUR WARDROBE</h3>
-			<p class="slider-description">
-				Upgrade your style with our premium clothing selection. Explore
-				our range of fashionable garments that blend quality, comfort,
-				and trendsetting designs.
-			</p>
-
-			<div class="slider-wrapper">
-				<button class="slider-prev-button" aria-label="Previous slide"
-					>&lt;</button
-				>
-				<div class="slider">
-					<div class="slider-slides">
-						<div class="slider-slide">
-							<img
-								src="images/extraterestrialpants.png"
-								alt="extraterestrial"
-							/>
-							<div class="slider-product-details">
-								<p>EXTRATERESTRIAL PANTS</p>
-								<p>$560</p>
-							</div>
-						</div>
-						<div class="slider-slide">
-							<img
-								src="images/shortmatrixpants.png"
-								alt="shorts"
-							/>
-							<div class="slider-product-details">
-								<p>SHORT FROM MATRIX</p>
-								<p>$360</p>
-							</div>
-						</div>
-						<div class="slider-slide">
-							<img
-								src="images/extraterestrialpants.png"
-								alt="pants"
-							/>
-							<div class="slider-product-details">
-								<p>PANTS FROM THE MARS</p>
-								<p>$560</p>
-							</div>
-						</div>
-						<div class="slider-slide">
-							<img
-								src="images/extraterestrialpants.png"
-								alt="extraterestrial"
-							/>
-							<div class="slider-product-details">
-								<p>EXTRATERESTRIAL PANTS</p>
-								<p>$560</p>
-							</div>
-						</div>
+		<!-- second section -->
+		<section class="second-section">
+			<div class="second-section-container">
+				<div class="second-section-cards">
+					<div class="second-section-col jackets">
+						<h2 class="second-section-title">
+							FIND YOUR PERFECT FIT
+						</h2>
+						<p>
+							Explore our diverse categories and uncover clothing
+							that suits your lifestyle. From chic essentials to
+							bold statement pieces, we have it all.
+						</p>
+						<img src="images/jackets.svg" alt="jackets" />
+						<h1 class="absolute-paragraph">JACKETS</h1>
+					</div>
+					<div class="second-section-col pants">
+						<img src="images/pants.png" alt="pants" />
+						<h1 class="absolute-paragraph">PANTS</h1>
+					</div>
+					<div class="second-section-col shorts">
+						<img src="images/shorts.png" alt="shorts" />
+						<h1 class="absolute-paragraph">SHORTS</h1>
 					</div>
 				</div>
-				<button class="slider-next-button" aria-label="Next slide"
-					>&gt;</button
-				>
 			</div>
-		</div>
-	</section>
+		</section>
+		<!-- end of second section -->
 
-	<!-- end of third section -->
+		<!-- third section -->
+		<section class="slider-section">
+			<div class="slider-container">
+				<h3 class="slider-title">ELEVATE YOUR WARDROBE</h3>
+				<p class="slider-description">
+					Upgrade your style with our premium clothing selection.
+					Explore our range of fashionable garments that blend
+					quality, comfort, and trendsetting designs.
+				</p>
+
+				<div class="slider-wrapper">
+					<button
+						class="slider-prev-button"
+						aria-label="Previous slide">&lt;</button
+					>
+					<div class="slider">
+						<div class="slider-slides">
+							{
+								products.map((product) => (
+									<div class="slider-slide">
+										<a href={`/product/${product.slug.current}`}>
+											<img
+												src={urlFor(
+													product.image,
+												)?.url()}
+												alt={product.title as string}
+											/>
+											<div class="slider-product-details">
+												<p class="slider-product-title title-1">
+													{product.title}
+												</p>
+												<p class="slider-product-price title-1">
+													${product.price}
+												</p>
+											</div>
+										</a>
+									</div>
+								))
+							}
+						</div>
+					</div>
+					<button class="slider-next-button" aria-label="Next slide"
+						>&gt;</button
+					>
+				</div>
+			</div>
+		</section>
+
+		<!-- end of third section -->
+	</main>
 	<script>
 		document.addEventListener("DOMContentLoaded", () => {
 			const section = document.querySelector(
@@ -356,10 +345,10 @@ const products = await sanityClient.fetch(`*[_type == "product"]`);
 	}
 	/* end of hero section */
 	.second-section-container {
-		max-width: 1200px;
+		max-width: 1400px;
 		margin: 0 auto;
 		text-align: center;
-		padding: 120px 0px;
+		padding: 0px 20px;
 	}
 
 	.second-section-title {
@@ -376,7 +365,6 @@ const products = await sanityClient.fetch(`*[_type == "product"]`);
 		grid-gap: 20px;
 		justify-items: center;
 		align-items: center;
-		padding: 20px;
 	}
 
 	.second-section-col {
@@ -398,7 +386,7 @@ const products = await sanityClient.fetch(`*[_type == "product"]`);
 		position: absolute;
 		top: 50%;
 		left: 50%;
-		transform: translate(-50%, -50%);
+		transform: translate(-50%, 50%);
 		color: #fff;
 	}
 
@@ -469,10 +457,10 @@ const products = await sanityClient.fetch(`*[_type == "product"]`);
 	}
 
 	.slider-container {
-		max-width: 1200px;
+		max-width: 1400px;
 		margin: 0 auto;
-		text-align: center;
 		padding: 0px 20px;
+		text-align: center;
 	}
 
 	.slider-title {
@@ -481,7 +469,9 @@ const products = await sanityClient.fetch(`*[_type == "product"]`);
 	}
 
 	.slider-description {
-		margin-bottom: 40px;
+		margin-bottom: 20px;
+		font-size: 12px;
+		text-transform: uppercase;
 	}
 
 	.slider-wrapper {
@@ -498,30 +488,42 @@ const products = await sanityClient.fetch(`*[_type == "product"]`);
 		scroll-behavior: smooth;
 		-webkit-overflow-scrolling: touch;
 	}
-
+	.slider::-webkit-scrollbar {
+		display: none;
+	}
 	.slider-slides {
 		display: flex;
 		flex-wrap: nowrap;
 	}
-
 	.slider-slide {
-		min-width: 250px;
+		width: 350px;
+		min-height: 300px;
 		margin-right: 20px;
-		flex-shrink: 0;
 		text-align: center;
+		display: flex;
+		justify-content: center;
+		align-items: center;
 	}
 
 	.slider-slide img {
 		width: 100%;
-		height: auto;
+		height: 100%;
+		object-fit: cover;
 		display: block;
+		background-color: #f7f7f7;
+		aspect-ratio: 3/4;
 	}
 
 	.slider-product-details {
 		display: flex;
-		justify-content: space-between;
-		align-items: center;
-		margin-top: 10px;
+		flex-direction: column;
+		align-items: flex-start;
+		margin-top: 7px;
+	}
+	.slider-product-title,
+	.slider-product-price {
+		color: #333333;
+		font-size: 12px;
 	}
 
 	.slider-prev-button,
@@ -550,11 +552,6 @@ const products = await sanityClient.fetch(`*[_type == "product"]`);
 		.hero-page-left-col {
 			max-width: 500px;
 		}
-
-		.slider {
-			overflow-x: hidden;
-		}
-
 		.slider-prev-button,
 		.slider-next-button {
 			display: block;
