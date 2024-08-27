@@ -113,23 +113,20 @@ const ProductListing = ({ openModal, products, searchedProducts, selectedPriceRa
                   <div>
                   <img src={urlFor(product.images[0]).url()} alt="" />
                   </div>
-                  <div className="product-details">
                     <div className="product-title-and-price">
-                      <span>{product.title}</span>
-                      <span>${product.price}</span>
+                      <p>{product.title}</p>
+                      <p>${product.price}</p>
                     </div>
-                      
-                  </div>
                 </div>
               </a>
-              <AddtoCart productDetails={{
+              {/* <AddtoCart productDetails={{
                          title: product.title,
                          slug: product.slug.current,
                          color: product.color,
                          price: product.price,
                          size: product.size,
                          image: product.image
-                       }} />
+                       }} /> no more needed after refactoring the front end for products */}
             </li>
           ))}
         </ul>

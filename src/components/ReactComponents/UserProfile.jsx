@@ -218,7 +218,7 @@ const UserProfile = ({ products }) => {
                     )}
                     {activeSection === 'profileOrders' && (
                         <div>
-                            <h1>My Orders</h1>
+                            <h4>My Orders</h4>
                             {profileInfo.orders.length ?
                                 <table className="orders-table">
                                     <thead>
@@ -264,7 +264,7 @@ const UserProfile = ({ products }) => {
                     {activeSection === 'profileWishlist' && (
                         <div className='all-products'>
                             <div className='all-products-wrapper'>
-                                <h1>My Wishlist</h1>
+                                <h4>My Wishlist</h4>
                                 <ul>
                                     {
                                         profileInfo.wishlist.length > 0 && profileInfo.wishlist.every(product => product?.slug?.current !== undefined) ? (
@@ -272,8 +272,24 @@ const UserProfile = ({ products }) => {
                                                 <li key={product.slug.current}>
                                                     <a href={"/product/" + product.slug.current}>
                                                         <div className="products">
-                                                            <div>
+                                                            <div className='wishlist-product-image'>
                                                                 <img src={urlFor(product.image).url()} alt="" />
+                                                                <span 
+                                                                onClick={handleWishlistProduct}
+                                                                className='btn-wishlist-product-remove'
+                                                                 >
+                                                                    <svg
+                                                                        xmlns="http://www.w3.org/2000/svg"
+                                                                        width="1em"
+                                                                        height="1em"
+                                                                        viewBox="0 0 256 256"
+                                                                    >
+                                                                        <path
+                                                                            fill="currentColor"
+                                                                            d="M216 48h-40v-8a24 24 0 0 0-24-24h-48a24 24 0 0 0-24 24v8H40a8 8 0 0 0 0 16h8v144a16 16 0 0 0 16 16h128a16 16 0 0 0 16-16V64h8a8 8 0 0 0 0-16M96 40a8 8 0 0 1 8-8h48a8 8 0 0 1 8 8v8H96Zm96 168H64V64h128Zm-80-104v64a8 8 0 0 1-16 0v-64a8 8 0 0 1 16 0m48 0v64a8 8 0 0 1-16 0v-64a8 8 0 0 1 16 0"
+                                                                        ></path>
+                                                                    </svg>
+                                                                </span>
                                                             </div>
                                                             <div className="product-details">
                                                                 <div className="product-title-and-price">
@@ -282,19 +298,6 @@ const UserProfile = ({ products }) => {
                                                             </div>
                                                         </div>
                                                     </a>
-                                                    <span onClick={handleWishlistProduct}>
-                                                        <svg
-                                                            xmlns="http://www.w3.org/2000/svg"
-                                                            width="1em"
-                                                            height="1em"
-                                                            viewBox="0 0 256 256"
-                                                        >
-                                                            <path
-                                                                fill="black"
-                                                                d="M216 48h-40v-8a24 24 0 0 0-24-24h-48a24 24 0 0 0-24 24v8H40a8 8 0 0 0 0 16h8v144a16 16 0 0 0 16 16h128a16 16 0 0 0 16-16V64h8a8 8 0 0 0 0-16M96 40a8 8 0 0 1 8-8h48a8 8 0 0 1 8 8v8H96Zm96 168H64V64h128Zm-80-104v64a8 8 0 0 1-16 0v-64a8 8 0 0 1 16 0m48 0v64a8 8 0 0 1-16 0v-64a8 8 0 0 1 16 0"
-                                                            ></path>
-                                                        </svg>
-                                                    </span>
                                                 </li>
                                             ))
                                         ) : (
