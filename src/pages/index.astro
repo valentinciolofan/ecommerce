@@ -5,6 +5,7 @@ import { sanityClient } from "sanity:client";
 import type { Product } from "../types/types";
 import urlFor from "../utils/urlFor";
 const products: Product[] = await sanityClient.fetch(`*[_type == "product"]`);
+
 ---
 
 <Layout title="fashionCulture | Unleash Your Style Potential">

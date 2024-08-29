@@ -273,8 +273,8 @@ import Layout from "../layouts/Layout.astro";
                     body: JSON.stringify(data),
                 });
 
-                if (!response.ok) {
-                    throw new Error(`HTTP error! Status: ${response.status}`);
+                if (response.status === 401) {
+                    alert('Email or password incorrect, please try again!');
                 } else {
                     const res = await response.json();
                     window.location.href = res.redirect;

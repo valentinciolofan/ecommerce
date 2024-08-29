@@ -14,7 +14,7 @@ import Layout from "../layouts/Layout.astro";
                 <form method="post">
                     <input
                         type="text"
-                        placeholder="Enter your name"
+                        placeholder="Enter your full name"
                         name="name"
                         required
                     />
@@ -44,26 +44,25 @@ import Layout from "../layouts/Layout.astro";
                     />
                     <input
                         type="text"
-                        placeholder="Enter your address"
-                        name="address"
+                        placeholder="Enter your county"
+                        name="county"
                         required
                     />
                     <input
                         type="text"
-                        placeholder="Enter your phone number"
-                        name="phone"
+                        placeholder="Enter your address"
+                        name="address"
                         required
                     />
                     <input
                         type="date"
                         placeholder="Enter your birthday"
                         name="birthday"
-                        required
                     />
                     <input
                         type="text"
-                        placeholder="Enter your county"
-                        name="county"
+                        placeholder="Enter your phone number"
+                        name="phone"
                         required
                     />
                     <div class="terms-and-conditions">
@@ -75,7 +74,8 @@ import Layout from "../layouts/Layout.astro";
                             required
                         />
                         <label for="termsandconditions">
-                            <a href="terms">I agree with terms and conditions</a>
+                            <a href="terms">I agree with terms and conditions</a
+                            >
                         </label>
                     </div>
                     <input type="submit" value="Register" />
@@ -191,7 +191,9 @@ import Layout from "../layouts/Layout.astro";
         background-color: white;
         border: 1px solid #ccc;
         margin-right: 10px;
-        transition: background-color 0.3s ease, border-color 0.3s ease;
+        transition:
+            background-color 0.3s ease,
+            border-color 0.3s ease;
     }
 
     .terms-and-conditions input[type="checkbox"]:checked + label::before {
@@ -271,7 +273,17 @@ import Layout from "../layouts/Layout.astro";
                 body: JSON.stringify(data),
             });
             if (!response.ok) {
+                if (response.status === 422) {
+                    alert('Please make sure that all the input fields are completed accordingly!');
+                } else if (response.status === 409) {
+                    alert('There is already an account with this email address!')
+                }
+
+
                 throw new Error(`HTTP error! Status: ${response.status}`);
+            } else {
+                window.location.href= "/login";
+                
             }
 
             const message = await response.text();
@@ -287,11 +299,6 @@ import Layout from "../layouts/Layout.astro";
         const form = event.target;
         const data = new FormData(form);
         const values = Object.fromEntries(data.entries());
-
-        if (!document.getElementById('termsandconditions').checked) {
-            alert('Please agree to the terms and conditions.');
-            return;
-        }
 
         console.log(values);
         registerSubmit(url, values);
