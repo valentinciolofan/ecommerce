@@ -74,16 +74,17 @@ strong {
 }
 
 .shop-container {
-  display: flex;
   justify-content: center;
   padding: 20px;
 }
 
 .shop-wrapper {
   display: flex;
-  justify-content: center;
+  margin: 0 auto;
 }
-
+.all-products {
+  margin-right: auto;
+}
 .all-products ul {
   display: flex;
   list-style-type: none;
@@ -145,8 +146,9 @@ strong {
 .btn-addToCart:hover {
   opacity: 0.9;
 }
-
-
+.shop-page-title {
+  text-transform: uppercase;
+}
 /* FILTERS AND CATEGORIES STYLING*/
 
 /* Filters modal base */
@@ -192,7 +194,7 @@ strong {
   width: 20px;
   height: 20px;
   background: white;
-  border: 1px solid black;
+  border: 1px solid #33333361;
   margin-right: 8px;
   vertical-align: middle;
   position: relative;
@@ -227,7 +229,7 @@ strong {
   font-size: 1.5rem;
   margin-bottom: 1rem;
   text-align: center;
-  border-bottom: 2px solid black;
+  border-bottom: 2px solid #3333;
   padding-bottom: 10px;
 }
 
@@ -335,7 +337,19 @@ strong {
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
   position: relative;
 }
-
+.sort-and-filter-buttons {
+  display: flex;
+  gap: 15px;
+}
+#btnFilters, #btnSorting {
+  padding: 16px 32px;
+  background: none;
+  border: #3333 solid 1px;
+  font-weight: 400;
+  margin-bottom: 20px;
+  display: flex;
+  gap: 10px;
+}
 /* Product page styling */
 .product-sizes-list {
   display: flex;
@@ -1069,7 +1083,11 @@ td {
   .right-col {
     padding-bottom: 20px;
   }
+  .filters-modal {
+    min-width: 100%;
+  }
 }
+
 
 
 @media screen and (min-width: 600px) {
@@ -1100,16 +1118,40 @@ td {
 }
 
 @media (min-width: 1024px) {
-  .shop-wrapper {
-    max-width: 1200px;
-  }
-
   .dropdownmenu-container {
     display: flex;
   }
 }
 
-@media (min-width: 1200px) {}
+@media (min-width: 1120px) {
+  .shop-wrapper {
+    gap: 40px;
+  }
+  .filters-modal {
+    position: static;
+    min-width: 300px;
+    height: 100%;
+    box-shadow: none;
+    z-index: 0;
+    height: auto;
+  }
+  .filters-modal-content {
+    box-shadow: none;
+    padding: 0px;
+  }
+  .filters-modal-content h2 {
+    text-align: start;
+  }
+  .filters-scroll {
+    max-height: 100%;
+  }
+  .btn-close {
+    display: none;
+  }
+  #btnFilters {
+    display: none;
+  }
+}
 
 @media (min-width: 1400px) {
   .shop-wrapper {

@@ -8,16 +8,16 @@ export const AddtoCart = ({ productDetails }) => {
   const productDetailsFromStore = useStore(productDetailsStore);
 
   const handleAddToCart = () => {
-      addToCart({
-          slug: productDetails.slug,
-          title: productDetails.title,
-          color: productDetails.color,
-          price: productDetails.price,
-          size: productDetailsFromStore.selectedSize,
-          image: productDetails.image,
-      });
+    addToCart({
+      slug: productDetails.slug,
+      title: productDetails.title,
+      color: productDetails.color,
+      price: productDetails.price,
+      size: productDetailsFromStore.selectedSize,
+      image: productDetails.image,
+    });
 
-      console.log('Added to cart with size: ', productDetailsFromStore.selectedSize);
+    console.log('Added to cart with size: ', productDetailsFromStore.selectedSize);
   };
 
   return (
@@ -44,7 +44,7 @@ export const AddtoCart = ({ productDetails }) => {
 };
 
 
-const ProductListing = ({ openModal, products, searchedProducts, selectedPriceRange, selectedCategory, selectedCollections, selectedColors, selectedMaterials, selectedSizes, selectedAvailability }) => {
+const ProductListing = ({ openModal, products, searchedProducts, selectedPriceRange, selectedCategory, selectedCollections, selectedColors, selectedMaterials, selectedSizes, selectedAvailability, FiltersModalComponent }) => {
   const [filteredProducts, setFilteredProducts] = useState(searchedProducts);
   const [minPrice, maxPrice] = Object.values(selectedPriceRange);
 
@@ -91,32 +91,40 @@ const ProductListing = ({ openModal, products, searchedProducts, selectedPriceRa
   return (
     <div className="all-products">
       <div className='all-products-wrapper'>
-        <h2>Find Your Style</h2>
+        <h4 className="shop-page-title">Find Your Style</h4>
+        <div className="sort-and-filter-buttons">
         <button id="btnFilters" type="button" onClick={openModal}>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="1em"
-            height="1em"
-            viewBox="0 0 24 24"
-          >
-            <path
-              fill="currentColor"
-              d="M22 18.605a.75.75 0 0 1-.75.75h-5.1a2.93 2.93 0 0 1-5.66 0H2.75a.75.75 0 1 1 0-1.5h7.74a2.93 2.93 0 0 1 5.66 0h5.1a.75.75 0 0 1 .75.75m0-13.21a.75.75 0 0 1-.75.75H18.8a2.93 2.93 0 0 1-5.66 0H2.75a.75.75 0 1 1 0-1.5h10.39a2.93 2.93 0 0 1 5.66 0h2.45a.74.74 0 0 1 .75.75m0 6.6a.74.74 0 0 1-.75.75H9.55a2.93 2.93 0 0 1-5.66 0H2.75a.75.75 0 1 1 0-1.5h1.14a2.93 2.93 0 0 1 5.66 0h11.7a.75.75 0 0 1 .75.75"
-            />
-          </svg>
+          <span>
+            <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 512 512"><path fill="none" stroke="black" strokeLinecap="round" strokeLinejoin="round" strokeWidth={32} d="M32 144h448M112 256h288M208 368h96"></path></svg>
+          </span>
+
+          <span>
+            Filters
+            </span>
         </button>
+        {/* <button id="btnSorting" type="button">
+          <span>
+         <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 21 21"><path fill="none" stroke="black" strokeLinecap="round" strokeLinejoin="round" d="m10.5 12.5l4 4.107l4-4.107m-8-4l-4-4l-4 3.997m4-3.997v12m8-12v12"></path></svg>
+         </span>
+         <span> 
+         Sort by
+         </span>
+        </button> */}
+        </div>
+
+
         <ul>
           {filteredProducts.map((product) => (
             <li key={product.slug.current}>
               <a href={"/product/" + product.slug.current}>
                 <div className="products">
                   <div>
-                  <img src={urlFor(product.images[0]).url()} alt="" />
+                    <img src={urlFor(product.images[0]).url()} alt="" />
                   </div>
-                    <div className="product-title-and-price">
-                      <p>{product.title}</p>
-                      <p>${product.price}</p>
-                    </div>
+                  <div className="product-title-and-price">
+                    <p>{product.title}</p>
+                    <p>${product.price}</p>
+                  </div>
                 </div>
               </a>
               {/* <AddtoCart productDetails={{

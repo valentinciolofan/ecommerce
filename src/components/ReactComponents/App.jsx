@@ -23,6 +23,25 @@ const App = ({ products }) => {
       product.title.toLowerCase().includes(searchValue.toLowerCase())
     );
     setSearchedProducts(searchedProductsD);
+
+    const handleResize = () => {
+      if (window.matchMedia('(min-width: 1120px)').matches) {
+        setShowModal(true);
+      } else {
+        setShowModal(false);
+      }
+    };
+
+    // Initial check
+    handleResize();
+
+    // Add event listener for window resize
+    window.addEventListener('resize', handleResize);
+
+    // Cleanup the event listener on component unmount
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
   }, [searchValue, products]);
 
 
