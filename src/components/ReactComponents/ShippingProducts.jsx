@@ -33,7 +33,7 @@ const ShippingProducts = () => {
             const savedDeliveryMethod = localStorage.getItem('deliveryMethod');
             const savedDetailsFilled = localStorage.getItem('detailsFilled') === 'true';
             const savedOrderInfo = localStorage.getItem('orderInfo');
-            
+
             if (savedStep !== null) setCurrentStep(parseInt(savedStep, 10));
             if (savedDeliveryMethod) setDeliveryMethod(savedDeliveryMethod);
             if (savedOrderInfo) setOrderInfo(JSON.parse(savedOrderInfo));
@@ -293,22 +293,36 @@ const ShippingProducts = () => {
                 )}
 
                 {currentStep === 1 && detailsFilled && (
-                    <div>
+                    <div className='order-summary'>
                         <svg onClick={handleBack} xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 20 20"><path fill="black" d="m3.828 9l6.071-6.071l-1.414-1.414L0 10l.707.707l7.778 7.778l1.414-1.414L3.828 11H20V9z"></path></svg>
                         <div className='final-delivery-address'>
                             <p>Contact information</p>
                             <span>{orderInfo.surname} {orderInfo.name}</span>
-                            {deliveryMethod ==='home' ? <span>{orderInfo.city} {orderInfo.region}</span> : ''}
-                            <span>{orderInfo.phone}</span>
+                            {deliveryMethod === 'home' ? <span>{orderInfo.city} {orderInfo.region}</span> : ''}
+                            <span>, {orderInfo.phone}</span>
                             <p>Address</p>
-                            {deliveryMethod ==='store' ? <span>fashionCulture</span> : ''}
+                            {deliveryMethod === 'store' ? <span>fashionCulture</span> : ''}
                             <span>{orderInfo.address}</span>
                             {orderInfo.additionalInfo ?
-                             <>
-                            <p>Additional Information</p>
-                            <span>{orderInfo.additionalInfo}</span>
-                            </>:''}
+                                <>
+                                    <p>Additional Information</p>
+                                    <span>{orderInfo.additionalInfo}</span>
+                                </> : ''}
                         </div>
+
+                        <div className="cart-items">
+                            <p>Your Cart</p>
+                            <ul>
+                                {cartItems.items.map((item, index) => (
+                                    <li key={index} className="cart-item">
+                                        <span className="cart-item-title">{item.title}</span>
+                                        <span className="cart-item-quantity">Qty: {item.quantity}</span>
+                                        <span className="cart-item-price">${item.price}</span>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+
                         <Payment cartItems={cartItems} />
                     </div>
                 )}
@@ -376,7 +390,7 @@ const ShippingProducts = () => {
                         <button
                             type="button"
                             className="btn-back-shopping"
-                            onClick={() => { window.location.href="/shop"; localStorage.removeItem('orderInfo')}}
+                            onClick={() => { window.location.href = "/shop"; localStorage.removeItem('orderInfo') }}
                         >
                             BACK TO SHOPPING
                         </button>

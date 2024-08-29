@@ -12,13 +12,20 @@ const handleProcessPaymentClick = () => {
 const CartProducts = () => {
   const cartItems = useStore(cartStore);
 
-  if (cartItems.total === 0 && cartItems.items.length === 0) {
-    return <p>You need to add products in your cart</p>
-  }  
+  if (cartItems.total === 0 || cartItems.items.length === 0) {
+    return (
+      <div className="no-products-in-cart">
+        <div className="oops">OOPS!</div>
+        <span className="icon">🛒</span>
+        <p>You need to add products in your cart. See all our products <a href="shop">here</a></p>
+      </div>
+
+    )
+  }
 
   return (
     <div className="cart">
-    <h2>My Cart</h2>
+      <h4>My Cart</h4>
 
       <div className="products-wrapper">
         <ul>
@@ -72,7 +79,7 @@ const CartProducts = () => {
           ))}
         </ul>
         <div className="total-cart-value">
-          <h4 className="order-summary">ORDER SUMMARY</h4>
+          <p className="order-summary">ORDER SUMMARY</p>
           <div className="total-cart-value-col">
             <p>Subtotal: </p>
             <span>${cartItems.total}</span>
