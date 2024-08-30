@@ -5,20 +5,5 @@
       }
     },
     "outputDirectory": ".vercel/output",
-    "builds": [
-      {
-        "src": "package.json",
-        "use": "@vercel/static-build",
-        "config": {
-          "distDir": ".vercel/output"
-        }
-      }
-    ],
-    "rewrites": [
-      {
-        "source": "/(.*)",
-        "destination": "/index.html"
-      }
-    ]
+    "framework": "astro"
   }
-  
