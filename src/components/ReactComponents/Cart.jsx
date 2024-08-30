@@ -11,7 +11,6 @@ const handleProcessPaymentClick = () => {
 
 const CartProducts = () => {
   const cartItems = useStore(cartStore);
-
   if (cartItems.total === 0 || cartItems.items.length === 0) {
     return (
       <div className="no-products-in-cart">
@@ -22,7 +21,11 @@ const CartProducts = () => {
 
     )
   }
+ 
+  console.log(cartItems.total);
 
+  
+  
   return (
     <div className="cart">
       <h4>My Cart</h4>
@@ -82,16 +85,19 @@ const CartProducts = () => {
           <p className="order-summary">ORDER SUMMARY</p>
           <div className="total-cart-value-col">
             <p>Subtotal: </p>
-            <span>${cartItems.total}</span>
+            <span>
+              ${cartItems.total.toFixed(2)}
+            </span>
+
           </div>
 
           <div className="total-cart-value-col">
             <p>Shipping: </p>
-            <span>$10</span>
+            <span style={cartItems.total > 99 ? { textDecoration: 'line-through' } : {}}>$10</span>
           </div>
           <div className="total-cart-value-col">
             <p>TOTAL: </p>
-            <span>${cartItems.total + 10}</span>
+            <span>${cartItems.total > 99 ? cartItems.total.toFixed(2) : (cartItems.total + 10).toFixed(2)}</span>
           </div>
           <div className="free-delivery-info">
             <svg-icon2 category="services" src="order" className="pr-8"><div _ngcontent-mdfrontw-c3850062867=""><svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">

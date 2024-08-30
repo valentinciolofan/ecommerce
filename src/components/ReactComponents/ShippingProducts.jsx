@@ -298,7 +298,7 @@ const ShippingProducts = () => {
                         <div className='final-delivery-address'>
                             <p>Contact information</p>
                             <span>{orderInfo.surname} {orderInfo.name}</span>
-                            {deliveryMethod === 'home' ? <span>{orderInfo.city} {orderInfo.region}</span> : ''}
+                            {deliveryMethod === 'home' ? <span>, {orderInfo.city} {orderInfo.region}</span> : ''}
                             <span>, {orderInfo.phone}</span>
                             <p>Address</p>
                             {deliveryMethod === 'store' ? <span>fashionCulture</span> : ''}

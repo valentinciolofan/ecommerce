@@ -1,20 +1,21 @@
 import React, { useState, useEffect } from "react";
-import '../components/ReactComponents/products.css'
+import '../components/ReactComponents/mystyle.css'
 
 const OrdersManagement = () => {
     const [orders, setOrders] = useState([]);
     const [filteredOrders, setFilteredOrders] = useState([]);
-
+    
     const handleOrdersSearch = (e) => {
         const searchInput = e.target.value.toLowerCase();
-
+        console.log(searchInput);
+        console.log(filteredOrders);
         if (filteredOrders.length) {
             const newData = orders.filter(order => {
                 if (order !== null && order !== undefined) {
                     return order.receiver.toLowerCase().includes(searchInput) ||
                         order.order_status.toLowerCase().includes(searchInput) ||
                         order.order_date.toLowerCase().includes(searchInput) ||
-                        order.receipt.toLowerCase().includes(searchInput);
+                        order.id.toString().includes(searchInput);
                 }
             })
             setFilteredOrders(newData);
@@ -22,7 +23,6 @@ const OrdersManagement = () => {
             setFilteredOrders(orders);    
         }
     }
-
     const handleOrderStatus = (event, index) => {
         const newStatus = event.target.value;
         const orderId = orders[index].id;
@@ -87,7 +87,7 @@ const OrdersManagement = () => {
                            filteredOrders.map((order, index) => (
                                 <tr key={order.id} className={index % 2 === 0 ? '' : 'table-row1'}>
                                     <td>{order.receiver}</td>
-                                    <td>{order.receipt}</td>
+                                    <td>{order.id}</td>
                                     <td>{order.order_date.slice(0, 10)}</td>
                                     <td className="order-status">
                                         <select value={order.order_status} onChange={(e) => handleOrderStatus(e, index)}>

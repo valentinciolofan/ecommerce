@@ -117,6 +117,7 @@ const UserProfile = ({ products }) => {
         }
     }, [profileInfo, products]);
 
+    
     console.log(profileInfo);
     const handleWishlistProduct = async (e) => {
         try {
@@ -159,7 +160,6 @@ const UserProfile = ({ products }) => {
     if (!profileInfo) {
         return <div>Loading...</div>;
     }
-
     return (
         <div className="profile-container">
             <h2>Profile</h2>

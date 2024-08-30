@@ -56,11 +56,23 @@ export function addToCart(product) {
 
 
 export function removeFromCart(productSlug) {
+  // Get the current state of the cart
   const currentCart = cartStore.get();
+
+  // Filter out the item that needs to be removed
   const updatedItems = currentCart.items.filter(item => item.slug !== productSlug);
 
-  currentCart.items = updatedItems;
-  calculateTotal(currentCart);
+  // Create a new cart object with the updated items
+  const updatedCart = {
+    ...currentCart, // Copy over the existing cart properties
+    items: updatedItems // Replace the items array with the updated one
+  };
+
+  // Recalculate the total after removing the item
+  calculateTotal(updatedCart);
+
+  // Update the cart store with the new cart object
+  cartStore.set(updatedCart);
 }
 export const decreaseQuantity = (productSlug) => {
   const currentCart = cartStore.get();
@@ -88,7 +100,16 @@ export const increaseQuantity = (productSlug) => {
 
 
 function calculateTotal(currentCart) {
+  // Calculate the new total based on items in the cart
   const total = currentCart.items.reduce((acc, item) => acc + item.price * item.quantity, 0);
-  currentCart.total = total;
-  cartStore.set(currentCart);
+  
+  // Create a new cart object with the updated total
+  const updatedCart = {
+    ...currentCart, // Spread the existing properties
+    total, // Update the total
+  };
+  
+  // Set the new cart state in the store
+  cartStore.set(updatedCart);
 }
+

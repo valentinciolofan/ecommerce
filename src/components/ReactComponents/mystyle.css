@@ -561,12 +561,14 @@ strong {
   flex-direction: column;
   align-items: center;
   gap: 20px;
+  padding-left: 20px;
+  padding-right: 20px;
 }
 
 .shipping-products-wrapper {
   display: flex;
   flex-direction: column;
-  min-width: 1200px;
+  min-width: 100%;
   justify-content: center;
   padding-bottom: 120px;
 }
@@ -744,7 +746,7 @@ strong {
   gap: 30px;
   flex-direction: column;
   border: 1px solid #c0c0c0;
-  padding: 20px 0px;
+  padding: 20px 5px;
   min-width: 100%;
 }
 
@@ -957,6 +959,7 @@ strong {
   display: flex;
   align-items: center;
   justify-content: center;
+  margin-top: 120px;
 }
 
 .panel-wrapper {
