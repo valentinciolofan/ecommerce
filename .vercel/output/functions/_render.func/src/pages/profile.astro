@@ -1,0 +1,121 @@
+---
+import Layout from "../layouts/Layout.astro";
+import { userSession, checkSession } from "../components/UserContext";
+import UserProfile from "../components/ReactComponents/UserProfile";
+import { sanityClient } from "sanity:client";
+import type { Product } from "../types/types";
+
+const productQuery = `*[_type == "product"] {
+  title, slug, image, availability
+}`;
+
+const products: Product[] = await sanityClient.fetch(productQuery);
+---
+
+<Layout title="Profile | fashionCulture">
+   <UserProfile products={products} client:load/>
+</Layout>
+
+
+<style>
+   .profile-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .profile-wrapper {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+
+  .profile-info {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+
+  .left-col {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: center;
+    text-align: center;
+  }
+
+  .left-col img {
+    border-radius: 50%;
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    margin-bottom: 10px;
+  }
+
+  .profile-button {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 20px;
+    font-size: 1rem;
+    background-color: #e0e0e0;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    width: 100%;
+  }
+
+  .profile-button:hover {
+    background-color: #d0d0d0;
+  }
+
+  .right-col {
+    flex: 2;
+  }
+
+  .profile-personal-information {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .profile-personal-information h4 {
+    font-family: "Montserrat", sans-serif;
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+  }
+
+  .profile-personal-information label {
+    font-weight: bold;
+    margin-top: 10px;
+  }
+
+  .profile-personal-information input {
+    padding: 8px;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-top: 5px;
+    width: 100%;
+  }
+
+  .profile-personal-information p {
+    font-weight: bold;
+    margin-top: 20px;
+  }
+
+  @media (max-width: 768px) {
+    .profile-wrapper {
+      flex-direction: column;
+    }
+
+    .left-col, .right-col {
+      flex: 1;
+    }
+
+  }
+</style>

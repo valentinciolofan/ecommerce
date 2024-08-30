@@ -1,0 +1,313 @@
+---
+import Layout from "../layouts/Layout.astro";
+---
+
+<Layout title="Ecommerce | Register">
+    <main>
+        <div class="register-container">
+            <div class="register-page-image">
+                <img src="images/registerpageimg.png" alt="Register Image" />
+            </div>
+            <div class="form-container">
+                <h1>Create Your Account</h1>
+                <p>Let's create a new ecommerce account for you!</p>
+                <form method="post">
+                    <input
+                        type="text"
+                        placeholder="Enter your full name"
+                        name="name"
+                        required
+                    />
+                    <input
+                        type="text"
+                        placeholder="Enter your email address"
+                        name="email"
+                        required
+                    />
+                    <input
+                        type="password"
+                        placeholder="Enter your password"
+                        name="password"
+                        required
+                    />
+                    <input
+                        type="password"
+                        placeholder="Confirm your password"
+                        name="confirm-password"
+                        required
+                    />
+                    <input
+                        type="text"
+                        placeholder="Enter your city"
+                        name="city"
+                        required
+                    />
+                    <input
+                        type="text"
+                        placeholder="Enter your county"
+                        name="county"
+                        required
+                    />
+                    <input
+                        type="text"
+                        placeholder="Enter your address"
+                        name="address"
+                        required
+                    />
+                    <input
+                        type="date"
+                        placeholder="Enter your birthday"
+                        name="birthday"
+                    />
+                    <input
+                        type="text"
+                        placeholder="Enter your phone number"
+                        name="phone"
+                        required
+                    />
+                    <div class="terms-and-conditions">
+                        <input
+                            type="checkbox"
+                            id="termsandconditions"
+                            name="termsandconditions"
+                            value="Terms and conditions"
+                            required
+                        />
+                        <label for="termsandconditions">
+                            <a href="terms">I agree with terms and conditions</a
+                            >
+                        </label>
+                    </div>
+                    <input type="submit" value="Register" />
+                </form>
+            </div>
+        </div>
+    </main>
+</Layout>
+
+<style>
+    body,
+    html {
+        margin: 0;
+        padding: 0;
+    }
+
+    main {
+        height: 100vh;
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        overflow: hidden;
+    }
+
+    .register-container {
+        display: flex;
+        align-items: center;
+        width: 100%;
+        max-width: 1400px;
+        padding: 0 20px;
+        gap: 20px;
+    }
+
+    .register-page-image {
+        flex: 1;
+        animation: slideInLeft 1s ease-out;
+    }
+
+    .register-page-image img {
+        width: 100%;
+        height: auto;
+        object-fit: cover;
+    }
+
+    .form-container {
+        flex: 1;
+        background: white;
+        animation: slideInRight 1s ease-out;
+    }
+
+    form {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+        margin-top: 25px;
+    }
+
+    input[type="text"],
+    input[type="password"],
+    input[type="date"] {
+        padding: 10px;
+        background-color: transparent;
+        border: none;
+        border-bottom: 2px solid black;
+        outline: none;
+        transition: border-color 0.3s ease;
+    }
+
+    input[type="text"]:focus,
+    input[type="password"]:focus,
+    input[type="date"]:focus {
+        border-color: black;
+    }
+
+    input[type="submit"] {
+        background-color: black;
+        color: white;
+        border: none;
+        padding: 10px;
+        cursor: pointer;
+        border-radius: 0;
+        transition: background-color 0.3s ease;
+    }
+
+    input[type="submit"]:hover {
+        background-color: #333;
+    }
+
+    .terms-and-conditions {
+        display: flex;
+        align-items: center;
+    }
+
+    .terms-and-conditions input[type="checkbox"] {
+        opacity: 0;
+        position: absolute;
+        cursor: pointer;
+    }
+
+    .terms-and-conditions label {
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+        position: relative;
+    }
+
+    .terms-and-conditions label::before {
+        content: "";
+        display: inline-block;
+        width: 20px;
+        height: 20px;
+        background-color: white;
+        border: 1px solid #ccc;
+        margin-right: 10px;
+        transition:
+            background-color 0.3s ease,
+            border-color 0.3s ease;
+    }
+
+    .terms-and-conditions input[type="checkbox"]:checked + label::before {
+        background-color: black;
+        border-color: black;
+    }
+
+    .terms-and-conditions input[type="checkbox"]:checked + label::after {
+        content: "✔";
+        color: white;
+        position: absolute;
+        left: 7px;
+        top: 50%;
+        transform: translateY(-50%);
+        font-size: 14px;
+    }
+
+    a {
+        color: black;
+        text-decoration: none;
+    }
+
+    a:hover {
+        text-decoration: underline;
+    }
+
+    /* Slide-in animations */
+    @keyframes slideInLeft {
+        from {
+            transform: translateX(-20%);
+            opacity: 0;
+        }
+        to {
+            transform: translateX(0);
+            opacity: 1;
+        }
+    }
+
+    @keyframes slideInRight {
+        from {
+            transform: translateX(20%);
+            opacity: 0;
+        }
+        to {
+            transform: translateX(0);
+            opacity: 1;
+        }
+    }
+
+    @media screen and (max-width: 767px) {
+        .register-container {
+            flex-direction: column;
+            gap: 40px;
+        }
+
+        .register-page-image {
+            display: none;
+        }
+
+        .form-container {
+            animation: none;
+            width: 100%;
+        }
+    }
+</style>
+
+<script>
+const url = "http://localhost:3000/register";
+
+async function registerSubmit(url: string, data: Record<string, any>) {
+    try {
+        const response = await fetch(url, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(data),
+        });
+
+        if (!response.ok) {
+            if (response.status === 422) {
+                alert('Please make sure that all the input fields are completed accordingly!');
+            } else if (response.status === 409) {
+                alert('There is already an account with this email address!');
+            }
+
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        } else {
+            window.location.href = "/login";
+        }
+
+        const message = await response.text();
+        console.log(message);
+    } catch (error) {
+        console.error("Error:", error);
+    }
+}
+
+function handleRegistration(event: Event) {
+    event.preventDefault();
+
+    const form = event.target as HTMLFormElement; // Type cast to HTMLFormElement
+    const data = new FormData(form);
+    const values = Object.fromEntries(data.entries());
+
+    console.log(values);
+    registerSubmit(url, values);
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+    const form = document.querySelector("form");
+    if (form) {
+        form.addEventListener("submit", handleRegistration);
+    }
+});
+
+</script>
