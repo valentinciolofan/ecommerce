@@ -1,41 +1,597 @@
 ---
+import Layout from "../../layouts/Layout.astro";
 import { sanityClient } from "sanity:client";
-import imageUrlBuilder from '@sanity/image-url'
-import { product } from "../../../schemas/product";
+import React from "react";
+import { type Product } from "../../types/types";
+import { AddToWishlist } from "../../components/ReactComponents/Header/UserWishlistIcon";
+import { AddtoCart } from "../../components/ReactComponents/ProductListing";
+import ProductSizes from "../../components/ProductSizes";
+import urlFor from "../../utils/urlFor";
 
 export const prerender = true;
+
 export async function getStaticPaths() {
-  const products = await sanityClient.fetch(`*[_type == "product"]`);
+  // Fetch all products
+  const products = await sanityClient.fetch(`*[_type == "product"]{
+    slug,
+    title,
+    price,
+    images,
+    image,
+    color,
+    description,
+    availability,
+    sizes,
+    material,
+    categories[]->{title}, 
+    collection[]->{title}
+  }`);
+  console.log(products);
+  // Function to get random products excluding the current one
+  const getRandomProducts = (currentSlug: any) => {
+    const filteredProducts = products.filter(
+      (p: { slug: { current: any } }) => p.slug.current !== currentSlug,
+    );
+    const shuffled = filteredProducts.sort(() => 0.5 - Math.random());
+    return shuffled.slice(0, 6); // Return up to 6 random products
+  };
 
-  return products.map(({ slug, title, price, images }) => {
+  // Map over products to create paths
+  const paths = await Promise.all(
+    products.map(async (product: { slug: { current: any } }) => {
+      // Get 6 random products as related products
+      const relatedProducts = getRandomProducts(product.slug.current);
 
-    return {
-      params: { slug: slug.current },
-      props: { title, price, images },
-    };
+      return {
+        params: { slug: product.slug.current },
+        props: {
+          product,
+          relatedProducts,
+        },
+      };
+    }),
+  );
+
+  return paths; // Directly return the paths array
+}
+
+const { slug } = Astro.params;
+const { product, relatedProducts } = Astro.props;
+
+const structuredSizes = [];
+for (let i = 0; i < product.sizes.length; i += 2) {
+  structuredSizes.push({
+    size: product.sizes[i],
+    stock: product.sizes[i + 1],
   });
 }
 
-const { slug  } = Astro.params;
-const { title, price, images } = Astro.props;
-
-
-const builder = imageUrlBuilder(sanityClient)
-
-function urlFor(source) {
-  return builder.image(source)
-}
-console.log(urlFor(images[0]).url());
+const productDetails = {
+  slug: slug,
+  title: product.title,
+  price: product.price,
+  color: product.color,
+  size: "",
+  image: product.image,
+};
+console.log(product);
 ---
 
-<h1>{title}</h1>
-<div>
-  <img src={urlFor(images[0]).url()}
-  alt=""
-  width="500"
-  height="auto" />
-  <div>
-    <p>{title}</p>
-    <p>${price}</p>
-  </div>
-</div>
+<Layout title={`${product.title} - fashionCulture`}>
+  <main>
+    <section class="product-container">
+      <div class="product-wrapper">
+        <div class="product-images">
+          <div class="product-image-wrapper">
+            {
+              product.images.map((image: any, index: number) => (
+                <img
+                  class={`product-image ${index === 0 ? "active" : ""}`}
+                  src={urlFor(image).url()}
+                  alt={product.title}
+                />
+              ))
+            }
+          </div>
+          <a class="prev">&#10094;</a>
+          <a class="next">&#10095;</a>
+        </div>
+        <!-- product information such as title, price, description -->
+        <aside class="product-info">
+          <div>
+            <div class="product-info-title-and-wishlist">
+              <p class="product-info-title text-1">{product.title}</p>
+              <AddToWishlist client:only />
+            </div>
+            <p class="product-info-price text-1">${product.price}</p>
+          </div>
+          <p class="text-1">{product.description}</p>
+          <div class="size-select">
+            <p class="text-1">Select a size:</p>
+            <ProductSizes sizes={structuredSizes} client:load />
+          </div>
+          <div class="add-to-cart-wrapper">
+            <AddtoCart productDetails={productDetails} client:load />
+          </div>
+        </aside>
+        <!--end of product info ### title, price, size -->
+      </div>
+    </section>
+
+    <section class="slider-section">
+      <div class="slider-container">
+        <p class="slider-description">You might also be interested in</p>
+        <div class="slider-wrapper">
+          <button class="slider-prev-button" aria-label="Previous slide"
+            >&lt;</button
+          >
+          <div class="slider">
+            <div class="slider-slides">
+              {
+                relatedProducts.map(
+                  (product: {
+                    slug: { current: string | URL | null | undefined };
+                    image: any;
+                    title: unknown;
+                    price: unknown;
+                  }) => {
+                    return (
+                      <div class="slider-slide">
+                        <a href={product.slug.current}>
+                          <img
+                            src={urlFor(product.image)?.url()}
+                            alt={product.title as string}
+                          />
+                          <div class="slider-product-details">
+                            <p class="slider-product-title title-1">
+                              {product.title}
+                            </p>
+                            <p class="slider-product-price title-1">
+                              ${product.price}
+                            </p>
+                          </div>
+                        </a>
+                      </div>
+                    );
+                  },
+                )
+              }
+            </div>
+          </div>
+          <button class="slider-next-button" aria-label="Next slide"
+            >&gt;</button
+          >
+        </div>
+      </div>
+    </section>
+  </main>
+  <script>
+    // script for product images
+    let slideIndex = 0;
+    showSlides(slideIndex);
+
+    const prevBtn = document.querySelector(".prev");
+    const nextBtn = document.querySelector(".next");
+
+    if (prevBtn && nextBtn) {
+      prevBtn.addEventListener("click", () => {
+        slideIndex -= 1;
+        showSlides(slideIndex);
+      });
+
+      nextBtn.addEventListener("click", () => {
+        slideIndex += 1;
+        showSlides(slideIndex);
+      });
+    }
+
+    function showSlides(n: number) {
+      const slides = document.querySelectorAll(".product-image");
+      const totalSlides = slides.length;
+
+      if (n >= totalSlides) {
+        slideIndex = 0;
+      }
+      if (n < 0) {
+        slideIndex = totalSlides - 1;
+      }
+
+      slides.forEach((slide) => {
+        slide.classList.remove("active");
+      });
+
+      slides[slideIndex].classList.add("active");
+    }
+
+    // carousel script for suggested products
+    document.addEventListener("DOMContentLoaded", () => {
+      const slider = document.querySelector(".slider") as HTMLElement | null;
+      const slides = document.querySelectorAll<HTMLElement>(".slider-slide");
+      const prevButton = document.querySelector(
+        ".slider-prev-button",
+      ) as HTMLButtonElement | null;
+      const nextButton = document.querySelector(
+        ".slider-next-button",
+      ) as HTMLButtonElement | null;
+
+      if (slides.length > 0 && slider) {
+        let scrollAmount = 0;
+        const slideWidth = slides[0]?.offsetWidth || 0;
+        const maxScroll = slider.scrollWidth - slider.clientWidth;
+
+        if (nextButton && prevButton) {
+          nextButton.addEventListener("click", () => {
+            if (scrollAmount < maxScroll) {
+              slider.scrollBy({
+                left: slideWidth,
+                behavior: "smooth",
+              });
+              scrollAmount += slideWidth;
+            } else {
+              slider.scrollTo({ left: 0, behavior: "smooth" });
+              scrollAmount = 0;
+            }
+          });
+
+          prevButton.addEventListener("click", () => {
+            if (scrollAmount > 0) {
+              slider.scrollBy({
+                left: -slideWidth,
+                behavior: "smooth",
+              });
+              scrollAmount -= slideWidth;
+            } else {
+              slider.scrollTo({
+                left: maxScroll,
+                behavior: "smooth",
+              });
+              scrollAmount = maxScroll;
+            }
+          });
+
+          // Auto-slide every 5 seconds
+          setInterval(() => {
+            if (scrollAmount < maxScroll) {
+              slider.scrollBy({
+                left: slideWidth,
+                behavior: "smooth",
+              });
+              scrollAmount += slideWidth;
+            } else {
+              slider.scrollTo({ left: 0, behavior: "smooth" });
+              scrollAmount = 0;
+            }
+          }, 5000);
+        }
+      }
+    });
+  </script>
+</Layout>
+
+<style>
+  /* Container for the images, ensuring all images stay consistent in size */
+  .product-images {
+    position: relative;
+    width: 100%;
+    max-width: 800px; /* Adjust as needed */
+    height: 600px;
+    overflow: hidden;
+    margin: 0 auto;
+  }
+
+  .product-image-wrapper {
+    position: relative;
+    width: 100%;
+    height: 100%;
+  }
+
+  /* Ensure all images maintain the same size */
+  .product-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;  /* Ensure images cover the entire container */
+    object-position: center;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+    z-index: 0;
+  }
+
+  .product-image.active {
+    opacity: 1;
+    z-index: 1;
+  }
+
+  /* Navigation buttons */
+  .prev,
+  .next {
+    cursor: pointer;
+    position: absolute;
+    top: 50%;
+    width: auto;
+    padding: 16px;
+    font-weight: bold;
+    font-size: 18px;
+    user-select: none;
+    transform: translateY(-50%);
+    transition: background-color 0.6s ease;
+    z-index: 10;
+  }
+
+  .next {
+    right: 10px;
+    border-radius: 3px 0 0 3px;
+  }
+
+  .prev {
+    left: 10px;
+    border-radius: 0 3px 3px 0;
+  }
+
+  .prev,
+  .next {
+    color: #fff;
+    background-color: rgba(0, 0, 0, 0.5);
+  }
+
+  .prev:hover,
+  .next:hover {
+    background-color: rgba(0, 0, 0, 0.7);
+  }
+
+  /* Product Container and Layout */
+  .product-container {
+    display: flex;
+    gap: 20px;
+    padding: 20px;
+    min-width: 300px;
+    justify-content: center;
+  }
+
+  .product-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    max-width: 1400px;
+  }
+
+  /* Image and Info Layout */
+  .product-image-container {
+    width: 100%;
+    height: 400px;
+    overflow: hidden;
+  }
+
+  .product-images {
+    position: relative;
+    min-height: 800px;
+    overflow: hidden;
+  }
+
+  .product-image {
+    max-width: 100%;
+    height: auto;
+    object-fit: contain;
+    object-position: center;
+  }
+
+  .active,
+  .dot:hover {
+    background-color: #d3d2d2;
+  }
+
+  /* Product Info */
+  .product-info {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    font-size: 14px;
+    box-sizing: border-box;
+    flex: 1;
+    flex-grow: 1;
+  }
+
+  .product-info-title-and-wishlist {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .product-info-title {
+    text-transform: uppercase;
+  }
+
+  .size-select {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  /* Add to Cart */
+  .add-to-cart-wrapper {
+    margin-top: 20px;
+  }
+
+  /* Suggested / Recommended products  Section Styling */
+  .slider-section {
+    width: 100%;
+    padding: 20px 0px;
+  }
+
+  .slider-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0px 20px;
+  }
+
+  .slider-title {
+    margin-top: 50px;
+    margin-bottom: 10px;
+  }
+
+  .slider-description {
+    margin-bottom: 20px;
+    font-size: 12px;
+    text-transform: uppercase;
+  }
+
+  .slider-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+
+  .slider {
+    overflow-x: auto;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .slider::-webkit-scrollbar {
+    display: none;
+  }
+
+  .slider-slides {
+    display: flex;
+    flex-wrap: nowrap;
+  }
+
+  .slider-slide {
+    width: 350px;
+    min-height: 300px;
+    margin-right: 20px;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .slider-slide img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    background-color: #f7f7f7;
+    aspect-ratio: 3/4;
+  }
+
+  .slider-product-details {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-top: 7px;
+  }
+
+  .slider-product-title,
+  .slider-product-price {
+    color: #333333;
+    font-size: 12px;
+  }
+
+  .slider-prev-button,
+  .slider-next-button {
+    display: none;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    z-index: 10;
+  }
+
+  .slider-prev-button {
+    left: 10px;
+  }
+
+  .slider-next-button {
+    right: 10px;
+  }
+
+  @media screen and (min-width: 768px) {
+    .slider-prev-button,
+    .slider-next-button {
+      display: block;
+    }
+  }
+
+  /* Responsive Design for Tablet and Desktop */
+  @media screen and (max-width: 767px) {
+    .product-container {
+      flex-direction: column;
+    }
+
+    .product-wrapper {
+      min-width: 100%;
+    }
+
+    .product-images {
+      height: 300px; /* Reduce height on smaller screens */
+    }
+
+    .product-wrapper {
+      flex-direction: column;
+    }
+  }
+
+  /* Adjustments for Larger Screens */
+  @media screen and (min-width: 768px) {
+    .product-wrapper {
+      flex-direction: row;
+      justify-content: space-between;
+      flex-grow: 1;
+      gap: 40px;
+    }
+
+    .product-info {
+      max-width: 50%;
+      justify-content: center;
+      margin-left: 20px; /* Space between image and info section */
+    }
+
+    .product-images {
+      max-width: 50%;
+    }
+  }
+
+  @media screen and (min-width: 1024px) {
+    .product-wrapper {
+      gap: 40px; /* Increase gap between image and info on larger screens */
+    }
+
+    .product-images {
+      max-width: 60%; /* More space for images on very large screens */
+    }
+
+    .product-info {
+      max-width: 40%; /* Info section takes less space */
+    }
+  }
+
+  /* Mobile Adjustments */
+  @media screen and (max-width: 767px) {
+    .product-images {
+      height: 300px; /* Reduce height on smaller screens */
+    }
+
+    .product-wrapper {
+      flex-direction: column; /* Stack items in a column on mobile */
+    }
+  }
+
+  /* Ensure consistent aspect ratio on mobile */
+  @media screen and (max-width: 767px) {
+    .product-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover; /* Ensure images fill the container */
+    }
+  }
+</style>

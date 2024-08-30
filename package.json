@@ -12,10 +12,13 @@
   "dependencies": {
     "@astrojs/check": "^0.5.9",
     "@astrojs/react": "^3.1.0",
+    "@nanostores/persistent": "^0.10.1",
     "@nanostores/react": "^0.7.2",
     "@sanity/astro": "^3.0.0",
     "@sanity/client": "^6.15.7",
     "@sanity/image-url": "^1.0.2",
+    "@stripe/react-stripe-js": "^2.7.1",
+    "@stripe/stripe-js": "^3.5.0",
     "@types/react": "^18.2.67",
     "@types/react-dom": "^18.2.22",
     "astro": "^4.5.5",
@@ -25,6 +28,7 @@
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.22.3",
     "sanity": "^3.34.0",
+    "stripe": "^16.9.0",
     "typescript": "^5.4.2"
   },
   "devDependencies": {
