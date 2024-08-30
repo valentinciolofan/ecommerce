@@ -1,7 +1,6 @@
-import sanity from "@sanity/astro";
 import { defineConfig } from "astro/config";
 import react from "@astrojs/react";
-import { sanityIntegration } from "@sanity/astro";
+import sanity from "@sanity/astro";
 
 export default defineConfig({
   integrations: [
@@ -11,6 +10,8 @@ export default defineConfig({
       useCdn: false,
       studioBasePath: "/admin",
     }),
-    react()],
-    output: 'server',
+    react()
+  ],
+  output: 'server',  
+  
 });
