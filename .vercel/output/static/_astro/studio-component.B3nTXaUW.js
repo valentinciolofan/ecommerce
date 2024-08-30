@@ -1,0 +1,1 @@
+import{am as a}from"./studio-component.BWUr4qYP.js";import"./jsx-runtime.CzgMDNMm.js";import"./index.DQ2WTIsS.js";import"./image-url.umd.B12jX_S8.js";import"./client.B3CCqPsx.js";export{a as StudioComponent};

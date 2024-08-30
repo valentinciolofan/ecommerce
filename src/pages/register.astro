@@ -261,53 +261,53 @@ import Layout from "../layouts/Layout.astro";
 </style>
 
 <script>
-    const url = "http://localhost:3000/register";
+const url = "http://localhost:3000/register";
 
-    async function registerSubmit(url, data) {
-        try {
-            const response = await fetch(url, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify(data),
-            });
-            if (!response.ok) {
-                if (response.status === 422) {
-                    alert('Please make sure that all the input fields are completed accordingly!');
-                } else if (response.status === 409) {
-                    alert('There is already an account with this email address!')
-                }
+async function registerSubmit(url: string, data: Record<string, any>) {
+    try {
+        const response = await fetch(url, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(data),
+        });
 
-
-                throw new Error(`HTTP error! Status: ${response.status}`);
-            } else {
-                window.location.href= "/login";
-                
+        if (!response.ok) {
+            if (response.status === 422) {
+                alert('Please make sure that all the input fields are completed accordingly!');
+            } else if (response.status === 409) {
+                alert('There is already an account with this email address!');
             }
 
-            const message = await response.text();
-            console.log(message);
-        } catch (error) {
-            console.error("Error:", error);
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        } else {
+            window.location.href = "/login";
         }
+
+        const message = await response.text();
+        console.log(message);
+    } catch (error) {
+        console.error("Error:", error);
     }
+}
 
-    function handleRegistration(event) {
-        event.preventDefault();
+function handleRegistration(event: Event) {
+    event.preventDefault();
 
-        const form = event.target;
-        const data = new FormData(form);
-        const values = Object.fromEntries(data.entries());
+    const form = event.target as HTMLFormElement; // Type cast to HTMLFormElement
+    const data = new FormData(form);
+    const values = Object.fromEntries(data.entries());
 
-        console.log(values);
-        registerSubmit(url, values);
+    console.log(values);
+    registerSubmit(url, values);
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+    const form = document.querySelector("form");
+    if (form) {
+        form.addEventListener("submit", handleRegistration);
     }
+});
 
-    document.addEventListener("DOMContentLoaded", () => {
-        const form = document.querySelector("form");
-        if (form) {
-            form.addEventListener("submit", handleRegistration);
-        }
-    });
 </script>

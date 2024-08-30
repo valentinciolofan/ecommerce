@@ -24,8 +24,7 @@ import Layout from "../layouts/Layout.astro";
                     placeholder="Enter your message"
                     name="message"
                     rows="6"
-                    required
-                ></textarea>
+                    required></textarea>
                 <input type="submit" value="Send Message" />
             </form>
         </div>
@@ -33,7 +32,10 @@ import Layout from "../layouts/Layout.astro";
         <div class="modal" id="successModal">
             <div class="modal-content">
                 <h2>Thank you!</h2>
-                <p>Your message has been sent successfully. We will get back to you shortly.</p>
+                <p>
+                    Your message has been sent successfully. We will get back to
+                    you shortly.
+                </p>
                 <button>Back to shopping</button>
             </div>
         </div>
@@ -47,7 +49,7 @@ import Layout from "../layouts/Layout.astro";
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            font-family: 'Lato', sans-serif;
+            font-family: "Lato", sans-serif;
         }
         .form-container {
             background: white;
@@ -138,12 +140,12 @@ import Layout from "../layouts/Layout.astro";
 
     <script>
         const url = "http://localhost:3000/contact";
-        
-        async function onSubmit(url, data) {
+
+        async function onSubmit(url: string, data: Record<string, any>) {
             try {
                 const response = await fetch(url, {
                     method: "POST",
-                    credentials: 'include',
+                    credentials: "include",
                     headers: {
                         "Content-Type": "application/json",
                     },
@@ -153,36 +155,49 @@ import Layout from "../layouts/Layout.astro";
                 if (!response.ok) {
                     throw new Error(`HTTP error! Status: ${response.status}`);
                 } else {
-                    document.getElementById('formContainer').style.display = 'none'; // Hide form
-                    document.getElementById('successModal').style.display = 'flex'; // Show modal
+                    const formContainer =
+                        document.getElementById("formContainer");
+                    const successModal =
+                        document.getElementById("successModal");
+
+                    if (formContainer && successModal) {
+                        formContainer.style.display = "none"; // Hide form
+                        successModal.style.display = "flex"; // Show modal
+                    }
                 }
-                
             } catch (error) {
                 console.error("Error:", error);
                 alert("Failed to send the message. Please try again later.");
             }
         }
 
-        function handleSubmit(event) {
+        function handleSubmit(event: Event) {
             event.preventDefault();
 
-            const data = new FormData(event.target);
+            const data = new FormData(event.target as HTMLFormElement);
             const values = Object.fromEntries(data.entries());
-            
+
             onSubmit(url, values);
         }
 
         function closeModal() {
-            document.getElementById('successModal').style.display = 'none'; // Hide modal
-            window.location.href = '/shop'; // Redirect to the /shop path
+            const successModal = document.getElementById("successModal");
+            if (successModal) {
+                successModal.style.display = "none"; // Hide modal
+                window.location.href = "/shop"; // Redirect to the /shop path
+            }
         }
 
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener("DOMContentLoaded", function () {
             const form = document.querySelector("form");
-            form.addEventListener("submit", handleSubmit);
+            if (form) {
+                form.addEventListener("submit", handleSubmit);
+            }
 
             const closeButton = document.querySelector("#successModal button");
-            closeButton.addEventListener("click", closeModal);
+            if (closeButton) {
+                closeButton.addEventListener("click", closeModal);
+            }
         });
     </script>
 </Layout>
