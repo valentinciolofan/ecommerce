@@ -28,6 +28,7 @@
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.22.3",
     "sanity": "^3.34.0",
+    "stripe": "^16.9.0",
     "typescript": "^5.4.2"
   },
   "devDependencies": {
