@@ -93,18 +93,31 @@ export const product = defineType({
       },
     }),
     defineField({
-      name: 'size',
-      title: 'Size',
-      type: 'string',
-      options: {
-        list: [
-          { title: 'S', value: 's' },
-          { title: 'M', value: 'm' },
-          { title: 'L', value: 'l' },
-          { title: 'XL', value: 'xl' },
-          { title: 'XXL', value: 'xxl' },
-        ],
-      },
+      name: 'sizes',
+      title: 'Sizes',
+      type: 'array',
+      of: [
+        defineField({
+          name: 'size',
+          title: 'Size',
+          type: 'string',
+          options: {
+            list: [
+              { title: 'S', value: 's' },
+              { title: 'M', value: 'm' },
+              { title: 'L', value: 'l' },
+              { title: 'XL', value: 'xl' },
+              { title: 'XXL', value: 'xxl' },
+            ],
+          },
+        }),
+        defineField({
+          name: 'stock',
+          title: 'Stock Level',
+          type: 'number',
+          validation: (rule) => rule.min(0),
+        }),
+      ],
     }),
     defineField({
       name: 'material',

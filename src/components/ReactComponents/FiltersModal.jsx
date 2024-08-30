@@ -31,7 +31,7 @@ function FiltersModal({
         <button className="btn-close" onClick={closeModal}>
           &times;
         </button>
-        <h2>Filters</h2>
+        <p><b>Filters</b></p>
         <div className="filters-scroll">
           <CategoryFilter onFilterChange={onCategoryChange} />
           <CollectionsFilter onCollectionsChange={onCollectionsChange} />

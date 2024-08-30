@@ -2,7 +2,7 @@ import React from "react"
 import { useStore } from "@nanostores/react"
 import { cartStore, removeFromCart, decreaseQuantity, increaseQuantity } from "../UserContext"
 import urlFor from "../../utils/urlFor"
-import "./products.css"
+import "./mystyle.css"
 
 const handleProcessPaymentClick = () => {
   window.location.href = "/checkout/shipping"
@@ -11,17 +11,24 @@ const handleProcessPaymentClick = () => {
 
 const CartProducts = () => {
   const cartItems = useStore(cartStore);
+  if (cartItems.total === 0 || cartItems.items.length === 0) {
+    return (
+      <div className="no-products-in-cart">
+        <div className="oops">OOPS!</div>
+        <span className="icon">🛒</span>
+        <p>You need to add products in your cart. See all our products <a href="shop">here</a></p>
+      </div>
 
-  console.log(cartItems)
+    )
+  }
+ 
+  console.log(cartItems.total);
 
+  
+  
   return (
-
-    // subtotal
-    // shipping
-    //divider
-    // checkout
     <div className="cart">
-    <h2>My Cart</h2>
+      <h4>My Cart</h4>
 
       <div className="products-wrapper">
         <ul>
@@ -75,19 +82,22 @@ const CartProducts = () => {
           ))}
         </ul>
         <div className="total-cart-value">
-          <h4 className="order-summary">ORDER SUMMARY</h4>
+          <p className="order-summary">ORDER SUMMARY</p>
           <div className="total-cart-value-col">
             <p>Subtotal: </p>
-            <span>${cartItems.total}</span>
+            <span>
+              ${cartItems.total.toFixed(2)}
+            </span>
+
           </div>
 
           <div className="total-cart-value-col">
             <p>Shipping: </p>
-            <span>$10</span>
+            <span style={cartItems.total > 99 ? { textDecoration: 'line-through' } : {}}>$10</span>
           </div>
           <div className="total-cart-value-col">
             <p>TOTAL: </p>
-            <span>${cartItems.total + 10}</span>
+            <span>${cartItems.total > 99 ? cartItems.total.toFixed(2) : (cartItems.total + 10).toFixed(2)}</span>
           </div>
           <div className="free-delivery-info">
             <svg-icon2 category="services" src="order" className="pr-8"><div _ngcontent-mdfrontw-c3850062867=""><svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">

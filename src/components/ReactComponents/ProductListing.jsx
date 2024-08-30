@@ -1,21 +1,23 @@
 import React, { useState, useEffect } from 'react';
-import { addToCart, cartStore } from '../UserContext';
-import "./products.css"
+import { useStore } from '@nanostores/react';
+import { productDetailsStore, addToCart, cartStore } from '../UserContext';
+import "./mystyle.css"
 import urlFor from '../../utils/urlFor';
 
-
 export const AddtoCart = ({ productDetails }) => {
+  const productDetailsFromStore = useStore(productDetailsStore);
+
   const handleAddToCart = () => {
     addToCart({
       slug: productDetails.slug,
       title: productDetails.title,
       color: productDetails.color,
       price: productDetails.price,
-      size: productDetails.size,
-      image: productDetails.image
-    })
-    console.log(productDetails.slug);
+      size: productDetailsFromStore.selectedSize,
+      image: productDetails.image,
+    });
 
+    console.log('Added to cart with size: ', productDetailsFromStore.selectedSize);
   };
 
   return (
@@ -40,62 +42,47 @@ export const AddtoCart = ({ productDetails }) => {
     </div>
   );
 };
-const ProductListing = ({ products, searchedProducts, selectedPriceRange, selectedCategory, selectedCollections, selectedColors, selectedMaterials, selectedSizes, selectedAvailability }) => {
+
+
+const ProductListing = ({ openModal, products, searchedProducts, selectedPriceRange, selectedCategory, selectedCollections, selectedColors, selectedMaterials, selectedSizes, selectedAvailability, FiltersModalComponent }) => {
   const [filteredProducts, setFilteredProducts] = useState(searchedProducts);
   const [minPrice, maxPrice] = Object.values(selectedPriceRange);
 
 
   useEffect(() => {
-    let filtered;
-    // state false if there is one which is selected and don t have filters applied
-    if (searchedProducts.length === 0) {
-      filtered = searchedProducts;
-    } else {
+    let filtered = products;
+
+    if (searchedProducts.length !== 0) {
       filtered = searchedProducts;
     }
 
-    // if (selectedColors.length === 0) {
-    //   filtered = products; // if there isn't any color selected, then show all products
-    // } else {
-    //   filtered = products.filter(product => selectedColors.includes(product.color)); // Filter based on selected colors
-    // }
-    console.log(filtered);
-
-    // if (selectedPriceRange.length === 0) {
-    //   filtered = filtered;
-    // } else {
-    //   filtered = products.filter(product => product.price >= minPrice && product.price <= maxPrice);
-    // }
-
-    if (selectedCategory.length === 0) {
-      filtered = filtered;
-    } else {
-      filtered = products.filter(product => selectedCategory.includes(product.categories[0].title));
+    if (selectedColors.length !== 0) {
+      filtered = filtered.filter(product => selectedColors.includes(product.color)); // Filter based on selected colors
     }
 
-    if (selectedCollections.length === 0) {
-      filtered = filtered;
-    } else {
-      filtered = products.filter(product => selectedCollections.includes(product.collection[0].title));
+    if (minPrice >= 0 && maxPrice !== 0) {
+      filtered = filtered.filter(product => product.price >= minPrice && product.price <= maxPrice);
     }
 
-    if (selectedMaterials.length === 0) {
-      filtered = filtered;
-    } else {
+    if (selectedCategory.length !== 0) {
+      filtered = filtered.filter(product => selectedCategory.includes(product.categories[0].title));
+    }
+
+    if (selectedCollections.length !== 0) {
+      filtered = filtered.filter(product => selectedCollections.includes(product.collection[0].title));
+    }
+
+    if (selectedMaterials.length !== 0) {
       filtered = filtered.filter(product => selectedMaterials.includes(product.material));
     }
 
-    if (selectedSizes.length === 0) {
-      filtered = filtered;
-    } else {
+    if (selectedSizes.length !== 0) {
       filtered = filtered.filter(product => selectedSizes.includes(product.size));
     }
-    if (selectedAvailability.length === 0) {
-      filtered = filtered;
-    } else {
+
+    if (selectedAvailability.length !== 0) {
       filtered = filtered.filter(product => selectedAvailability.includes(product.availability));
     }
-    console.log(filtered);
 
     setFilteredProducts(filtered);
 
@@ -103,31 +90,56 @@ const ProductListing = ({ products, searchedProducts, selectedPriceRange, select
 
   return (
     <div className="all-products">
-      <ul>
-        {filteredProducts.map((product) => (
-          <li key={product.slug.current}>
-            <a href={"/product/" + product.slug.current}>
-              <div className="products">
-                <img src={urlFor(product.images[0]).url()} alt="" />
-                <div className="product-details">
-                  <span>{product.title}</span>
-                  <span>${product.price}</span>
+      <div className='all-products-wrapper'>
+        <h4 className="shop-page-title">Find Your Style</h4>
+        <div className="sort-and-filter-buttons">
+        <button id="btnFilters" type="button" onClick={openModal}>
+          <span>
+            <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 512 512"><path fill="none" stroke="black" strokeLinecap="round" strokeLinejoin="round" strokeWidth={32} d="M32 144h448M112 256h288M208 368h96"></path></svg>
+          </span>
+
+          <span>
+            Filters
+            </span>
+        </button>
+        {/* <button id="btnSorting" type="button">
+          <span>
+         <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 21 21"><path fill="none" stroke="black" strokeLinecap="round" strokeLinejoin="round" d="m10.5 12.5l4 4.107l4-4.107m-8-4l-4-4l-4 3.997m4-3.997v12m8-12v12"></path></svg>
+         </span>
+         <span> 
+         Sort by
+         </span>
+        </button> */}
+        </div>
+
+
+        <ul>
+          {filteredProducts.map((product) => (
+            <li key={product.slug.current}>
+              <a href={"/product/" + product.slug.current}>
+                <div className="products">
+                  <div>
+                    <img src={urlFor(product.images[0]).url()} alt="" />
+                  </div>
+                  <div className="product-title-and-price">
+                    <p>{product.title}</p>
+                    <p>${product.price}</p>
+                  </div>
                 </div>
-              </div>
-            </a>
+              </a>
+              {/* <AddtoCart productDetails={{
+                         title: product.title,
+                         slug: product.slug.current,
+                         color: product.color,
+                         price: product.price,
+                         size: product.size,
+                         image: product.image
+                       }} /> no more needed after refactoring the front end for products */}
+            </li>
+          ))}
+        </ul>
+      </div>
 
-
-            <AddtoCart productDetails={{
-              slug: product.slug.current,
-              title: product.title,
-              price: product.price,
-              color: product.color,
-              size: product.size,
-              image: product.image
-            }} />
-          </li>
-        ))}
-      </ul>
     </div>
   );
 }

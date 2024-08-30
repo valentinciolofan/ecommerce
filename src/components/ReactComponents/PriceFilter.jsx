@@ -52,25 +52,34 @@ const PriceFilter = ({ selectedPriceRange, onFilterChange }) => {
             </label>
           </li>
         ))}
+
+<li>
+
+<label htmlFor="min-price">Min Price:</label>
+<input
+  id="min-price"
+  type="number"
+  value={minPrice}
+  min={selectedPriceRange.minPrice}
+  onChange={handleMinChange}
+/>
+</li>
+        <li>
+          <label htmlFor="max-price">Max Price:</label>
+          <input
+            id="max-price"
+            type="number"
+            value={maxPrice}
+            max={selectedPriceRange.maxPrice}
+            onChange={handleMaxChange}
+          />
+        </li>
       </ul>
+     
+     
 
-      <label htmlFor="min-price">Min Price:</label>
-      <input
-        id="min-price"
-        type="number"
-        value={minPrice}
-        min={selectedPriceRange.minPrice}
-        onChange={handleMinChange}
-      />
 
-      <label htmlFor="max-price">Max Price:</label>
-      <input
-        id="max-price"
-        type="number"
-        value={maxPrice}
-        max={selectedPriceRange.maxPrice}
-        onChange={handleMaxChange}
-      />
+
     </div>
   );
 }

@@ -19,6 +19,7 @@ export interface Collection {
   };
   description?: string;
 }
+
 export interface Product {
   _id: string;
   _type: 'product';
@@ -27,7 +28,7 @@ export interface Product {
     _type: 'slug';
     current: string;
   };
-  category: {
+  categories: {
     _type: 'reference';
     _ref: string;
   };
@@ -43,12 +44,20 @@ export interface Product {
       _type: 'reference';
     };
   }>;
-  image: { _type: 'image', asset: [Object] },
+  image: {
+    _type: 'image';
+    asset: {
+      _ref: string;
+      _type: 'reference';
+    };
+  };
   availability: boolean;
   description: string;
   color: string;
-  size: string;
+  sizes: Array<{
+    size: string;
+    stock: number;
+  }>;
   material: string;
   rating: number;
 }
-

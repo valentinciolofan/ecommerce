@@ -26,7 +26,7 @@ function SizeFilter({ onFilterChange }) {
             onChange={handleChange}
           />
           <span className="checkmark"></span>
-          {size.charAt(0).toUpperCase() + size.slice(1)}
+          {size.toUpperCase()}
         </label>
       ))}
     </div>

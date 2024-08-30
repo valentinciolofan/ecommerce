@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { useStore } from '@nanostores/react';
 import { checkSession } from '../../UserContext';
 import { UserIconDropDown, UserFavoriteListIconDropDown, UserCartIconDropDown } from './Modal';
-import './mystyle.css'
+import '../mystyle.css'
 
 export default function UserIcon({session, handleLogOut}) {
     const [showDropdown, setShowDropdown] = useState(false);

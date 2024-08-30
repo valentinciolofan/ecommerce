@@ -2,10 +2,7 @@ import React from 'react'
 import { userSession, cartStore } from '../../UserContext';
 import { useStore } from '@nanostores/react';
 import urlFor from '../../../utils/urlFor';
-import './Modal.css'
-
-
-
+import '../mystyle.css'
 
 export const UserIconDropDown = ({ session, handleLogOut }) => {
 
@@ -15,7 +12,7 @@ export const UserIconDropDown = ({ session, handleLogOut }) => {
         <strong>Hello, {session.name}</strong>
         <ul className='unordered-modal-list'>
           <a className="header-user-actions" href='/profile'>View my profile</a>
-          <a className="header-user-actions" onClick={handleLogOut}>Log out</a>
+          <a className="header-user-actions log-out" onClick={handleLogOut}>Log out</a>
         </ul>
       </div>
     </div>
@@ -38,7 +35,6 @@ export const UserFavoriteListIconDropDown = () => {
     </>
   );
 }
-
 
 export const UserCartIconDropDown = ({ session }) => {
   const products = useStore(cartStore);

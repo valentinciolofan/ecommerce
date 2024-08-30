@@ -1,0 +1,188 @@
+---
+import Layout from "../layouts/Layout.astro";
+---
+
+<Layout title="Ecommerce | Contact">
+    <main>
+        <h1>Contact Us</h1>
+
+        <div class="form-container" id="formContainer">
+            <form method="post">
+                <input
+                    type="text"
+                    placeholder="Enter your name"
+                    name="name"
+                    required
+                />
+                <input
+                    type="email"
+                    placeholder="Enter your email address"
+                    name="email"
+                    required
+                />
+                <textarea
+                    placeholder="Enter your message"
+                    name="message"
+                    rows="6"
+                    required
+                ></textarea>
+                <input type="submit" value="Send Message" />
+            </form>
+        </div>
+
+        <div class="modal" id="successModal">
+            <div class="modal-content">
+                <h2>Thank you!</h2>
+                <p>Your message has been sent successfully. We will get back to you shortly.</p>
+                <button>Back to shopping</button>
+            </div>
+        </div>
+    </main>
+
+    <style>
+        main {
+            height: 60vh;
+            display: flex;
+            gap: 45px;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Lato', sans-serif;
+        }
+        .form-container {
+            background: white;
+            padding: 40px;
+            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+            width: 500px;
+            max-width: 100%;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        textarea {
+            padding: 10px;
+            background-color: transparent;
+            border: none;
+            border-bottom: 2px solid #3333;
+            outline: none;
+            transition: border-color 0.3s ease;
+        }
+
+        input[type="text"]:focus,
+        input[type="email"]:focus,
+        textarea:focus {
+            border-color: black;
+        }
+
+        input[type="submit"] {
+            background-color: black;
+            color: white;
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+            border-radius: 0;
+            transition: background-color 0.3s ease;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #333;
+        }
+
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.4);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .modal-content h2 {
+            margin-top: 0;
+        }
+
+        .modal-content button {
+            background-color: black;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            border-radius: 5px;
+            margin-top: 20px;
+            transition: background-color 0.3s ease;
+        }
+
+        .modal-content button:hover {
+            background-color: #333;
+        }
+    </style>
+
+    <script>
+        const url = "http://localhost:3000/contact";
+        
+        async function onSubmit(url, data) {
+            try {
+                const response = await fetch(url, {
+                    method: "POST",
+                    credentials: 'include',
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(data),
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                } else {
+                    document.getElementById('formContainer').style.display = 'none'; // Hide form
+                    document.getElementById('successModal').style.display = 'flex'; // Show modal
+                }
+                
+            } catch (error) {
+                console.error("Error:", error);
+                alert("Failed to send the message. Please try again later.");
+            }
+        }
+
+        function handleSubmit(event) {
+            event.preventDefault();
+
+            const data = new FormData(event.target);
+            const values = Object.fromEntries(data.entries());
+            
+            onSubmit(url, values);
+        }
+
+        function closeModal() {
+            document.getElementById('successModal').style.display = 'none'; // Hide modal
+            window.location.href = '/shop'; // Redirect to the /shop path
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.querySelector("form");
+            form.addEventListener("submit", handleSubmit);
+
+            const closeButton = document.querySelector("#successModal button");
+            closeButton.addEventListener("click", closeModal);
+        });
+    </script>
+</Layout>
