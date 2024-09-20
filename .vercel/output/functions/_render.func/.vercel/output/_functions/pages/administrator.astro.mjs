@@ -1,7 +1,7 @@
 import '../chunks/page-ssr_DIHUUOGG.mjs';
 import { c as createComponent, r as renderTemplate, d as renderComponent } from '../chunks/astro/server_iDbVhKBp.mjs';
 import 'kleur/colors';
-import { $ as $$Layout } from '../chunks/Layout_D1ojY-ez.mjs';
+import { $ as $$Layout } from '../chunks/Layout_C9PtLTXJ.mjs';
 import { jsxs, jsx } from 'react/jsx-runtime';
 import { useState, useEffect } from 'react';
 /* empty css                                         */

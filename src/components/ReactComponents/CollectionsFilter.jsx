@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 
 const collections = ['Jackets', 'Shirts', 'Pants', 'T-shirts', 'Shorts']
 
-const CollectionsFilter = ({ onCollectionsChange, onFilterChange }) => {
+const CollectionsFilter = ({ onCollectionsChange }) => {
   const [selectedCollections, setSelectedCollections] = useState([]);
 
 

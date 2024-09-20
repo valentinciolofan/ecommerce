@@ -1,7 +1,7 @@
 import { s as sanityClient } from '../chunks/page-ssr_DIHUUOGG.mjs';
 import { c as createComponent, r as renderTemplate, d as renderComponent } from '../chunks/astro/server_iDbVhKBp.mjs';
 import 'kleur/colors';
-import { u as userSession, $ as $$Layout } from '../chunks/Layout_D1ojY-ez.mjs';
+import { u as userSession, $ as $$Layout } from '../chunks/Layout_C9PtLTXJ.mjs';
 import { jsx, jsxs } from 'react/jsx-runtime';
 import { useState, useEffect } from 'react';
 import { useStore } from '@nanostores/react';
@@ -207,11 +207,7 @@ const UserProfile = ({ products }) => {
                   order.order_id
                 ] }),
                 /* @__PURE__ */ jsx("td", { children: order.order_date.slice(0, 10) }),
-                /* @__PURE__ */ jsx("td", { className: "order-status", children: /* @__PURE__ */ jsxs("select", { value: order.order_status, onChange: (e) => handleOrderStatus(e, index), children: [
-                  /* @__PURE__ */ jsx("option", { children: "Pending" }),
-                  /* @__PURE__ */ jsx("option", { children: "In progress" }),
-                  /* @__PURE__ */ jsx("option", { children: "Delivered" })
-                ] }) }),
+                /* @__PURE__ */ jsx("td", { className: "order-status", children: order.order_status }),
                 /* @__PURE__ */ jsx("td", { children: /* @__PURE__ */ jsx("a", { href: order.receipt_url, children: "View receipt" }) })
               ] }, order.order_id)
             ) })

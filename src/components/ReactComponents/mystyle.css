@@ -568,7 +568,7 @@ strong {
 .shipping-products-wrapper {
   display: flex;
   flex-direction: column;
-  min-width: 100%;
+  min-width: 1400px;
   justify-content: center;
   padding-bottom: 120px;
 }

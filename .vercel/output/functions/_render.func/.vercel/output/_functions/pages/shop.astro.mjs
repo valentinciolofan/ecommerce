@@ -1,10 +1,10 @@
 import { s as sanityClient } from '../chunks/page-ssr_DIHUUOGG.mjs';
 import { c as createComponent, r as renderTemplate, d as renderComponent, e as createAstro, m as maybeRenderHead } from '../chunks/astro/server_iDbVhKBp.mjs';
 import 'kleur/colors';
-import { s as searchBoxValue, $ as $$Layout } from '../chunks/Layout_D1ojY-ez.mjs';
+import { s as searchBoxValue, $ as $$Layout } from '../chunks/Layout_C9PtLTXJ.mjs';
 import { jsxs, jsx } from 'react/jsx-runtime';
 import { useState, useEffect } from 'react';
-import { P as ProductListing } from '../chunks/ProductListing_BaplNkMb.mjs';
+import { P as ProductListing } from '../chunks/ProductListing_tkVvB4cZ.mjs';
 import { useStore } from '@nanostores/react';
 /* empty css                                         */
 /* empty css                                */
@@ -43,7 +43,7 @@ function CategoryFilter({ onFilterChange }) {
 }
 
 const collections = ["Jackets", "Shirts", "Pants", "T-shirts", "Shorts"];
-const CollectionsFilter = ({ onCollectionsChange, onFilterChange }) => {
+const CollectionsFilter = ({ onCollectionsChange }) => {
   const [selectedCollections, setSelectedCollections] = useState([]);
   const handleCollectionsChange = (e) => {
     const collection = e.target.value;

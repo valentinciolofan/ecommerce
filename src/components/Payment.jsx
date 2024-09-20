@@ -1,4 +1,4 @@
-import React, { useCallback, useState, useEffect } from 'react';
+import React, { useCallback } from 'react';
 import { loadStripe } from '@stripe/stripe-js';
 
 const stripePromise = loadStripe("pk_test_51PVVxaEZbF6dio7iTjo5JguBuXPvFmlSfPJrZUkzEaksQnUuVP9nt3z74pjCzpI6O6qu3KuwSRYAK3N2Ft5xzIy700JPHkXNap");

@@ -1,1 +1,0 @@
-import{c as t,i}from"./image-url.umd.B12jX_S8.js";const a=t({apiVersion:"v2023-08-24",projectId:"1ymeft4k",dataset:"production",useCdn:!1,studioBasePath:"/admin"}),r=i(a);function o(e){return r.image(e)}export{o as u};

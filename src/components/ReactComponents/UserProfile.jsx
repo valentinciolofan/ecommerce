@@ -236,17 +236,7 @@ const UserProfile = ({ products }) => {
                                                     <td>#{order.order_id}</td>
                                                     <td>{order.order_date.slice(0, 10)}</td>
                                                     <td className="order-status">
-                                                        <select value={order.order_status} onChange={(e) => handleOrderStatus(e, index)}>
-                                                            <option>
-                                                                Pending
-                                                            </option>
-                                                            <option>
-                                                                In progress
-                                                            </option>
-                                                            <option>
-                                                                Delivered
-                                                            </option>
-                                                        </select>
+                                                    {order.order_status}
                                                     </td>
                                                     <td><a href={order.receipt_url}>View receipt</a></td>
                                                 </tr>
