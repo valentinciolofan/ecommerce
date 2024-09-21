@@ -1,9 +1,11 @@
 {
-    "build": {
-      "env": {
-        "NODE_ENV": "production"
-      }
+  "build": {
+    "env": {
+      "NODE_ENV": "production",
+      "PUBLIC_API_URL": "https://fashionculture-api.onrender.com"
     },
-    "outputDirectory": ".vercel/output",
-    "framework": "astro"
-  }
+    "buildCommand": "npm run build",  
+    "outputDirectory": "dist"  
+  },
+  "framework": "astro"
+}

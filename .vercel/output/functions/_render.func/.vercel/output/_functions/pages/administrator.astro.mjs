@@ -11,7 +11,8 @@ const Stats = () => {
   const [status, setStatus] = useState({});
   useEffect(() => {
     const getStats = async () => {
-      const getData = await fetch("http://localhost:3000/stats");
+      const apiUrl = "https://fashionculture-api.onrender.com";
+      const getData = await fetch(`${apiUrl}/stats`);
       const data = await getData.json();
       setStatus(data);
       console.log(data);
@@ -70,7 +71,8 @@ const OrdersManagement = () => {
     const newStatus = event.target.value;
     const orderId = orders[index].id;
     console.log(newStatus, orderId);
-    fetch(`http://localhost:3000/api/orders/${orderId}/status`, {
+    const apiUrl = "https://fashionculture-api.onrender.com";
+    fetch(`${apiUrl}/api/orders/${orderId}/status`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json"
@@ -92,7 +94,8 @@ const OrdersManagement = () => {
   };
   useEffect(() => {
     const getOrders = async () => {
-      const data = await fetch("http://localhost:3000/orders");
+      const apiUrl = "https://fashionculture-api.onrender.com";
+      const data = await fetch(`${apiUrl}/orders`);
       const retrievedOrders = await data.json();
       setOrders(retrievedOrders);
       setFilteredOrders(retrievedOrders);

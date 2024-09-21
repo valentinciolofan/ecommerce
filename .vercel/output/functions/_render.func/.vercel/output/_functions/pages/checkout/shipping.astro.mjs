@@ -42,7 +42,8 @@ const CheckoutButton = ({ cartItems }) => {
   console.log(cartItems);
   const handleCheckout = useCallback(async () => {
     const stripe = await stripePromise;
-    const response = await fetch("http://localhost:3000/create-checkout-session", {
+    const apiUrl = "https://fashionculture-api.onrender.com";
+    const response = await fetch(`${apiUrl}/create-checkout-session`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -181,8 +182,9 @@ const ShippingProducts = () => {
     const sessionId = query.get("session_id");
     if (sessionId !== null) {
       const checkPaymentStatus = async () => {
+        const apiUrl = "https://fashionculture-api.onrender.com";
         setLoading(true);
-        const response = await fetch(`http://localhost:3000/check-payment-status/${sessionId}`);
+        const response = await fetch(`${apiUrl}/check-payment-status/${sessionId}`);
         const result = await response.json();
         setLoading(false);
         if (result.status === "paid") {
@@ -206,8 +208,9 @@ const ShippingProducts = () => {
     }
   }, [detailsFilled, deliveryMethod, storeSelected]);
   const orderDetails = async (data) => {
+    const apiUrl = "https://fashionculture-api.onrender.com";
     setLoading(true);
-    await fetch("http://localhost:3000/generate-receipt", {
+    await fetch(`${apiUrl}/generate-receipt`, {
       method: "POST",
       credentials: "include",
       headers: {

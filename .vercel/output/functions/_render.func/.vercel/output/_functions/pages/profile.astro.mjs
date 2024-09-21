@@ -39,7 +39,8 @@ const UserProfile = ({ products }) => {
       [field]: editableFields[field] || profileInfo[field]
     };
     try {
-      const response = await fetch("http://localhost:3000/update-profile", {
+      const apiUrl = "https://fashionculture-api.onrender.com";
+      const response = await fetch(`${apiUrl}/update-profile`, {
         method: "PATCH",
         credentials: "include",
         headers: {
@@ -111,8 +112,9 @@ const UserProfile = ({ products }) => {
   console.log(profileInfo);
   const handleWishlistProduct = async (e) => {
     try {
+      const apiUrl = "https://fashionculture-api.onrender.com";
       const slug = e.target.closest("SVG").parentNode.parentNode.firstChild.pathname.slice(9);
-      const response = await fetch("http://localhost:3000/remove-wishlist-product", {
+      const response = await fetch(`${apiUrl}/remove-wishlist-product`, {
         method: "PATCH",
         credentials: "include",
         headers: {
