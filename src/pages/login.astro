@@ -261,7 +261,7 @@ import Layout from "../layouts/Layout.astro";
 
     <script>
         const apiUrl = import.meta.env.PUBLIC_API_URL;
-        const url: string = `${apiUrl}/login`;
+        const url: string = `https://fashionculture-api.onrender.com/login`;
         async function onSubmit(url: string, data: Record<string, FormDataEntryValue>) {
             try {
                 const response = await fetch(url, {
