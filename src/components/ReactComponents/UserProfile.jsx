@@ -38,7 +38,8 @@ const UserProfile = ({ products }) => {
         };
 
         try {
-            const response = await fetch('http://localhost:3000/update-profile', {
+            const apiUrl = import.meta.env.PUBLIC_API_URL;
+            const response = await fetch(`${apiUrl}/update-profile`, {
                 method: 'PATCH',
                 credentials: 'include',
                 headers: {
@@ -117,15 +118,17 @@ const UserProfile = ({ products }) => {
         }
     }, [profileInfo, products]);
 
-    
+
     console.log(profileInfo);
     const handleWishlistProduct = async (e) => {
         try {
+            const apiUrl = import.meta.env.PUBLIC_API_URL;
+
             // Find the closest SVG element and extract the product slug from the URL path
             const slug = e.target.closest("SVG").parentNode.parentNode.firstChild.pathname.slice(9);
 
             // Send the request to the backend to remove the product from the wishlist
-            const response = await fetch('http://localhost:3000/remove-wishlist-product', {
+            const response = await fetch(`${apiUrl}/remove-wishlist-product`, {
                 method: 'PATCH',
                 credentials: 'include',
                 headers: {
@@ -236,7 +239,7 @@ const UserProfile = ({ products }) => {
                                                     <td>#{order.order_id}</td>
                                                     <td>{order.order_date.slice(0, 10)}</td>
                                                     <td className="order-status">
-                                                    {order.order_status}
+                                                        {order.order_status}
                                                     </td>
                                                     <td><a href={order.receipt_url}>View receipt</a></td>
                                                 </tr>
@@ -264,10 +267,10 @@ const UserProfile = ({ products }) => {
                                                         <div className="products">
                                                             <div className='wishlist-product-image'>
                                                                 <img src={urlFor(product.image).url()} alt="" />
-                                                                <span 
-                                                                onClick={handleWishlistProduct}
-                                                                className='btn-wishlist-product-remove'
-                                                                 >
+                                                                <span
+                                                                    onClick={handleWishlistProduct}
+                                                                    className='btn-wishlist-product-remove'
+                                                                >
                                                                     <svg
                                                                         xmlns="http://www.w3.org/2000/svg"
                                                                         width="1em"

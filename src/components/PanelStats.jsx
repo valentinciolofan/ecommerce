@@ -5,7 +5,9 @@ const Stats = () => {
 
     useEffect(() => {
         const getStats = async () => {
-            const getData = await fetch("http://localhost:3000/stats");
+            const apiUrl = import.meta.env.PUBLIC_API_URL;
+
+            const getData = await fetch(`${apiUrl}/stats`);
             const data = await getData.json();
             setStatus(data);
             console.log(data)

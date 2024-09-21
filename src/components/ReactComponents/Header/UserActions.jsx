@@ -7,12 +7,15 @@ import UserWishlistIcon from './UserWishlistIcon';
 import UserCartIcon from './UserCartIcon';
 import SearchBar from '../Searchbar';
 
+
+
 const UserActions = () => {
   let session = useStore(userSession);
-
+  
   const handleLogOut = async () => {
+    const apiUrl = import.meta.env.PUBLIC_API_URL;
     try {
-      const response = await fetch('http://localhost:3000/logout', {
+      const response = await fetch(`${apiUrl}/logout`, {
         method: "POST",
         credentials: "include",
         headers: {

@@ -55,32 +55,36 @@ export const AddToWishlist = () => {
     const saveDesiredProduct = async () => {
         if (session === null) {
             return alert('You need to be logged in to add products to wishlist!');
-        } 
-        try {
-          const response = await fetch('http://localhost:3000/wishlist', {
-            method: 'POST',
-            credentials: 'include',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ productSlug: slug })
-          });
-    
-          const result = await response.json();
-          if (result.success) {
-            console.log('Favorite saved successfully.');
-            setIsInWishlist(true);
-          } else {
-            console.error('Failed to save favorite:', result.error);
-          }
-        } catch (error) {
-          console.error('Error:', error);
         }
-      };
-
-      const removeWishlistProduct = async (e) => {
         try {
-            const response = await fetch('http://localhost:3000/remove-wishlist-product', {
+            const apiUrl = import.meta.env.PUBLIC_API_URL;
+
+            const response = await fetch(`${apiUrl}/wishlist`, {
+                method: 'POST',
+                credentials: 'include',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ productSlug: slug })
+            });
+
+            const result = await response.json();
+            if (result.success) {
+                console.log('Favorite saved successfully.');
+                setIsInWishlist(true);
+            } else {
+                console.error('Failed to save favorite:', result.error);
+            }
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    };
+
+    const removeWishlistProduct = async (e) => {
+        try {
+            const apiUrl = import.meta.env.PUBLIC_API_URL;
+
+            const response = await fetch(`${apiUrl}/remove-wishlist-product`, {
                 method: 'PATCH',
                 credentials: 'include',
                 headers: {
@@ -117,7 +121,7 @@ export const AddToWishlist = () => {
             const product = session.wishlist.find(p => p === slug);
             setIsInWishlist(product !== undefined);
         }
-    }, [session]); 
+    }, [session]);
 
     return (
         <>

@@ -143,8 +143,10 @@ const ShippingProducts = () => {
 
         if (sessionId !== null) {
             const checkPaymentStatus = async () => {
+                const apiUrl = import.meta.env.PUBLIC_API_URL;
+
                 setLoading(true);
-                const response = await fetch(`http://localhost:3000/check-payment-status/${sessionId}`);
+                const response = await fetch(`${apiUrl}/check-payment-status/${sessionId}`);
                 const result = await response.json();
                 setLoading(false);
                 if (result.status === 'paid') {
@@ -171,8 +173,10 @@ const ShippingProducts = () => {
     }, [detailsFilled, deliveryMethod, storeSelected]);
 
     const orderDetails = async (data) => {
+        const apiUrl = import.meta.env.PUBLIC_API_URL;
+
         setLoading(true);
-        await fetch('http://localhost:3000/generate-receipt', {
+        await fetch(`${apiUrl}/generate-receipt`, {
             method: 'POST',
             credentials: 'include',
             headers: {

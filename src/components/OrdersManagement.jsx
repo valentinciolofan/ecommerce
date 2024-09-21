@@ -4,7 +4,7 @@ import '../components/ReactComponents/mystyle.css'
 const OrdersManagement = () => {
     const [orders, setOrders] = useState([]);
     const [filteredOrders, setFilteredOrders] = useState([]);
-    
+
     const handleOrdersSearch = (e) => {
         const searchInput = e.target.value.toLowerCase();
         console.log(searchInput);
@@ -20,7 +20,7 @@ const OrdersManagement = () => {
             })
             setFilteredOrders(newData);
         } else {
-            setFilteredOrders(orders);    
+            setFilteredOrders(orders);
         }
     }
     const handleOrderStatus = (event, index) => {
@@ -28,34 +28,37 @@ const OrdersManagement = () => {
         const orderId = orders[index].id;
 
         console.log(newStatus, orderId);
+        const apiUrl = import.meta.env.PUBLIC_API_URL;
 
-        fetch(`http://localhost:3000/api/orders/${orderId}/status`, {
+        fetch(`${apiUrl}/api/orders/${orderId}/status`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({ status: newStatus }),
         })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            return response.json();
-        })
-        .then(() => {
-            setOrders(prevOrders => {
-                const updatedOrders = [...prevOrders];
-                updatedOrders[index].order_status = newStatus; // Ensure this matches the property name in the API
-                setFilteredOrders(updatedOrders); // Sync filtered orders as well
-                return updatedOrders;
-            });
-        })
-        .catch(error => console.error('Error updating order status:', error));
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(() => {
+                setOrders(prevOrders => {
+                    const updatedOrders = [...prevOrders];
+                    updatedOrders[index].order_status = newStatus; // Ensure this matches the property name in the API
+                    setFilteredOrders(updatedOrders); // Sync filtered orders as well
+                    return updatedOrders;
+                });
+            })
+            .catch(error => console.error('Error updating order status:', error));
     };
-        
+
     useEffect(() => {
         const getOrders = async () => {
-            const data = await fetch("http://localhost:3000/orders");
+            const apiUrl = import.meta.env.PUBLIC_API_URL;
+
+            const data = await fetch(`${apiUrl}/orders`);
             const retrievedOrders = await data.json();
             setOrders(retrievedOrders);
             setFilteredOrders(retrievedOrders);
@@ -84,7 +87,7 @@ const OrdersManagement = () => {
                     </thead>
                     <tbody>
                         {
-                           filteredOrders.map((order, index) => (
+                            filteredOrders.map((order, index) => (
                                 <tr key={order.id} className={index % 2 === 0 ? '' : 'table-row1'}>
                                     <td>{order.receiver}</td>
                                     <td>{order.id}</td>

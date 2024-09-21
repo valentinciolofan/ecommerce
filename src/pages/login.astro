@@ -260,8 +260,8 @@ import Layout from "../layouts/Layout.astro";
     </style>
 
     <script>
-        const url: string = "http://localhost:3000/login";
-        
+        const apiUrl = import.meta.env.PUBLIC_API_URL;
+        const url: string = `${apiUrl}/login`;
         async function onSubmit(url: string, data: Record<string, FormDataEntryValue>) {
             try {
                 const response = await fetch(url, {

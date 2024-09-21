@@ -3,12 +3,13 @@ import { loadStripe } from '@stripe/stripe-js';
 
 const stripePromise = loadStripe("pk_test_51PVVxaEZbF6dio7iTjo5JguBuXPvFmlSfPJrZUkzEaksQnUuVP9nt3z74pjCzpI6O6qu3KuwSRYAK3N2Ft5xzIy700JPHkXNap");
 
-const CheckoutButton = ({ cartItems}) => {
+const CheckoutButton = ({ cartItems }) => {
   console.log(cartItems);
   const handleCheckout = useCallback(async () => {
     const stripe = await stripePromise;
-    
-    const response = await fetch("http://localhost:3000/create-checkout-session", {
+    const apiUrl = import.meta.env.PUBLIC_API_URL;
+
+    const response = await fetch(`${apiUrl}/create-checkout-session`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
