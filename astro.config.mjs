@@ -1,7 +1,7 @@
 import { defineConfig } from "astro/config";
 import react from "@astrojs/react";
 import sanity from "@sanity/astro";
-import vercel from '@astrojs/vercel/serverless';
+import vercelServerless from '@astrojs/vercel'
 
 export default defineConfig({
   integrations: [
@@ -13,5 +13,6 @@ export default defineConfig({
     }),
     react()
   ],
-  adapter: vercel(),  
+  output: 'server',
+  adapter: vercelServerless(),
 });
