@@ -277,7 +277,7 @@ import Layout from "../layouts/Layout.astro";
                     alert('Email or password incorrect, please try again!');
                 } else {
                     const res = await response.json();
-                    window.location.href = res.redirect;
+                    // window.location.href = res.redirect;
                 }
             } catch (error) {
                 console.error("Error:", error);
