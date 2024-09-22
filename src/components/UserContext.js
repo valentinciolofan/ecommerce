@@ -11,7 +11,7 @@ export const productDetailsStore = atom('');
 
 export async function checkSession() {
     try {
-       const response = await fetch('https://fashionculture-api.onrender.com/check-session', {
+       const response = await fetch('https://www.valentinciolofan.com/check-session', {
                     method: "GET",
                     credentials: 'include',
                     headers: {
