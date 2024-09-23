@@ -141,7 +141,7 @@ import Layout from "../layouts/Layout.astro";
     </style>
 
     <script>
-        const apiUrl = import.meta.env.PUBLIC_API_URL
+        const apiUrl = import.meta.env.PUBLIC_API_URL;
         const url = `${apiUrl}/contact`;
 
         async function onSubmit(url: string, data: Record<string, any>) {
