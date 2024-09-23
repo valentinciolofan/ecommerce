@@ -126,7 +126,7 @@ const UserProfile = ({ products }) => {
 
             // Find the closest SVG element and extract the product slug from the URL path
             const slug = e.target.closest("SVG").parentNode.parentNode.firstChild.pathname.slice(9);
-
+            console.log(slug);
             // Send the request to the backend to remove the product from the wishlist
             const response = await fetch(`${apiUrl}/remove-wishlist-product`, {
                 method: 'PATCH',

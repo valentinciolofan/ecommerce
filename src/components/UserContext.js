@@ -11,7 +11,7 @@ export const productDetailsStore = atom('');
 
 export async function checkSession() {
     try {
-      const apiUrl = import.meta.env.PUBLIC_API_URL
+      const apiUrl = import.meta.env.PUBLIC_API_URL;
        const response = await fetch(`${apiUrl}/check-session`, {
                     method: "GET",
                     credentials: 'include',
