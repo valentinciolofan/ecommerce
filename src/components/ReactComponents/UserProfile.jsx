@@ -125,8 +125,7 @@ const UserProfile = ({ products }) => {
             const apiUrl = import.meta.env.PUBLIC_API_URL;
 
             // Find the closest SVG element and extract the product slug from the URL path
-            const slug = e.target.closest("SVG").parentNode.parentNode.firstChild.pathname.slice(9);
-            console.log(slug);
+            const slug = e.target.closest('.btn-wishlist-product-remove').getAttribute('data-slug');
             // Send the request to the backend to remove the product from the wishlist
             const response = await fetch(`${apiUrl}/remove-wishlist-product`, {
                 method: 'PATCH',
@@ -270,6 +269,7 @@ const UserProfile = ({ products }) => {
                                                                 <span
                                                                     onClick={handleWishlistProduct}
                                                                     className='btn-wishlist-product-remove'
+                                                                    data-slug={product.slug.current}
                                                                 >
                                                                     <svg
                                                                         xmlns="http://www.w3.org/2000/svg"
