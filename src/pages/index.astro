@@ -4,8 +4,7 @@ import React from "react";
 import { sanityClient } from "sanity:client";
 import type { Product } from "../types/types";
 import urlFor from "../utils/urlFor";
-// const products: Product[] = await sanityClient.fetch(`*[_type == "product"]`);
-
+const products: Product[] = await sanityClient.fetch(`*[_type == "product"]`);
 ---
 
 <Layout title="fashionCulture | Unleash Your Style Potential">
@@ -61,14 +60,14 @@ import urlFor from "../utils/urlFor";
 							that suits your lifestyle. From chic essentials to
 							bold statement pieces, we have it all.
 						</p>
-						<img src="images/jackets.svg" alt="jackets" />
+						<img src="images/jackets.svg" alt="jackets" id="jackets"/>
 						<h1 class="absolute-paragraph">JACKETS</h1>
 					</div>
-					<div class="second-section-col pants">
-						<img src="images/pants.png" alt="pants" />
+					<div class="second-section-col pants" id="pants">
+						<img src="images/pants.png" alt="pants"/>
 						<h1 class="absolute-paragraph">PANTS</h1>
 					</div>
-					<div class="second-section-col shorts">
+					<div class="second-section-col shorts" id="shorts">
 						<img src="images/shorts.png" alt="shorts" />
 						<h1 class="absolute-paragraph">SHORTS</h1>
 					</div>
@@ -78,7 +77,7 @@ import urlFor from "../utils/urlFor";
 		<!-- end of second section -->
 
 		<!-- third section -->
-		<!-- <section class="slider-section">
+		<section class="slider-section">
 			<div class="slider-container">
 				<h3 class="slider-title">ELEVATE YOUR WARDROBE</h3>
 				<p class="slider-description">
@@ -97,7 +96,9 @@ import urlFor from "../utils/urlFor";
 							{
 								products.map((product) => (
 									<div class="slider-slide">
-										<a href={`/product/${product.slug.current}`}>
+										<a
+											href={`/product/${product.slug.current}`}
+										>
 											<img
 												src={urlFor(
 													product.image,
@@ -123,7 +124,7 @@ import urlFor from "../utils/urlFor";
 					>
 				</div>
 			</div>
-		</section> -->
+		</section>
 
 		<!-- end of third section -->
 	</main>
@@ -158,6 +159,26 @@ import urlFor from "../utils/urlFor";
 
 				observer.observe(section);
 			}
+		});
+
+		// listen to section 2 and redirect to shop page with the corresponding filters
+		const jackets = document.getElementById('jackets');
+		const pants = document.getElementById('pants');
+		const shorts = document.getElementById('shorts');
+
+		jackets?.addEventListener('click', () => {
+			window.location.href = '/shop';
+			localStorage.setItem('shopFilter', 'Jackets');
+		});
+
+		pants?.addEventListener('click', () => {
+			window.location.href = '/shop';
+			localStorage.setItem('shopFilter', 'Pants');
+		});
+
+		shorts?.addEventListener('click', () => {
+			window.location.href = '/shop';
+			localStorage.setItem('shopFilter', 'Shorts');
 		});
 
 		// carousel ### third section functionality ###
@@ -455,15 +476,14 @@ import urlFor from "../utils/urlFor";
 	.slider-section {
 		width: 100%;
 		padding: 20px 0px;
+		margin-bottom: 120px;
 	}
-
 	.slider-container {
 		max-width: 1400px;
 		margin: 0 auto;
 		padding: 0px 20px;
 		text-align: center;
 	}
-
 	.slider-title {
 		margin-top: 50px;
 		margin-bottom: 10px;

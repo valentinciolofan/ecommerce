@@ -11,7 +11,8 @@ export const productDetailsStore = atom('');
 
 export async function checkSession() {
     try {
-       const response = await fetch('https://www.valentinciolofan.com/check-session', {
+      const apiUrl = import.meta.process.env.PUBLIC
+       const response = await fetch(`${apiUrl}/check-session`, {
                     method: "GET",
                     credentials: 'include',
                     headers: {

@@ -17,7 +17,6 @@ const App = ({ products }) => {
   const [selectedMaterials, setSelectedMaterials] = useState([]);
   const [searchedProducts, setSearchedProducts] = useState([]);
 
-
   useEffect(() => {
     const searchedProductsD = products.filter(product =>
       product.title.toLowerCase().includes(searchValue.toLowerCase())

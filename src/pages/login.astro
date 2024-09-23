@@ -172,10 +172,13 @@ import Layout from "../layouts/Layout.astro";
             display: inline-block;
             position: relative;
             margin-right: 10px;
-            transition: background-color 0.3s ease, border-color 0.3s ease;
+            transition:
+                background-color 0.3s ease,
+                border-color 0.3s ease;
         }
 
-        .remember-me-and-forgot-pass input[type="checkbox"]:checked
+        .remember-me-and-forgot-pass
+            input[type="checkbox"]:checked
             ~ .custom-checkbox {
             background-color: black;
             border-color: black;
@@ -261,8 +264,11 @@ import Layout from "../layouts/Layout.astro";
 
     <script>
         const apiUrl = import.meta.env.PUBLIC_API_URL;
-        const url: string = `https://www.valentinciolofan.com/login`;
-        async function onSubmit(url: string, data: Record<string, FormDataEntryValue>) {
+        const url: string = `${apiUrl}/login`;
+        async function onSubmit(
+            url: string,
+            data: Record<string, FormDataEntryValue>,
+        ) {
             try {
                 const response = await fetch(url, {
                     method: "POST",
@@ -274,10 +280,10 @@ import Layout from "../layouts/Layout.astro";
                 });
 
                 if (response.status === 401) {
-                    alert('Email or password incorrect, please try again!');
+                    alert("Email or password incorrect, please try again!");
                 } else {
                     const res = await response.json();
-                    // window.location.href = res.redirect;
+                    window.location.href = res.redirect;
                 }
             } catch (error) {
                 console.error("Error:", error);
