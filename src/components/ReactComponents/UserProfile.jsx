@@ -123,7 +123,7 @@ const UserProfile = ({ products }) => {
     const handleWishlistProduct = async (e) => {
         try {
             const apiUrl = import.meta.env.PUBLIC_API_URL;
-
+            e.stopPropagation();
             // Find the closest SVG element and extract the product slug from the URL path
             const slug = e.target.closest('.btn-wishlist-product-remove').getAttribute('data-slug');
             // Send the request to the backend to remove the product from the wishlist
